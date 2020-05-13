@@ -1,0 +1,326 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"spread",
+				"spreadsheetId\twarning"
+			],
+			[
+				"purchase",
+				"purchaseButton\tconst"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"re",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"rein",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: Disable Package"
+			],
+			[
+				"html ",
+				"HTMLBeautify"
+			],
+			[
+				"rei",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"editp",
+				"Project: Edit Project"
+			],
+			[
+				"edit",
+				"Project: Edit Project"
+			],
+			[
+				"mater",
+				"Material Theme: Configuration"
+			],
+			[
+				"packa",
+				"Install Package Control"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": true,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/jay/node/cia-airtable"
+	],
+	"file_history":
+	[
+		"/Users/jay/node/cia-airtable/config.js",
+		"/Users/jay/node/cia/views/home.ejs",
+		"/Users/jay/node/cia/sampleClient.js",
+		"/Users/jay/node/cia/test/parser.js",
+		"/Users/jay/node/cia/.gitignore",
+		"/Users/jay/node/cia/templates.js",
+		"/Users/jay/.ssh/known_hosts",
+		"/Users/adminmac1/node/cia/test.html",
+		"/Users/adminmac1/node/cia/test/templates.js",
+		"/Users/adminmac1/node/cia/templates.js",
+		"/Users/adminmac1/node/cia/samples/contact_us_form.html",
+		"/Users/adminmac1/node/cia/test/gmail.js",
+		"/Users/adminmac1/node/cia/samples/get_in_touch.html",
+		"/Users/adminmac1/node/cia/index.js",
+		"/Users/adminmac1/node/cia/samples/new_entry_new_candidate.html",
+		"/Users/adminmac1/node/cia/config.json",
+		"/Users/adminmac1/node/cia/sampleClient.js",
+		"/Users/adminmac1/node/cia/test/parser.js",
+		"/Users/adminmac1/node/cia/test/template.js",
+		"/Users/adminmac1/node/cia/package.json",
+		"/Users/adminmac1/node/cia/samples/table.html",
+		"/Users/adminmac1/node/cia/cia.sublime-project",
+		"/Users/rs/node/ci-admissions/.gitignore",
+		"/Users/rs/node/ci-admissions/index.js",
+		"/Users/rs/node/ci-admissions/tests/authorization.js",
+		"/Users/rs/node/gtw-auth/.gitignore",
+		"/Users/rs/node/gtw-auth/.env",
+		"/Users/rs/node/gtw-auth/package.json",
+		"/Users/rs/node/gtw-auth/test/index.js",
+		"/Users/rs/node/gtw-auth/test:index.js",
+		"/Users/rs/node/gtw-auth/gtw-auth.sublime-project",
+		"/Users/rs/node/gotowebinar-addon/gotowebinar-addon.sublime-project",
+		"/Users/rs/node/mylord/mylord.sublime-project",
+		"/Users/rs/node/mylord/src/App.js"
+	],
+	"find":
+	{
+		"height": 70.0
+	},
+	"find_in_files":
+	{
+		"height": 158.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 30.0
+	},
+	"input":
+	{
+		"height": 66.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.doc":
+	{
+		"height": 0.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "cia-airtable.sublime-project",
+	"replace":
+	{
+		"height": 56.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"inde",
+				"index.js"
+			],
+			[
+				"giti",
+				".gitignore"
+			],
+			[
+				"testpa",
+				"test/parser.js"
+			],
+			[
+				"tem",
+				"templates.js"
+			],
+			[
+				"c",
+				"config.json"
+			],
+			[
+				"sampl",
+				"sampleClient.js"
+			],
+			[
+				"sample",
+				"sampleClient.js"
+			],
+			[
+				"con",
+				"config.json"
+			],
+			[
+				"packa",
+				"package.json"
+			],
+			[
+				"pack",
+				"package.json"
+			],
+			[
+				"testp",
+				"test/parser.js"
+			],
+			[
+				"pars",
+				"parser.js"
+			],
+			[
+				"env",
+				".env"
+			],
+			[
+				"testu",
+				"test/test-utils.js"
+			],
+			[
+				".en",
+				".env"
+			],
+			[
+				"gitig",
+				".gitignore"
+			],
+			[
+				"ine",
+				"index.js"
+			],
+			[
+				"play",
+				"player.js"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 241.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

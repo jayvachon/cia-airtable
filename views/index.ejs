@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Code Immersives Admissions</title>
+</head>
+<body>
+	<h1>Code Immersives Admissions</h1>
+	<% if (loggedIn) { %>
+		<a href="/email-new-leads">Auto-email new leads</a>
+	<% } %>
+	<% if (!loggedIn) { %>
+	    <a href="/login">Login</a>
+	<% } %>
+</body>
