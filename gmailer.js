@@ -1,4 +1,5 @@
 const parser = require('./parser');
+const templates = require('./templates');
 const _ = require('lodash');
 const {google} = require('googleapis');
 
@@ -12,6 +13,11 @@ const base64ToString = (base64str) => {
 	if (!base64str) return '';
 	const buff = Buffer.from(base64str, 'base64');
 	return buff.toString('utf8');
+};
+
+const stringToBase64 = (str) => {
+	const buff = Buffer.from(str, 'utf8');
+	return buff.toString('base64');
 };
 
 const getMessages = (ids) => {
@@ -73,7 +79,39 @@ const list = () => {
 	.catch(err => console.error(err));
 };
 
+const makeBody = (to, from, subject, message) => {
+    let str = ["Content-Type: text/html; charset=\"UTF-8\"\n",
+        "MIME-Version: 1.0\n",
+        "Content-Transfer-Encoding: 7bit\n",
+        "to: ", to, "\n",
+        "from: ", from, "\n",
+        "subject: ", subject, "\n\n",
+        message
+    ].join('');
+
+    return stringToBase64(str).replace(/\+/g, '-').replace(/\//g, '_');;
+};
+
+const sendMessage = (raw) => {
+    return gmail.users.messages.send({
+        userId: 'me',
+        resource: {
+            raw: raw
+        }
+    });
+};
+
+const send = (newLeads) => {
+	return Promise.all(_.each(newLeads, lead => {
+			let body = templates.initial(lead.content.firstName, lead.content.program, 'August');
+			let raw = makeBody(lead.content.email, 'admissions@codeimmersives.com', 'RE: Code Immersives', body)
+			return sendMessage(raw);
+		})
+	);
+};
+
 module.exports = {
 	init,
 	list,
+	send,
 };

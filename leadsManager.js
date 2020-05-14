@@ -59,7 +59,9 @@ const insertUnique = (leads) => {
 		// add(formatted);
 		return Promise.all(_.map(chunked, leads => {
 			return add(leads);
-		}));
+		})).then(values => {
+			return newLeads;
+		});
 	});
 };
 

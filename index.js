@@ -66,7 +66,8 @@ app.get('/email-new-leads', (req, res) => {
 	gmailer.init(oAuth2Client);
 	gmailer.list().then(leads => leadsManager.insertUnique(leads))
 	.then(newLeads => {
-		res.send('Done!');
+		gmailer.send(newLeads);
+		res.render('newLeads', { hasLeads: newLeads.length > 0, newLeads: newLeads });
 	});
 });
 
