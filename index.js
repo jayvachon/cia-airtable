@@ -1,3 +1,4 @@
+require('dotenv').config({path: __dirname + '/.env'})
 const config = require('./config');
 const gmailer = require('./gmailer');
 const leadsManager = require('./leadsManager');
@@ -8,6 +9,7 @@ const express = require('express');
 const app = express();
 const {google} = require('googleapis');
 const TOKEN_PATH = 'token.json';
+const PORT = process.env.PORT;
 
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
@@ -71,4 +73,4 @@ app.get('/email-new-leads', (req, res) => {
 	});
 });
 
-app.listen(process.env.PORT);
+app.listen(PORT);
