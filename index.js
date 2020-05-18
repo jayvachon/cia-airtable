@@ -20,6 +20,12 @@ let oAuth2Client = new google.auth.OAuth2(
 	config.GOOGLE_CLIENT_SECRET,
 	config.REDIRECT_URI);
 
+oAuth2Client.on('tokens', (tokens) => {
+	if (tokens.refresh_token) {
+		oauth2Client.setCredentials(tokens);
+	}
+});
+
 const isLoggedIn = () => {
 	return Object.keys(oAuth2Client.credentials).length !== 0;
 };
