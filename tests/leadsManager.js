@@ -6,7 +6,6 @@ describe('Leads Manager', () => {
 	it('should insert a new lead record', done => {
 
 		const lead = {
-			id: 'x',
 			content: {
 				email: 'test@test.com',
 				phone: '(555) 555-555',

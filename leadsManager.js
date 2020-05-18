@@ -38,7 +38,6 @@ const insertUnique = (leads) => {
 		const formatted = _.map(newLeads, lead => {
 			return {
 				fields: {
-					'id': lead.id,
 					'Email': lead.content.email,
 					'Phone': lead.content.phone,
 					'First Name': lead.content.firstName,

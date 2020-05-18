@@ -3,7 +3,9 @@
 	<%- include('partials/header'); -%>
 	
 	<% if (loggedIn) { %>
-		<a href="/email-new-leads">Auto-email new leads</a>
+		<p><a href="/email-new-leads">Auto-email new leads</a></p>
+		<p><a href="https://airtable.com/shr6oALIdlcyIRtoB">Manually add new lead</a></p>
+		<p><a href="https://airtable.com/shrmVJEcfQ20awbU4">Log correspondence</a></p>
 	<% } %>
 	<% if (!loggedIn) { %>
 	    <a href="/login">Login</a>
