@@ -79,4 +79,18 @@ app.get('/email-new-leads', (req, res) => {
 	});
 });
 
+app.get('/log-correspondence', (req, res) => {
+	if (isLoggedIn() === false) {
+		return res.redirect('/');
+	}
+	res.render('logCorrespondence');
+});
+
+app.get('/manually-add-lead', (req, res) => {
+	if (isLoggedIn() === false) {
+		return res.redirect('/');
+	}
+	res.render('manuallyAddLead');
+});
+
 app.listen(PORT);
