@@ -50,10 +50,10 @@ const extract = (html) => {
 		let name = _.split(form.Name, ' ');
 		let firstName = name[0];
 		let lastName = name[1];
-		let status = '';
+		let studentType = '';
 
 		if (form['Tell us how you found us!'] === 'VA or Veteran Agency') {
-			status = 'Veteran';
+			studentType = 'Veteran';
 		}
 		
 		return {
@@ -61,9 +61,9 @@ const extract = (html) => {
 			lastName: lastName,
 			email: form['Email Address'] || form['Email'],
 			phone: form['Phone Number'],
-			program: '',
-			status: status,
-			aid: '',
+			program: 'unknown',
+			studentType: studentType,
+			aid: 'unknown',
 			message: form.Message,
 		};
 	}
