@@ -43,12 +43,13 @@ const insertUnique = (leads) => {
 					'Phone': lead.content.phone,
 					'First Name': lead.content.firstName,
 					'Last Name': lead.content.lastName,
-					'Student Type': lead.content.status,
+					'Student Type': lead.content.studentType,
 					'Financial Aid': lead.content.aid,
 					'Term': 'Fall 2020',
 					'Program': lead.content.program,
 					'Message': lead.content.message,
 					'Date added': new Date(),
+					'Status': 'New',
 				},
 			};
 		});

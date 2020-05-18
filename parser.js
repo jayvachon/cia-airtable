@@ -19,13 +19,13 @@ const extract = (html) => {
 
 		let international = form['If You Are an International Student Choose Status'];
 		let veteran = form['Will You Be Seeking Veteran Benefits']
-		let status = 'unknown';
+		let studentType = 'unknown';
 
 		if (international !== 'Select One') {
-			status = 'International - ' + international;
+			studentType = 'International - ' + international;
 		}
 		if (veteran !== 'Select One' && veteran !== 'No') {
-			status = _.replace(veteran, 'Yes,', 'Veteran -')
+			studentType = _.replace(veteran, 'Yes,', 'Veteran -')
 		}
 
 		return {
@@ -34,7 +34,7 @@ const extract = (html) => {
 			email: form.Email,
 			phone: form['Cell Phone'],
 			program: form['Choose a program'],
-			status: status,
+			studentType: studentType,
 			aid: form['Will You Be Applying For Financial Aid'],
 			message: '',
 		};
