@@ -38,6 +38,7 @@ const insertUnique = (leads) => {
 		const formatted = _.map(newLeads, lead => {
 			return {
 				fields: {
+					'id': lead.id,
 					'Email': lead.content.email,
 					'Phone': lead.content.phone,
 					'First Name': lead.content.firstName,
@@ -56,9 +57,8 @@ const insertUnique = (leads) => {
 		// Airtable can only add a maxiumum of ten records at a time, so break up the list
 		const chunked = _.chunk(formatted, 10);
 
-		// add(formatted);
-		return Promise.all(_.map(chunked, leads => {
-			return add(leads);
+		return Promise.all(_.map(chunked, chunk => {
+			return add(chunk);
 		})).then(values => {
 			return newLeads;
 		});

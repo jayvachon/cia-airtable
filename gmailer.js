@@ -110,8 +110,20 @@ const send = (newLeads) => {
 	);
 };
 
+const markRead = (ids) => {
+	return Promise.all(_.map(ids, id => {
+		return gmail.users.messages.modify({
+			id: id,
+			userId: 'me',
+			addLabelIds: ['STARRED'],
+			removeLabelIds: ['UNREAD'],
+		});
+	}));
+};
+
 module.exports = {
 	init,
 	list,
 	send,
+	markRead,
 };

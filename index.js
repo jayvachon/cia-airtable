@@ -20,11 +20,11 @@ let oAuth2Client = new google.auth.OAuth2(
 	config.GOOGLE_CLIENT_SECRET,
 	config.REDIRECT_URI);
 
-oAuth2Client.on('tokens', (tokens) => {
+/*oAuth2Client.on('tokens', (tokens) => {
 	if (tokens.refresh_token) {
 		oauth2Client.setCredentials(tokens);
 	}
-});
+});*/
 
 const isLoggedIn = () => {
 	return Object.keys(oAuth2Client.credentials).length !== 0;
@@ -38,7 +38,8 @@ app.get('/login', (req, res) => {
 		scope: [
 			'https://www.googleapis.com/auth/spreadsheets',
 			'https://www.googleapis.com/auth/gmail.readonly',
-			'https://www.googleapis.com/auth/gmail.send'
+			'https://www.googleapis.com/auth/gmail.send',
+			'https://www.googleapis.com/auth/gmail.modify',
 		].join(' '),
 	});
 
@@ -76,6 +77,7 @@ app.get('/email-new-leads', (req, res) => {
 	.then(newLeads => {
 		gmailer.send(newLeads);
 		res.render('newLeads', { hasLeads: newLeads.length > 0, newLeads: newLeads });
+		return gmailer.markRead(_.map(newLeads, newLead => newLead.id));
 	});
 });
 
