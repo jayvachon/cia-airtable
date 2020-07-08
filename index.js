@@ -73,7 +73,8 @@ app.get('/email-new-leads', (req, res) => {
 
 	// 4. Final step: apply the authorization to gmail
 	gmailer.init(oAuth2Client);
-	gmailer.list().then(leads => leadsManager.insertUnique(leads))
+	gmailer.list()
+	.then(leads => leadsManager.insertUnique(leads))
 	.then(newLeads => {
 		gmailer.send(newLeads);
 		res.render('newLeads', { hasLeads: newLeads.length > 0, newLeads: newLeads });

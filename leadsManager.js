@@ -21,16 +21,20 @@ const insertUnique = (leads) => {
 	
 	// Remove duplicate new leads (for when people submit the form more than once)
 	leads = _.uniqBy(leads, 'content.email');
+	existing = [];
 
-	return base('Leads').select().firstPage().then(existing => {
+	return base('Leads')
+	.select()
+	.all()
+	.then(existing => {
 		
 		// Get all existing leads
 		return _.map(existing, lead => lead.fields);
 	})
 	.then(existingLeads => {
-
 		// Filter out leads that have already been added
 		const existingEmails = _.map(existingLeads, existingLead => existingLead.Email);
+		// console.log(existingLeads);
 		return _.filter(leads, lead => !_.includes(existingEmails, lead.content.email));
 	})
 	.then(newLeads => {
