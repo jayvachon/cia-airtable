@@ -103,7 +103,7 @@ const sendMessage = (raw) => {
 
 const send = (newLeads) => {
 	return Promise.all(_.each(newLeads, lead => {
-			let body = templates.initial(lead.content.firstName, lead.content.program, 'August');
+			let body = templates.initial(lead.content.firstName, lead.content.program, 'September');
 			let raw = makeBody(lead.content.email, 'admissions@codeimmersives.com', 'RE: Code Immersives', body)
 			return sendMessage(raw);
 		})
