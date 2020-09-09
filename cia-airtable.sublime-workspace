@@ -25,13 +25,12 @@
 			}
 		},
 		{
-			"contents": "Searching 24 files for \"august\"\n\n/Users/jay/node/cia-airtable/gmailer.js:\n  104  const send = (newLeads) => {\n  105  \treturn Promise.all(_.each(newLeads, lead => {\n  106: \t\t\tlet body = templates.initial(lead.content.firstName, lead.content.program, 'August');\n  107  \t\t\tlet raw = makeBody(lead.content.email, 'admissions@codeimmersives.com', 'RE: Code Immersives', body)\n  108  \t\t\treturn sendMessage(raw);\n\n1 match in 1 file\n",
+			"file": "views/newLeads.ejs",
 			"settings":
 			{
-				"buffer_size": 425,
-				"line_ending": "Unix",
-				"name": "Find Results",
-				"scratch": true
+				"buffer_size": 948,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
 			}
 		},
 		{
@@ -294,8 +293,8 @@
 						"selection":
 						[
 							[
-								718,
-								718
+								646,
+								646
 							]
 						],
 						"settings":
@@ -311,56 +310,39 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 261.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
+					"file": "views/newLeads.ejs",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 425,
+						"buffer_size": 948,
 						"regions":
 						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										250,
-										256
-									]
-								],
-								"scope": ""
-							}
 						},
 						"selection":
 						[
 							[
-								254,
-								254
+								396,
+								396
 							]
 						],
 						"settings":
 						{
-							"detect_indentation": false,
-							"line_numbers": false,
-							"output_tag": 1,
-							"result_base_dir": "",
-							"result_file_regex": "^([^ \t].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+							"syntax": "Packages/EJS 2/EJS.sublime-syntax",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
@@ -399,10 +381,10 @@
 							"use_tab_stops": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1878.0,
+						"translation.y": 2214.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -628,14 +610,14 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 1,
+	"selected_group": 0,
 	"settings":
 	{
 	},
 	"show_minimap": false,
 	"show_open_files": false,
 	"show_tabs": true,
-	"side_bar_visible": false,
+	"side_bar_visible": true,
 	"side_bar_width": 241.0,
 	"status_bar_visible": true,
 	"template_settings":
