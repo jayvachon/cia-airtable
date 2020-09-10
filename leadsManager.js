@@ -49,7 +49,7 @@ const insertUnique = (leads) => {
 					'Last Name': lead.content.lastName,
 					'Student Type': lead.content.studentType,
 					'Financial Aid': lead.content.aid,
-					'Term': 'Fall 2020',
+					'Term': 'Winter 2021',
 					'Program': lead.content.program,
 					'Message': lead.content.message,
 					'Date added': new Date(),
