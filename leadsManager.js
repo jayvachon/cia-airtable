@@ -23,7 +23,7 @@ const insertUnique = (leads) => {
 	leads = _.uniqBy(leads, 'content.email');
 	existing = [];
 
-	return base('Leads')
+	return base('1. Leads')
 	.select()
 	.all()
 	.then(existing => {
