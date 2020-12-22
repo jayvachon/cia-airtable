@@ -10,7 +10,7 @@ Airtable.configure({
 const base = Airtable.base(config.BASE);
 
 const add = (leads) => {
-	return base('Leads')
+	return base('1. Leads')
 	.create(leads, { typecast: true })
 	.catch(err => {
 		console.error(err);
