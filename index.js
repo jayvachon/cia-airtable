@@ -1,18 +1,39 @@
 require('dotenv').config({path: __dirname + '/.env'})
+const constants = require('./constants');
 const config = require('./config');
 const gmailer = require('./gmailer');
-const leadsManager = require('./leadsManager');
+const leadsManager = require('./airtable');
+const populi = require('./services/populi');
 const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
 const express = require('express');
+const session = require('express-session');
+const MemoryStore = require('memorystore')(session);
+const bodyParser = require('body-parser');
 const app = express();
 const {google} = require('googleapis');
+const appRoot = require('app-root-path');
+const logger = require(`${appRoot}/config/winston`);
 const TOKEN_PATH = 'token.json';
 const PORT = process.env.PORT;
 
 app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
+
+const sessionOptions = {
+	cookie: { maxAge: 86400000 },
+	store: new MemoryStore({
+		checkPeriod: 86400000 // prune expired entries every 24h
+	}),
+	secret: 'keyboard cat',
+	resave: false,
+	saveUninitialized: true,
+	cookie: {},
+};
+
+app.use(session(sessionOptions));
 
 // 1. Create client
 let oAuth2Client = new google.auth.OAuth2(
@@ -61,8 +82,41 @@ app.get('/auth/google/callback', (req, res) => {
 	.catch(err => console.error(err));
 });
 
+app.get('/populi-login', (req, res) => {
+	
+	let file = fs.readFileSync('./package.json');
+	let pack = JSON.parse(file);
+	let environment = process.env.NODE_ENV;
+	let root = constants[process.env.NODE_ENV].ROOT;
+	
+	res.render('populiLogin', { pack, environment, root });
+});
+
+app.post('/populi-login', (req, res, next) => {
+	populi.getAccessToken(req.body.username, req.body.password)
+		.then(token => {
+			logger.info('Login succeeded for user ' + req.body.username);
+			if (!token) {
+				return res.render('login', {error: 'The username and password you provided did not work'});
+			}
+			req.session.token = token;
+			console.log(token);
+			res.redirect('/');
+		})
+		.catch(err => {
+			logger.error('Login failed for user ' + req.body.username);
+			res.render('login', {error:err});
+		});
+});
+
 app.get('/', (req, res) => {
-	res.render('index', { loggedIn: isLoggedIn() });
+
+	let file = fs.readFileSync('./package.json');
+	let pack = JSON.parse(file);
+	let environment = process.env.NODE_ENV;
+	let root = constants[process.env.NODE_ENV].ROOT;
+
+	res.render('index', { loggedIn: isLoggedIn(), environment, root });
 });
 
 app.get('/email-new-leads', (req, res) => {

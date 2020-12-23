@@ -1,5 +1,5 @@
 require('should');
-const leadsManager = require('../leadsManager');
+const leadsManager = require('../airtable');
 
 describe('Leads Manager', () => {
 
