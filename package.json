@@ -24,6 +24,7 @@
     "lodash": "^4.17.20",
     "memorystore": "^1.6.4",
     "mz": "^2.7.0",
+    "node-tesseract": "^0.2.7",
     "winston": "^3.3.3",
     "xml-js": "^1.6.11"
   },

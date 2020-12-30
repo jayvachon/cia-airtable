@@ -69,6 +69,13 @@ const insertUnique = (leads) => {
 	});
 };
 
+const listDocs = () => {
+	return base('2. Docs').select({ view: 'Upcoming term' }).all().then(existing => {
+		return existing;
+	});
+};
+
 module.exports = {
 	insertUnique,
+	listDocs,
 };
