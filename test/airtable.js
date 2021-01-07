@@ -9,4 +9,11 @@ describe('Airtable', () => {
 			done();
 		});
 	});
+
+	it('should get the info table', done => {
+		airtable.listInfo().then(records => {
+			console.log(records);
+			done();
+		});
+	});
 });

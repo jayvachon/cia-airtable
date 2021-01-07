@@ -65,6 +65,10 @@ const post = (path, keyvals) => {
 		throw new Error('You are not logged in');
 	}
 
+	if (_.some(Object.values(keyvals), _.isEmpty)) {
+		throw new Error('One of the values provided is undefined, so the request cannot be completed: '+ JSON.stringify(keyvals))
+	}
+
 	let form = new FormData();
 	form.append('access_key', token);
 	form.append('task', path);
@@ -92,32 +96,54 @@ const addPerson = (person) => {
 	// the next step is to add student information to the profile (phone number, address, etc)
 	// and then to pull this information from airtable
 
-	return post('getPossibleDuplicatePeople', { first_name: person.firstName, last_name: person.lastName })
+	return post('getPossibleDuplicatePeople', { first_name: person['First Name'], last_name: person['Last Name'], birth_date: person['Birth Date'] })
 		.then(response => {
 			let duplicates = response.js.possible_duplicate;
 			if (duplicates === undefined) {
-				return post('addPerson', { first_name: person.firstName, last_name: person.lastName, birth_date: person.birthDate  });
+				return post('addPerson', { first_name: person['First Name'], last_name: person['Last Name'], birth_date: person['Birth Date']  })
+					.then(response => {
+						person.id = response.js.id._text;
+						return response;
+					});
 			} else {
-				console.log('person already exists');
-				// console.log(response.js.possible_duplicate);
-				return duplicates[0];
+				console.log(`${ person['First Name'] } ${ person['Last Name'] } already exists -- updating their information now`);
+				let duplicate = {};
+				if (_.isArray(duplicates)) {
+					duplicate = duplicates[0];
+				} else {
+					duplicate = duplicates;
+				}
+				person.id = duplicate.id._text;
+				return person;
 			}
 		})
 		.then(response => {
-			return post('setPersonSSN', { person_id: person.id, ssn: person.socialSecurityNumber });
+			return post('setPersonSSN', { person_id: person.id, ssn: person['Social Security Number'] });
 		})
 		.then(response => {
-			return post('addPhoneNumber', { person_id: person.id, phone_number: person.phoneNumber, type: 'MOBILE', primary: 'true' });
+			if (!person['Phone Number']) {
+				return Promise.resolve();
+			} else {
+				return post('addPhoneNumber', { person_id: person.id, phone_number: person['Phone Number'], type: 'MOBILE', primary: 'true' });
+			}
 		})
 		.then(response => {
 			return post('addAddress', { person_id: person.id, street: person.street, city: person.city, state: person.state, postal: person.postal, country: person.country, type: 'HOME', primary: 'true' });
 		})
 		.then(response => {
-			return post('addEmailAddress', { person_id: person.id, email_address: person.emailAddress, type: 'HOME', primary: 'true' })
+			return post('addEmailAddress', { person_id: person.id, email_address: person['Email'], type: 'HOME', primary: 'true' })
 		})
+		.then(response => {
+			return person.id;
+		})
+		.catch(err => {
+			console.log(err);
+			throw new Error(err);
+		});
+		// TODO
 		/*.then(response => {
 			return post('addProfilePicture', { person_id: person.id, image: person.image });
-		});*/
+		})*/;
 };
 
 const image2base64 = (path) => {

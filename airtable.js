@@ -69,13 +69,37 @@ const insertUnique = (leads) => {
 	});
 };
 
+const listLeads = () => {
+	return base('1. Leads').select({ view: 'Interested' }).all().then(existing => {
+		return { name: 'leads', data: existing };
+	});
+}
+
 const listDocs = () => {
 	return base('2. Docs').select({ view: 'Upcoming term' }).all().then(existing => {
-		return existing;
+		return { name: 'docs', data: existing };
 	});
+};
+
+const listInfo = () => {
+	return base('3. Accepted Student Info').select({ view: 'Grid view'}).all().then(existing => {
+		return { name: 'info', data: existing };
+	});
+};
+
+const addPopuliLink = (id, link) => {
+	return base('3. Accepted Student Info').update([{
+		'id': id,
+		'fields': {
+			'Populi': link,
+		}
+	}]);
 };
 
 module.exports = {
 	insertUnique,
+	listLeads,
 	listDocs,
+	listInfo,
+	addPopuliLink,
 };
