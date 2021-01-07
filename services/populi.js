@@ -91,11 +91,6 @@ const post = (path, keyvals) => {
 
 const addPerson = (person) => {
 
-	// left off here:
-	// populi successfully finds duplicates based on first and last name
-	// the next step is to add student information to the profile (phone number, address, etc)
-	// and then to pull this information from airtable
-
 	return post('getPossibleDuplicatePeople', { first_name: person['First Name'], last_name: person['Last Name'], birth_date: person['Birth Date'] })
 		.then(response => {
 			let duplicates = response.js.possible_duplicate;

@@ -11,7 +11,7 @@ const findNewStudents = (info) => {
 			return false;
 		} else {
 			// Left off here: trying to add multiple students at a time
-			return student.fields['Last Name'] === 'Hubert' || student.fields['Last Name'] === 'Juarez';
+			return student.fields['Last Name'] === 'Kvak' || student.fields['Last Name'] === 'Leary';
 		}
 	});
 };
@@ -51,13 +51,14 @@ const createInPopuli = (newStudents, leads) => {
 			postal: newStudent.fields['Zip Code'],
 			country: newStudent.fields.Country,
 			'Email': newLead.fields['Email'],
-			// image: '', // TODO
+			image: newLead.fields['Photo'][0], // TODO
 		};
+		console.log(profile);
 
-		return populi.addPerson(profile)
+		/*return populi.addPerson(profile)
 			.then(id => {
 				return airtable.addPopuliLink(newStudent.id, `${constants[process.env.NODE_ENV].WEB_ROOT}router/contacts/people/${id}`)
-			});
+			});*/
 	}))
 };
 
