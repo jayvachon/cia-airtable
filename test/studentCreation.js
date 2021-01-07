@@ -4,14 +4,10 @@ const appRoot = require('app-root-path');
 
 describe('Student Creation', () => {
 	it('should create students', function(done) {
-		this.timeout(5000);
+		this.timeout(10000);
 		studentCreation.create().then(result => {
 			console.log(result);
 			done();
 		});
-	});
-
-	it('should convert image', done => {
-		
 	});
 });

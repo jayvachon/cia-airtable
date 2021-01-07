@@ -31,10 +31,10 @@ describe('Populi', () => {
 		});
 	});
 
-	it('should convert image to base64', done => {
-		populi.image2base64(appRoot + '/samples/sample.jpeg').then(data => {
-			data.should.be.type('string');
+	it('should convert image', done => {
+		populi.image2base64('https://dl.airtable.com/.attachments/d1230ddbf32249ba2e362b1d7433f79f/c28531de/FB_IMG_1599275082632__01.jpg').then(base64 => {
+			console.log(base64);
 			done();
 		});
-	})
+	});
 });

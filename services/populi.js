@@ -4,9 +4,13 @@ const _ = require('lodash');
 const constants = require('../constants');
 const Bottleneck = require('bottleneck');
 const got = require('got');
+const stream = require("stream");
 const FormData = require('form-data');
 const xmlConvert = require('xml-js');
-const fs = require('mz/fs');
+const fs = require('promise-fs');
+const path = require('path');
+const { createWriteStream } = require("fs");
+const { promisify } = require("util");
 
 const client = got.extend({
 	// hooks: before
@@ -89,6 +93,25 @@ const post = (path, keyvals) => {
 	});
 };
 
+const image2base64 = (url) => {
+	let filename = path.basename(url);
+	const downloadStream = got.stream(url);
+	const downloadPath = `${appRoot}/uploads/${filename}`;
+	const fileWriterStream = createWriteStream(downloadPath);
+	const pipeline = promisify(stream.pipeline);
+
+	downloadStream
+		.on('error', (error) => {
+			console.error(`Download failed: ${error.message}`);
+		});
+
+	return pipeline(downloadStream, fileWriterStream)
+		.then(() => {
+			return fs.readFile(downloadPath, 'base64');
+		})
+		.catch((error) => console.error(`Something went wrong. ${error.message}`));
+};
+
 const addPerson = (person) => {
 
 	return post('getPossibleDuplicatePeople', { first_name: person['First Name'], last_name: person['Last Name'], birth_date: person['Birth Date'] })
@@ -113,7 +136,11 @@ const addPerson = (person) => {
 			}
 		})
 		.then(response => {
-			return post('setPersonSSN', { person_id: person.id, ssn: person['Social Security Number'] });
+			if (!person['Social Security Number']) {
+				return Promise.resolve();
+			} else {
+				return post('setPersonSSN', { person_id: person.id, ssn: person['Social Security Number'] });
+			}
 		})
 		.then(response => {
 			if (!person['Phone Number']) {
@@ -129,21 +156,17 @@ const addPerson = (person) => {
 			return post('addEmailAddress', { person_id: person.id, email_address: person['Email'], type: 'HOME', primary: 'true' })
 		})
 		.then(response => {
+			return image2base64(person.image).then(base64 => {
+				return post('addProfilePicture', { person_id: person.id, image: base64 });
+			});
+		})
+		.then(response => {
 			return person.id;
 		})
 		.catch(err => {
 			console.log(err);
 			throw new Error(err);
 		});
-		// TODO
-		/*.then(response => {
-			return post('addProfilePicture', { person_id: person.id, image: person.image });
-		})*/;
-};
-
-const image2base64 = (path) => {
-	return fs.readFile(path, 'base64')
-		.catch(err => console.error(err));
 };
 
 module.exports = {

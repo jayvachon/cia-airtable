@@ -1,7 +1,6 @@
 const airtable = require('../airtable');
 const populi = require('./populi');
 const _ = require('lodash');
-const got = require('got');
 const constants = require('../constants');
 
 const findNewStudents = (info) => {
@@ -14,13 +13,6 @@ const findNewStudents = (info) => {
 			return student.fields['Last Name'] === 'Kvak' || student.fields['Last Name'] === 'Leary';
 		}
 	});
-};
-
-// TODO
-const image2base64 = (url) => {
-	// got.stream(url);
-	return fs.readFile(path, 'base64')
-		.catch(err => console.error(err));
 };
 
 const createInPopuli = (newStudents, leads) => {
@@ -51,14 +43,13 @@ const createInPopuli = (newStudents, leads) => {
 			postal: newStudent.fields['Zip Code'],
 			country: newStudent.fields.Country,
 			'Email': newLead.fields['Email'],
-			image: newLead.fields['Photo'][0], // TODO
+			image: newStudent.fields['Photo'][0].url, // TODO
 		};
-		console.log(profile);
 
-		/*return populi.addPerson(profile)
+		return populi.addPerson(profile)
 			.then(id => {
 				return airtable.addPopuliLink(newStudent.id, `${constants[process.env.NODE_ENV].WEB_ROOT}router/contacts/people/${id}`)
-			});*/
+			});
 	}))
 };
 
