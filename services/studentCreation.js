@@ -5,15 +5,10 @@ const constants = require('../constants');
 
 const findNewStudents = (info) => {
 	return _.filter(info, student => {
-		
 		if (student.fields.Populi !== undefined) {
 			return false;
 		}
 		return true;
-		/*else {
-			// Left off here: trying to add multiple students at a time
-			return student.fields['Last Name'] === 'Almonte' || student.fields['Last Name'] === 'Ashford';
-		}*/
 	});
 };
 

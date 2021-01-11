@@ -41,11 +41,9 @@ let oAuth2Client = new google.auth.OAuth2(
 	config.GOOGLE_CLIENT_SECRET,
 	config.REDIRECT_URI);
 
-/*oAuth2Client.on('tokens', (tokens) => {
-	if (tokens.refresh_token) {
-		oauth2Client.setCredentials(tokens);
-	}
-});*/
+oAuth2Client.on('tokens', (tokens) => {
+	console.log(tokens);
+});
 
 const isLoggedIn = () => {
 	return Object.keys(oAuth2Client.credentials).length !== 0;
@@ -115,6 +113,9 @@ app.get('/', (req, res) => {
 	let pack = JSON.parse(file);
 	let environment = process.env.NODE_ENV;
 	let root = constants[process.env.NODE_ENV].ROOT;
+
+	let tokens = JSON.parse(fs.readFileSync(TOKEN_PATH, 'utf8'));
+	oAuth2Client.setCredentials(tokens);
 
 	res.render('index', { loggedIn: isLoggedIn(), environment, root });
 });
