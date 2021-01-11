@@ -156,9 +156,13 @@ const addPerson = (person) => {
 			return post('addEmailAddress', { person_id: person.id, email_address: person['Email'], type: 'HOME', primary: 'true' })
 		})
 		.then(response => {
-			return image2base64(person.image).then(base64 => {
-				return post('addProfilePicture', { person_id: person.id, image: base64 });
-			});
+			if (!person.image) {
+				return Promise.resolve();
+			} else {
+				return image2base64(person.image).then(base64 => {
+					return post('addProfilePicture', { person_id: person.id, image: base64 });
+				});
+			}
 		})
 		.then(response => {
 			return person.id;

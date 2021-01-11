@@ -32,24 +32,31 @@ const getMessages = (ids) => {
 
 const extractBody = (messages) => {
 	return new Promise((resolve, reject) => {
+		// console.log(JSON.stringify(messages[4], null, 4));
 		return resolve(
-			_.map(messages, message => {
+			_.chain(messages)
 
-				if (message.data.payload.parts) {
-					let parts = message.data.payload.parts;
-					return {
-						id: message.data.id,
-						content: _.map(parts, part => {
-							return base64ToString(part.body.data);
-						}),
+				// Remove the messages that have already been processed (marked by a star)
+				.filter(message => {
+					return !_.includes(message.data.labelIds, "STARRED");
+				})
+				.map(message => {
+					if (message.data.payload.parts) {
+						let parts = message.data.payload.parts;
+						return {
+							id: message.data.id,
+							content: _.map(parts, part => {
+								return base64ToString(part.body.data);
+							}),
+						}
+					} else {
+						return { 
+							id: message.data.id,
+							content: [base64ToString(message.data.payload.body.data)],
+						};
 					}
-				} else {
-					return { 
-						id: message.data.id,
-						content: [base64ToString(message.data.payload.body.data)],
-					};
-				}
-			})
+				})
+				.value()
 		)
 	});
 };
@@ -110,6 +117,14 @@ const send = (newLeads) => {
 	);
 };
 
+const sendRepeat = (repeatLeads) => {
+	return Promise.all(_.each(repeatLeads, lead => {
+		let body = templates.repeat(lead.content.firstName, lead.content.program, 'January 2021');
+		let raw = makeBody(lead.content.email, 'admissions@codeimmersives.com', 'Would you like to enroll at Code Immersives?', body)
+		return sendMessage(raw);
+	}));
+};
+
 const markRead = (ids) => {
 	return Promise.all(_.map(ids, id => {
 		return gmail.users.messages.modify({
@@ -125,5 +140,6 @@ module.exports = {
 	init,
 	list,
 	send,
+	sendRepeat,
 	markRead,
 };

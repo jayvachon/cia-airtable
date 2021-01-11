@@ -130,9 +130,16 @@ app.get('/email-new-leads', (req, res) => {
 	gmailer.list()
 	.then(leads => leadsManager.insertUnique(leads))
 	.then(newLeads => {
-		gmailer.send(newLeads);
-		res.render('newLeads', { hasLeads: newLeads.length > 0, newLeads: newLeads });
-		return gmailer.markRead(_.map(newLeads, newLead => newLead.id));
+		gmailer.send(newLeads.initial);
+		gmailer.sendRepeat(newLeads.repeat);
+		let hasLeads = false;
+		if (newLeads.initial.length > 0) { hasLeads = true; }
+		if (newLeads.repeat.length > 0) { hasLeads = true; }
+		res.render('newLeads', { hasLeads, newLeads: newLeads });
+		return gmailer.markRead(_.map(newLeads.initial, newLead => newLead.id))
+			.then(() => {
+				return gmailer.markRead(_.map(newLeads.repeat, newLead => newLead.id))
+			});
 	});
 });
 

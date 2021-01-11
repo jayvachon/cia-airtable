@@ -32,14 +32,32 @@ const insertUnique = (leads) => {
 		return _.map(existing, lead => lead.fields);
 	})
 	.then(existingLeads => {
+
 		// Filter out leads that have already been added
-		const existingEmails = _.map(existingLeads, existingLead => existingLead.Email);
-		// console.log(existingLeads);
-		return _.filter(leads, lead => !_.includes(existingEmails, lead.content.email));
+		const existingEmails = _.map(existingLeads, existingLead => {
+			// existingLead.Email.toLowercase()
+			let email = existingLead.Email;
+			if (email) {
+				return existingLead.Email.toLowerCase();
+			} else {
+				return '';
+			}
+		});
+		// console.log(existingEmails);
+		// console.log(JSON.stringify(_.includes(existingEmails, leads[0].content.email.toLowerCase())));
+
+		// console.log(JSON.stringify(_.filter(leads, lead => _.includes(existingEmails, lead.content.email.toLowerCase()))));
+		// return _.filter(leads, lead => !_.includes(existingEmails, lead.content.email.toLowercase()));
+		return {
+			// Leads making first contact
+			initial: _.filter(leads, lead => !_.includes(existingEmails, lead.content.email.toLowerCase())),
+
+			// Leads who are filling out the form again
+			repeat: _.filter(leads, lead => _.includes(existingEmails, lead.content.email.toLowerCase())),
+		};
 	})
 	.then(newLeads => {
-
-		const formatted = _.map(newLeads, lead => {
+		const formatted = _.map(newLeads.initial, lead => {
 			return {
 				fields: {
 					'id': lead.id,

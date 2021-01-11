@@ -11,5 +11,6 @@ module.exports = {
 		// Production site:
 		WEB_ROOT: 'https://dfa.populiweb.com/',
 		ROOT: 'https://dfa.populiweb.com/api/index.php',
+		TOKEN: 'g987519aa62fef5eec5b3cbe532b18de88223cc1d667048eefd33c04879a9cb916237e13b7472b9d69dae9d291e101de3be957cfe797f30e644d19a420f7834fe6f317bfc8a3dbe0c6679eb0b0cbb8020313d1dbe50cb2203a4062b386b9149f22eb6b4edca6e7727b7cbb067f21ad5fd9737bcc1e85c12c83ab61f27de54e2f1f81fa1b47837fc651c842001bb7681d5ef5cc6eec160fe71cf358b8876faee62d56d17bd1f4f57189055f86fa777542e3d289a8e3efc02117bcd73972c84ebb48d12',
 	},
 };

@@ -5,13 +5,15 @@ const constants = require('../constants');
 
 const findNewStudents = (info) => {
 	return _.filter(info, student => {
-		// For now, only work with Barbosa
+		
 		if (student.fields.Populi !== undefined) {
 			return false;
-		} else {
-			// Left off here: trying to add multiple students at a time
-			return student.fields['Last Name'] === 'Kvak' || student.fields['Last Name'] === 'Leary';
 		}
+		return true;
+		/*else {
+			// Left off here: trying to add multiple students at a time
+			return student.fields['Last Name'] === 'Almonte' || student.fields['Last Name'] === 'Ashford';
+		}*/
 	});
 };
 
@@ -24,13 +26,19 @@ const createInPopuli = (newStudents, leads) => {
 			return lead.fields['3. Accepted Student Info'][0] === newStudent.id;
 		});
 
-		// console.log(newStudent.fields.Photo[0]);
-		
+		// Format phone number
 		let phone = '';
 		if (newLead.fields['Phone']) {
 			phone = newLead.fields['Phone'].replace('(','').replace(')','').replace(' ','').replace('-','');
 			phone = phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
 		}
+
+		// Allow images to not be uploaded
+		let image = undefined;
+		if (newStudent.fields['Photo'] !== undefined && newStudent.fields['Photo'].length > 0) {
+			image = newStudent.fields['Photo'][0].url;
+		}
+
 		let profile = {
 			'First Name': newStudent.fields['First Name'],
 			'Last Name': newStudent.fields['Last Name'],
@@ -43,7 +51,7 @@ const createInPopuli = (newStudents, leads) => {
 			postal: newStudent.fields['Zip Code'],
 			country: newStudent.fields.Country,
 			'Email': newLead.fields['Email'],
-			image: newStudent.fields['Photo'][0].url, // TODO
+			image: image,
 		};
 
 		return populi.addPerson(profile)

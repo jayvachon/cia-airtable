@@ -37,6 +37,17 @@ const initial = (firstName, program, upcomingTerm) => {
 	return str;
 };
 
+const repeat = (firstName, program, upcomingTerm) => {
+	let str = `<div dir="ltr"><p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt">Hi ${firstName},</p>
+		<br>
+		<p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt">I noticed that you filled out the form on our website again indicating your interest in attending one of our coding programs. If you have any questions or if you'd like to proceed with enrollment for our upcoming ${upcomingTerm} term, simply respond to this email and I can start the process with you!</p>
+		<br>
+		<p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt">Jay</p>
+		`;
+	return str;
+};
+
 module.exports = {
 	initial,
+	repeat,
 };
