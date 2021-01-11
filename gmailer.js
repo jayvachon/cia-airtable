@@ -130,8 +130,8 @@ const markRead = (ids) => {
 		return gmail.users.messages.modify({
 			id: id,
 			userId: 'me',
-			addLabelIds: ['STARRED'],
-			removeLabelIds: ['UNREAD'],
+			addLabelIds: ['STARRED', 'INBOX'],
+			removeLabelIds: ['UNREAD', 'SPAM'],
 		});
 	}));
 };

@@ -130,12 +130,20 @@ app.get('/email-new-leads', (req, res) => {
 	gmailer.list()
 	.then(leads => leadsManager.insertUnique(leads))
 	.then(newLeads => {
+
+		// Send emails
 		gmailer.send(newLeads.initial);
 		gmailer.sendRepeat(newLeads.repeat);
+
+		// Check if any emails have been sent
 		let hasLeads = false;
 		if (newLeads.initial.length > 0) { hasLeads = true; }
 		if (newLeads.repeat.length > 0) { hasLeads = true; }
+
+		// Give feedback
 		res.render('newLeads', { hasLeads, newLeads: newLeads });
+
+		// Mark the emails as read
 		return gmailer.markRead(_.map(newLeads.initial, newLead => newLead.id))
 			.then(() => {
 				return gmailer.markRead(_.map(newLeads.repeat, newLead => newLead.id))
