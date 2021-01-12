@@ -8,30 +8,34 @@
 	<% } %>
 	
 	<% if (hasLeads) { %>
-		<p>The following new leads have been added and emailed:</p>
-		<% newLeads.initial.forEach(function(newLead) { %>
-		<ul>
-			<li>Name: <%= newLead.content.firstName %> <%= newLead.content.lastName %></li>
-			<li>Email: <%= newLead.content.email %></li>
-			<li>Phone: <%= newLead.content.phone %></li>
-			<li>Student Type: <%= newLead.content.status %></li>
-			<li>Needs Financial Aid: <%= newLead.content.aid %></li>
-			<li>Program: <%= newLead.content.program %></li>
-			<li>Message: <%= newLead.content.message %></li>
-		</ul>
-		<% }); %>
-		<p>The following leads are repeats:</p>
-		<% newLeads.repeat.forEach(function(newLead) { %>
-		<ul>
-			<li>Name: <%= newLead.content.firstName %> <%= newLead.content.lastName %></li>
-			<li>Email: <%= newLead.content.email %></li>
-			<li>Phone: <%= newLead.content.phone %></li>
-			<li>Student Type: <%= newLead.content.status %></li>
-			<li>Needs Financial Aid: <%= newLead.content.aid %></li>
-			<li>Program: <%= newLead.content.program %></li>
-			<li>Message: <%= newLead.content.message %></li>
-		</ul>
-		<% }); %>
+		<% if (newLeads.initial.length > 0) { %>
+			<p>The following new leads have been added and emailed:</p>
+			<% newLeads.initial.forEach(function(newLead) { %>
+			<ul>
+				<li>Name: <%= newLead.content.firstName %> <%= newLead.content.lastName %></li>
+				<li>Email: <%= newLead.content.email %></li>
+				<li>Phone: <%= newLead.content.phone %></li>
+				<li>Student Type: <%= newLead.content.status %></li>
+				<li>Needs Financial Aid: <%= newLead.content.aid %></li>
+				<li>Program: <%= newLead.content.program %></li>
+				<li>Message: <%= newLead.content.message %></li>
+			</ul>
+			<% }); %>
+		<% } %>
+		<% if (newLeads.repeat.length > 0) { %>
+			<p>The following leads are repeats:</p>
+			<% newLeads.repeat.forEach(function(newLead) { %>
+			<ul>
+				<li>Name: <%= newLead.content.firstName %> <%= newLead.content.lastName %></li>
+				<li>Email: <%= newLead.content.email %></li>
+				<li>Phone: <%= newLead.content.phone %></li>
+				<li>Student Type: <%= newLead.content.status %></li>
+				<li>Needs Financial Aid: <%= newLead.content.aid %></li>
+				<li>Program: <%= newLead.content.program %></li>
+				<li>Message: <%= newLead.content.message %></li>
+			</ul>
+			<% }); %>
+		<% } %>
 	<% } %>
 	<a href="/">Back</a>
 </body>

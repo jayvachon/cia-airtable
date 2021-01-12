@@ -91,7 +91,7 @@ const list = () => {
 const list20 = () => {
 	return gmail.users.messages.list({
 		userId: 'me',
-		maxResults: 30,
+		maxResults: 40,
 		includeSpamTrash: false,
 	})
 	.then(list => {
@@ -108,9 +108,25 @@ const list20 = () => {
 			.filter(body => {
 				// left off here: filter out emails that don't have attachments
 				// _.map(body.data.payload.parts, part => part.headers);
+				let parts = body.data.payload.parts;
+				// only return emails that have attachments
+				return _.filter(parts, part => part.filename !== '');
+
+				/*_.each(attachments, attachment => {
+					let body = attachment.body;
+					if (body.data) {
+						// I think this field is deprecated, but log it just in case
+						console.log('FOUND BODY.DATA!!! ' + JSON.stringify(attachment));
+					} else if (body.attachmentId) {
+
+					}
+				});*/
 			})
 			.value();
-		console.log(JSON.stringify(bodies, null,4));
+		// console.log(JSON.stringify(bodies, null,4));
+	})
+	.then(bodiesWithAttachments => {
+		console.log(bodiesWithAttachments);
 	})
 	.catch(err => console.error(err));
 };

@@ -54,6 +54,7 @@ app.get('/login', (req, res) => {
 	// 2. Generate authorize url
 	authorizeUrl = oAuth2Client.generateAuthUrl({
 		access_type: 'offline',
+		prompt: 'consent',
 		scope: [
 			'https://www.googleapis.com/auth/spreadsheets',
 			'https://www.googleapis.com/auth/gmail.readonly',
