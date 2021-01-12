@@ -61,6 +61,7 @@ const extractBody = (messages) => {
 	});
 };
 
+// Returns a list of "Get In Touch" emails
 const list = () => {
 	return gmail.users.messages.list({
 		userId: 'me',
@@ -82,6 +83,34 @@ const list = () => {
 		});
 
 		return _.filter(entries, entry => entry.content.email !== undefined);
+	})
+	.catch(err => console.error(err));
+};
+
+// Returns the 20 most recent emails
+const list20 = () => {
+	return gmail.users.messages.list({
+		userId: 'me',
+		maxResults: 30,
+		includeSpamTrash: false,
+	})
+	.then(list => {
+		return _.map(list.data.messages, m => m.id);
+	})
+	.then(ids => getMessages(ids))
+	.then(bodies => {
+		return _.chain(bodies)
+			.filter(body => {
+				// Exclude emails sent by myself
+				let sender = _.find(body.data.payload.headers, header => header.name === 'From').value;
+				return !_.includes(sender, 'admissions@codeimmersives.com');
+			})
+			.filter(body => {
+				// left off here: filter out emails that don't have attachments
+				// _.map(body.data.payload.parts, part => part.headers);
+			})
+			.value();
+		console.log(JSON.stringify(bodies, null,4));
 	})
 	.catch(err => console.error(err));
 };
@@ -139,6 +168,7 @@ const markRead = (ids) => {
 module.exports = {
 	init,
 	list,
+	list20,
 	send,
 	sendRepeat,
 	markRead,

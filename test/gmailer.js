@@ -1,13 +1,13 @@
 require('should');
 const gmailer = require('../gmailer');
 
-/*describe('Gmailer', () => {
+describe('Gmailer', () => {
 
-	it('should list messages', done => {
+	/*it('should list messages with attachments', done => {
 
 		gmailer.list().then(messages => {
 			console.log(messages);
 			done();
 		});
-	});
-});*/
+	});*/
+});

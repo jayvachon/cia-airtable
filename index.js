@@ -166,4 +166,14 @@ app.get('/manually-add-lead', (req, res) => {
 	res.render('manuallyAddLead');
 });
 
+app.get('/process-attachments', (req, res) => {
+	if (isLoggedIn() === false) {
+		return res.redirect('/');
+	}
+	gmailer.init(oAuth2Client);
+	gmailer.list20().then(messages => {
+		// console.log(messages);
+	});
+});
+
 app.listen(PORT);
