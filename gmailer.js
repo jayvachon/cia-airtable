@@ -7,6 +7,7 @@ let gmail = {};
 
 const init = (auth) => {
 	gmail = google.gmail({version: 'v1', auth: auth});
+	return google;
 };
 
 const base64ToString = (base64str) => {
@@ -91,8 +92,9 @@ const list = () => {
 const list20 = () => {
 	return gmail.users.messages.list({
 		userId: 'me',
-		maxResults: 40,
+		maxResults: 20,
 		includeSpamTrash: false,
+		q: 'in:inbox -category:{social promotions updates forums}',
 	})
 	.then(list => {
 		return _.map(list.data.messages, m => m.id);
@@ -101,34 +103,48 @@ const list20 = () => {
 	.then(bodies => {
 		return _.chain(bodies)
 			.filter(body => {
-				// Exclude emails sent by myself
-				let sender = _.find(body.data.payload.headers, header => header.name === 'From').value;
-				return !_.includes(sender, 'admissions@codeimmersives.com');
-			})
-			.filter(body => {
-				// left off here: filter out emails that don't have attachments
-				// _.map(body.data.payload.parts, part => part.headers);
+				
+				let sender = _.find(body.data.payload.headers, header => header.name === 'From');
+				if (!sender) return false; // the sender must be known
+				let from = sender.value;
+
+				let excludeEmails = [
+					'admissions@codeimmersives.com',
+					'colleen.komar@digitalfilmacademy.edu',
+					'anthony.derosa@codeimmersives.com',
+				];
+
+				if (_.some(excludeEmails, _.method('includes', from.match(/\<(.*?)\>/)[1]))) {
+					return false; // the sender cannot be one of the excluded email addresses
+				}
+				
 				let parts = body.data.payload.parts;
-				// only return emails that have attachments
-				return _.filter(parts, part => part.filename !== '');
+				let attachments = _.find(parts, part => part.filename !== '');
+				if (!attachments) return false; // the email must have attachments
 
-				/*_.each(attachments, attachment => {
-					let body = attachment.body;
-					if (body.data) {
-						// I think this field is deprecated, but log it just in case
-						console.log('FOUND BODY.DATA!!! ' + JSON.stringify(attachment));
-					} else if (body.attachmentId) {
-
-					}
-				});*/
+				return true;
 			})
 			.value();
-		// console.log(JSON.stringify(bodies, null,4));
-	})
-	.then(bodiesWithAttachments => {
-		console.log(bodiesWithAttachments);
 	})
 	.catch(err => console.error(err));
+};
+
+const downloadAttachments = (emailBodies) => {
+	return Promise.all(_.map(emailBodies, body => {
+		body.files = [];
+		let messageId = body.data.id;
+		let attachments = _.filter(body.data.payload.parts, part => part.filename !== '');
+		return Promise.all(_.map(attachments, attachment => {
+				return gmail.users.messages.attachments.get({
+					id: attachment.body.attachmentId,
+					messageId,
+					userId: 'me',
+				}).then(file => {
+					body.files.push(file);
+					return body;
+				});
+			}));
+	}));
 };
 
 const makeBody = (to, from, subject, message) => {
@@ -188,4 +204,5 @@ module.exports = {
 	send,
 	sendRepeat,
 	markRead,
+	downloadAttachments,
 };

@@ -2,6 +2,7 @@ require('dotenv').config({path: __dirname + '/.env'})
 const constants = require('./constants');
 const config = require('./config');
 const gmailer = require('./gmailer');
+const drive = require('./services/drive');
 const leadsManager = require('./airtable');
 const populi = require('./services/populi');
 const fs = require('fs');
@@ -60,6 +61,10 @@ app.get('/login', (req, res) => {
 			'https://www.googleapis.com/auth/gmail.readonly',
 			'https://www.googleapis.com/auth/gmail.send',
 			'https://www.googleapis.com/auth/gmail.modify',
+
+			// 'https://www.googleapis.com/auth/drive.appdata',
+			// 'https://www.googleapis.com/auth/drive.file',
+			'https://www.googleapis.com/auth/drive',
 		].join(' '),
 	});
 
@@ -172,9 +177,13 @@ app.get('/process-attachments', (req, res) => {
 		return res.redirect('/');
 	}
 	gmailer.init(oAuth2Client);
-	gmailer.list20().then(messages => {
-		// console.log(messages);
-	});
+	drive.init(oAuth2Client);
+	/*gmailer.list20().then(bodies => gmailer.downloadAttachments(bodies))
+	.then(attachments => {
+		console.log(attachments);
+	});*/
+
+	drive.getOrCreateFolder();
 });
 
 app.listen(PORT);
