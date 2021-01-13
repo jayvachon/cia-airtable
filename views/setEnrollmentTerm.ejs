@@ -1,0 +1,18 @@
+<%- include('partials/head'); -%>
+<body>
+	<%- include('partials/header'); -%>
+
+	<p>Current term: <%= currentTerm %></p>
+
+	<form id="term" action="/set-enrollment-term" method="post">
+	    <select class="selectpicker" data-style="btn-info" name="selectpicker">
+	        <optgroup label="Select Term">
+	            <option value="">Select Enrollment Term</option>
+	            <% terms.forEach(function(term){ %>
+	            <option value="<%= JSON.stringify(term) %>"><%= term.Name %></option>
+	            <% }) %>
+	        </optgroup>
+	    </select>
+	    <input type="submit" value="Submit" />
+	</form>
+</body>

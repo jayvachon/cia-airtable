@@ -1,7 +1,16 @@
 const parser = require('./parser');
 const templates = require('./templates');
 const _ = require('lodash');
+const fs = require('fs');
 const {google} = require('googleapis');
+
+const getCurrenTerm = () => {
+	let currentTerm = JSON.parse(fs.readFileSync('settings.json')).current_term;
+	let startDate = new Date(currentTerm['Start date']);
+	let month = startDate.toLocaleString('default', { month: 'long' });
+	let year = startDate.getFullYear();
+	return `${month} ${year}`;
+};
 
 let gmail = {};
 
@@ -170,8 +179,9 @@ const sendMessage = (raw) => {
 };
 
 const send = (newLeads) => {
+	let currentTerm = getCurrenTerm();
 	return Promise.all(_.each(newLeads, lead => {
-			let body = templates.initial(lead.content.firstName, lead.content.program, 'January 2021');
+			let body = templates.initial(lead.content.firstName, lead.content.program, currentTerm);
 			let raw = makeBody(lead.content.email, 'admissions@codeimmersives.com', 'RE: Code Immersives', body)
 			return sendMessage(raw);
 		})
@@ -179,8 +189,9 @@ const send = (newLeads) => {
 };
 
 const sendRepeat = (repeatLeads) => {
+	let currentTerm = getCurrenTerm();
 	return Promise.all(_.each(repeatLeads, lead => {
-		let body = templates.repeat(lead.content.firstName, lead.content.program, 'January 2021');
+		let body = templates.repeat(lead.content.firstName, lead.content.program, currentTerm);
 		let raw = makeBody(lead.content.email, 'admissions@codeimmersives.com', 'Would you like to enroll at Code Immersives?', body)
 		return sendMessage(raw);
 	}));

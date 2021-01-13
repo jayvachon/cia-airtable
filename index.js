@@ -1,9 +1,9 @@
-require('dotenv').config({path: __dirname + '/.env'})
+const dotenv = require('dotenv');
 const constants = require('./constants');
 const config = require('./config');
 const gmailer = require('./gmailer');
 const drive = require('./services/drive');
-const leadsManager = require('./airtable');
+const airtable = require('./airtable');
 const populi = require('./services/populi');
 const fs = require('fs');
 const _ = require('lodash');
@@ -18,6 +18,8 @@ const appRoot = require('app-root-path');
 const logger = require(`${appRoot}/config/winston`);
 const TOKEN_PATH = 'token.json';
 const PORT = process.env.PORT;
+
+dotenv.config({path: __dirname + '/.env'})
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -135,7 +137,7 @@ app.get('/email-new-leads', (req, res) => {
 	// 4. Final step: apply the authorization to gmail
 	gmailer.init(oAuth2Client);
 	gmailer.list()
-	.then(leads => leadsManager.insertUnique(leads))
+	.then(leads => airtable.insertUnique(leads))
 	.then(newLeads => {
 
 		// Send emails
@@ -184,6 +186,24 @@ app.get('/process-attachments', (req, res) => {
 	});*/
 
 	drive.getOrCreateFolder();
+});
+
+app.get('/set-enrollment-term', (req, res) => {
+	if (isLoggedIn() === false) {
+		return res.redirect('/');
+	}
+	let currentTerm = JSON.parse(fs.readFileSync('settings.json')).current_term.Name;
+	airtable.getTerms()
+		.then(terms => {
+			res.render('setEnrollmentTerm', { terms, currentTerm });
+		});
+});
+
+app.post('/set-enrollment-term', (req, res) => {
+	let settings = JSON.parse(fs.readFileSync('settings.json'));
+	settings.current_term = JSON.parse(req.body.selectpicker);
+	fs.writeFileSync('settings.json', JSON.stringify(settings));
+	res.redirect('/');
 });
 
 app.listen(PORT);

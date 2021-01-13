@@ -9,6 +9,10 @@ Airtable.configure({
 
 const base = Airtable.base(config.BASE);
 
+const getCurrentTerm = () => {
+	return currentTerm = JSON.parse(fs.readFileSync('settings.json')).current_term;
+};
+
 const add = (leads) => {
 	return base('1. Leads')
 	.create(leads, { typecast: true })
@@ -58,6 +62,7 @@ const insertUnique = (leads) => {
 	})
 	.then(newLeads => {
 		const formatted = _.map(newLeads.initial, lead => {
+			let currentTerm = getCurrentTerm;
 			return {
 				fields: {
 					'id': lead.id,
@@ -67,7 +72,7 @@ const insertUnique = (leads) => {
 					'Last Name': lead.content.lastName,
 					'Student Type': lead.content.studentType,
 					'Financial Aid': lead.content.aid,
-					'Term': 'Winter 2021',
+					'Term': currentTerm.Name,
 					'Program': lead.content.program,
 					'Message': lead.content.message,
 					'Date added': new Date(),
@@ -114,10 +119,23 @@ const addPopuliLink = (id, link) => {
 	}]);
 };
 
+const getTerms = () => {
+	return base('Terms').select().all().then(records => {
+		return _.map(records, record => {
+			return {
+				Name: record.fields.Name,
+				'Start date': record.fields['Start date'],
+				'End date': record.fields['End date'],
+			};
+		});
+	});
+};
+
 module.exports = {
 	insertUnique,
 	listLeads,
 	listDocs,
 	listInfo,
 	addPopuliLink,
+	getTerms,
 };
