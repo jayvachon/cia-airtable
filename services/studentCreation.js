@@ -21,6 +21,10 @@ const createInPopuli = (newStudents, leads) => {
 			return lead.fields['3. Accepted Student Info'][0] === newStudent.id;
 		});
 
+		if (!newLead) {
+			throw new Error(`The student ${newStudent.fields['Last Name']} has not been linked to a leads record`)
+		}
+
 		// Format phone number
 		let phone = '';
 		if (newLead.fields['Phone']) {

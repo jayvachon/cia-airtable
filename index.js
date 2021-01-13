@@ -185,7 +185,9 @@ app.get('/process-attachments', (req, res) => {
 		console.log(attachments);
 	});*/
 
-	drive.getOrCreateFolder();
+	drive.getOrCreateParentFolder().then(r => {
+		console.log(r);
+	});
 });
 
 app.get('/set-enrollment-term', (req, res) => {

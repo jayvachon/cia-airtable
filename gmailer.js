@@ -4,7 +4,7 @@ const _ = require('lodash');
 const fs = require('fs');
 const {google} = require('googleapis');
 
-const getCurrenTerm = () => {
+const getCurrentTerm = () => {
 	let currentTerm = JSON.parse(fs.readFileSync('settings.json')).current_term;
 	let startDate = new Date(currentTerm['Start date']);
 	let month = startDate.toLocaleString('default', { month: 'long' });
@@ -179,7 +179,7 @@ const sendMessage = (raw) => {
 };
 
 const send = (newLeads) => {
-	let currentTerm = getCurrenTerm();
+	let currentTerm = getCurrentTerm();
 	return Promise.all(_.each(newLeads, lead => {
 			let body = templates.initial(lead.content.firstName, lead.content.program, currentTerm);
 			let raw = makeBody(lead.content.email, 'admissions@codeimmersives.com', 'RE: Code Immersives', body)
@@ -189,7 +189,7 @@ const send = (newLeads) => {
 };
 
 const sendRepeat = (repeatLeads) => {
-	let currentTerm = getCurrenTerm();
+	let currentTerm = getCurrentTerm();
 	return Promise.all(_.each(repeatLeads, lead => {
 		let body = templates.repeat(lead.content.firstName, lead.content.program, currentTerm);
 		let raw = makeBody(lead.content.email, 'admissions@codeimmersives.com', 'Would you like to enroll at Code Immersives?', body)
