@@ -131,6 +131,12 @@ const getTerms = () => {
 	});
 };
 
+const getLeadByEmail = (email) => {
+	return listLeads().then(leads => {
+		return _.find(leads.data, lead => lead.fields.Email === email);
+	})
+};
+
 module.exports = {
 	insertUnique,
 	listLeads,
@@ -138,4 +144,5 @@ module.exports = {
 	listInfo,
 	addPopuliLink,
 	getTerms,
+	getLeadByEmail,
 };

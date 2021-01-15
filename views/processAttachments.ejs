@@ -1,0 +1,11 @@
+<%- include('partials/head'); -%>
+<body>
+	<%- include('partials/header'); -%>
+	<h2>Process attachments</h2>
+	<% previews.forEach(function(preview){ %>
+		<p><%= preview.from %></p>
+		<% preview.files.forEach(function(file){ %>
+			<p><%= file %></p>
+		<% }) %>
+	<% }) %>
+</body>

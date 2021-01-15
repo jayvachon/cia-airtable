@@ -2,6 +2,7 @@ const parser = require('./parser');
 const templates = require('./templates');
 const _ = require('lodash');
 const fs = require('fs');
+const appRoot = require('app-root-path');
 const {google} = require('googleapis');
 
 const getCurrentTerm = () => {
@@ -123,7 +124,11 @@ const list20 = () => {
 					'anthony.derosa@codeimmersives.com',
 				];
 
-				if (_.some(excludeEmails, _.method('includes', from.match(/\<(.*?)\>/)[1]))) {
+				if (from.includes('<')) {
+					from = from.match(/\<(.*?)\>/)[1];
+				}
+
+				if (_.some(excludeEmails, _.method('includes', from))) {
 					return false; // the sender cannot be one of the excluded email addresses
 				}
 				
@@ -140,19 +145,44 @@ const list20 = () => {
 
 const downloadAttachments = (emailBodies) => {
 	return Promise.all(_.map(emailBodies, body => {
+
+		// downloaded files will be attached to the email body
 		body.files = [];
 		let messageId = body.data.id;
+
+		// filter out emails that don't have attachments
 		let attachments = _.filter(body.data.payload.parts, part => part.filename !== '');
+		console.log(`Downloading ${JSON.stringify(_.map(attachments, attachment => attachment.filename))}`);
+
 		return Promise.all(_.map(attachments, attachment => {
-				return gmail.users.messages.attachments.get({
-					id: attachment.body.attachmentId,
-					messageId,
-					userId: 'me',
-				}).then(file => {
-					body.files.push(file);
-					return body;
+
+			// capture the file information
+			let filename = attachment.filename;
+			let mimeType = attachment.mimeType;
+
+			// download the file and save it locally
+			return gmail.users.messages.attachments.get({
+				id: attachment.body.attachmentId,
+				messageId,
+				userId: 'me',
+			}).then(file => {
+
+				// save the file
+				const fileContents = Buffer.from(file.data.data, 'base64');
+				return new Promise((resolve, reject) => {
+					fs.writeFile(`${appRoot}/uploads/${filename}`, fileContents, (err) => {
+						if (err) reject(err);
+						else {
+
+							// add the file information to the email body along with its local path
+							file.localPath = `${appRoot}/uploads/${filename}`;
+							body.files.push(file);
+							resolve(body);
+						}
+					})
 				});
-			}));
+			});
+		}));
 	}));
 };
 

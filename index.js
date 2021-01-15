@@ -180,14 +180,41 @@ app.get('/process-attachments', (req, res) => {
 	}
 	gmailer.init(oAuth2Client);
 	drive.init(oAuth2Client);
-	/*gmailer.list20().then(bodies => gmailer.downloadAttachments(bodies))
-	.then(attachments => {
-		console.log(attachments);
-	});*/
 
-	drive.getOrCreateParentFolder().then(r => {
-		console.log(r);
-	});
+	// left off here
+	// next steps:
+	// create picker to rename files and send to airtable
+	// attach to drive save
+
+	// Get the 20 most recent emails and filter out the ones that don't have attachments
+	gmailer.list20().then(bodies => gmailer.downloadAttachments(bodies))
+		.then(bodies => {
+			let previews = _.map(bodies[0], body => {
+				let sender = _.find(body.data.payload.headers, header => header.name === 'From');
+				from = sender.value;
+				if (from.includes('<')) {
+					from = from.match(/\<(.*?)\>/)[1];
+				}
+				let files = _.map(body.files, file => file.localPath);
+
+				return {
+					from,
+					files,
+				};
+			});
+			return res.render('processAttachments', { previews });
+		});
+
+
+	// Find the lead in airtable
+	/*airtable.getLeadByEmail('zaimulaaa311@gmail.com')
+		.then(lead => {
+
+			// Fetch the student's folder, creating it if it doesn't exist
+			let studentName = `${lead.fields['Last Name']}${lead.fields['First Name']}`;
+			return drive.getOrCreateParentFolder()
+				.then(id => drive.getOrCreateStudentFolder(id, studentName));
+		});*/
 });
 
 app.get('/set-enrollment-term', (req, res) => {

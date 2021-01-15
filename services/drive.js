@@ -51,7 +51,51 @@ const getOrCreateParentFolder = () => {
 	.catch(err => console.error(err));
 };
 
+const getOrCreateStudentFolder = (parentFolder, studentName) => {
+
+	// student name should be formatted LastnameFirstname
+
+	return drive.files.list({
+		corpora: 'user',
+		q: `"${parentFolder}" in parents`,
+	}).then(list => {
+
+		// See if we can find the student
+		let studentDir = _.find(list.data.files, dir => {
+			return dir.name === studentName;
+		});
+
+		// If not, create a new folder for the student
+		if (!studentDir) {
+
+			let fileMetadata = {
+				'name': studentName,
+				'parents': [parentFolder],
+				'mimeType': 'application/vnd.google-apps.folder',
+			};
+
+			return drive.files.create({
+				resource: fileMetadata,
+				fields: 'id',
+			})
+			.then(result => {
+				return result.data.id;
+			});
+
+		} else {
+			return studentDir.id;
+		}
+	})
+	.catch(err => console.error(err));
+};
+
+const downloadAttachment = (data) => {
+	const fileContents = new Buffer(data, 'base64');
+	// fs.writeFile()
+};
+
 module.exports = {
 	init,
 	getOrCreateParentFolder,
+	getOrCreateStudentFolder,
 };
