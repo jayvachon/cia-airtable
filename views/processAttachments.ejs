@@ -2,10 +2,42 @@
 <body>
 	<%- include('partials/header'); -%>
 	<h2>Process attachments</h2>
-	<% previews.forEach(function(preview){ %>
-		<p><%= preview.from %></p>
-		<% preview.files.forEach(function(file){ %>
-			<p><%= file %></p>
+	<form id="attachments" action="/process-attachments" method="post">
+		<ul>
+		<% previews.forEach(function(preview){ %>
+
+			<!-- Sender -->
+			<li>
+				<h4><%= preview.from %></h4>
+
+				<!-- Sender's files -->
+				<% preview.files.forEach(function(file){ %>
+					<select class="selectpicker" data-style="btn-info" name="selectpicker">
+						<optgroup label="Document type">
+						<option value="">Document Type</option>
+							<option value="ignore">IGNORE THIS DOCUMENT</option>
+							<option value="id">ID</option>
+							<option value="ssc">Social Security Card</option>
+							<option value="diploma">Diploma / Transcript</option>
+							<option value="dd214">DD-214</option>
+							<option value="coe">COE / Statement of Benefits</option>
+							<option value="proof">Proof of $32,000 funds</option>
+							<option value="i20">I-20</option>
+							<option value="f1">F1 Visa</option>
+						</optgroup>
+					</select>
+					<br>
+					<br>
+					<img src="<%= file %>" style="max-width: 200px;" />
+					<p><input type="text" name="file" value="<%= file %>" readonly=true></p>
+					<input type="text" name="from" value="<%= preview.from %>" style="display:none;">
+					<br>
+				<% }) %>
+			</li>
 		<% }) %>
-	<% }) %>
+		<input type="submit" value="Submit" />
+		</ul>
+	</form>
+
+	<a href="/">Back</a>
 </body>

@@ -174,37 +174,6 @@ app.get('/email-new-leads', (req, res) => {
 	}
 
 	return autoEmail(res);
-
-	// 4. Final step: apply the authorization to gmail
-	/*gmailer.init(oAuth2Client);
-	gmailer.list()
-		.then(leads => airtable.insertUnique(leads))
-		.then(newLeads => {
-
-			// Send emails
-			gmailer.send(newLeads.initial);
-			gmailer.sendRepeat(newLeads.repeat);
-
-			// Check if any emails have been sent
-			let hasLeads = false;
-			if (newLeads.initial.length > 0) { hasLeads = true; }
-			if (newLeads.repeat.length > 0) { hasLeads = true; }
-
-			if (hasLeads) {
-				logger.log(`[AUTO-EMAILER] Added the following leads: ${JSON.stringify(newLeads, null, 4)}`);
-			} else {
-				logger.log('[AUTO-EMAILER] No new leads were found.')
-			}
-
-			// Give feedback
-			res.render('newLeads', { hasLeads, newLeads: newLeads });
-
-			// Mark the emails as read
-			return gmailer.markRead(_.map(newLeads.initial, newLead => newLead.id))
-				.then(() => {
-					return gmailer.markRead(_.map(newLeads.repeat, newLead => newLead.id))
-				});
-		});*/
 });
 
 app.get('/log-correspondence', (req, res) => {
@@ -242,7 +211,9 @@ app.get('/process-attachments', (req, res) => {
 				if (from.includes('<')) {
 					from = from.match(/\<(.*?)\>/)[1];
 				}
-				let files = _.map(body.files, file => file.localPath);
+
+				// Get the filename
+				let files = _.map(body.files, file => file.localPath.split(/(\\|\/)/g).pop());
 
 				return {
 					from,
@@ -262,6 +233,15 @@ app.get('/process-attachments', (req, res) => {
 			return drive.getOrCreateParentFolder()
 				.then(id => drive.getOrCreateStudentFolder(id, studentName));
 		});*/
+});
+
+app.post('/process-attachments', (req, res) => {
+	// req.body.selectpicker
+	// req.body.file
+	// req.body.from
+	console.log(req.body.selectpicker);
+	console.log(JSON.stringify(req.body));
+	// console.log(JSON.parse(req.body));
 });
 
 app.get('/set-enrollment-term', (req, res) => {

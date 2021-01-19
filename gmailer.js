@@ -170,12 +170,12 @@ const downloadAttachments = (emailBodies) => {
 				// save the file
 				const fileContents = Buffer.from(file.data.data, 'base64');
 				return new Promise((resolve, reject) => {
-					fs.writeFile(`${appRoot}/uploads/${filename}`, fileContents, (err) => {
+					fs.writeFile(`${appRoot}/public/${filename}`, fileContents, (err) => {
 						if (err) reject(err);
 						else {
 
 							// add the file information to the email body along with its local path
-							file.localPath = `${appRoot}/uploads/${filename}`;
+							file.localPath = `${appRoot}/public/${filename}`;
 							body.files.push(file);
 							resolve(body);
 						}
