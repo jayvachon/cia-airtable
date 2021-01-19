@@ -1,4 +1,5 @@
 const dotenv = require('dotenv');
+const cron = require('node-cron');
 const constants = require('./constants');
 const config = require('./config');
 const gmailer = require('./gmailer');
@@ -50,6 +51,44 @@ oAuth2Client.on('tokens', (tokens) => {
 
 const isLoggedIn = () => {
 	return Object.keys(oAuth2Client.credentials).length !== 0;
+};
+
+const autoEmail = (res) => {
+	if (isLoggedIn() === false) {
+		logger.info('[AUTO-EMAILER] Cannot auto-email because the user is not logged in');
+	}
+
+	gmailer.init(oAuth2Client);
+	gmailer.list()
+		.then(leads => airtable.insertUnique(leads))
+		.then(newLeads => {
+
+			// Send emails
+			gmailer.send(newLeads.initial);
+			gmailer.sendRepeat(newLeads.repeat);
+
+			// Check if any emails have been sent
+			let hasLeads = false;
+			if (newLeads.initial.length > 0) { hasLeads = true; }
+			if (newLeads.repeat.length > 0) { hasLeads = true; }
+
+			if (hasLeads) {
+				logger.info(`[AUTO-EMAILER] Added the following leads: ${JSON.stringify(newLeads, null, 4)}`);
+			} else {
+				logger.info('[AUTO-EMAILER] No new leads were found.');
+			}
+
+			// Give feedback
+			if (res) {
+				res.render('newLeads', { hasLeads, newLeads: newLeads });
+			}
+
+			// Mark the emails as read
+			return gmailer.markRead(_.map(newLeads.initial, newLead => newLead.id))
+				.then(() => {
+					return gmailer.markRead(_.map(newLeads.repeat, newLead => newLead.id))
+				});
+		});
 };
 
 app.get('/login', (req, res) => {
@@ -134,30 +173,38 @@ app.get('/email-new-leads', (req, res) => {
 		return res.redirect('/');
 	}
 
+	return autoEmail(res);
+
 	// 4. Final step: apply the authorization to gmail
-	gmailer.init(oAuth2Client);
+	/*gmailer.init(oAuth2Client);
 	gmailer.list()
-	.then(leads => airtable.insertUnique(leads))
-	.then(newLeads => {
+		.then(leads => airtable.insertUnique(leads))
+		.then(newLeads => {
 
-		// Send emails
-		gmailer.send(newLeads.initial);
-		gmailer.sendRepeat(newLeads.repeat);
+			// Send emails
+			gmailer.send(newLeads.initial);
+			gmailer.sendRepeat(newLeads.repeat);
 
-		// Check if any emails have been sent
-		let hasLeads = false;
-		if (newLeads.initial.length > 0) { hasLeads = true; }
-		if (newLeads.repeat.length > 0) { hasLeads = true; }
+			// Check if any emails have been sent
+			let hasLeads = false;
+			if (newLeads.initial.length > 0) { hasLeads = true; }
+			if (newLeads.repeat.length > 0) { hasLeads = true; }
 
-		// Give feedback
-		res.render('newLeads', { hasLeads, newLeads: newLeads });
+			if (hasLeads) {
+				logger.log(`[AUTO-EMAILER] Added the following leads: ${JSON.stringify(newLeads, null, 4)}`);
+			} else {
+				logger.log('[AUTO-EMAILER] No new leads were found.')
+			}
 
-		// Mark the emails as read
-		return gmailer.markRead(_.map(newLeads.initial, newLead => newLead.id))
-			.then(() => {
-				return gmailer.markRead(_.map(newLeads.repeat, newLead => newLead.id))
-			});
-	});
+			// Give feedback
+			res.render('newLeads', { hasLeads, newLeads: newLeads });
+
+			// Mark the emails as read
+			return gmailer.markRead(_.map(newLeads.initial, newLead => newLead.id))
+				.then(() => {
+					return gmailer.markRead(_.map(newLeads.repeat, newLead => newLead.id))
+				});
+		});*/
 });
 
 app.get('/log-correspondence', (req, res) => {
@@ -233,6 +280,10 @@ app.post('/set-enrollment-term', (req, res) => {
 	settings.current_term = JSON.parse(req.body.selectpicker);
 	fs.writeFileSync('settings.json', JSON.stringify(settings));
 	res.redirect('/');
+});
+
+cron.schedule('0 */3 * * *', () => {
+	autoEmail();
 });
 
 app.listen(PORT);

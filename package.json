@@ -24,6 +24,7 @@
     "lodash": "^4.17.20",
     "memorystore": "^1.6.4",
     "mz": "^2.7.0",
+    "node-cron": "^2.0.3",
     "node-tesseract": "^0.2.7",
     "promise-fs": "^2.1.1",
     "winston": "^3.3.3",

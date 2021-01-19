@@ -1,2 +1,11 @@
 {"message":"Login succeeded for user jay.vachon","level":"info","service":"dfa-populi","timestamp":"2020-12-23 14:41:16"}
 {"message":"Login succeeded for user jay.vachon","level":"info","service":"dfa-populi","timestamp":"2020-12-23 14:41:23"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-01-19 13:52:54"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-01-19 13:54:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-01-19 13:54:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-01-19 13:54:29"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-01-19 13:55:01"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-01-19 13:56:02"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-01-19 13:57:01"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-01-19 13:58:01"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-01-19 13:59:01"}
