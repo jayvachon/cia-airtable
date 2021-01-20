@@ -175,6 +175,8 @@ const downloadAttachments = (emailBodies) => {
 						else {
 
 							// add the file information to the email body along with its local path
+							delete file.data.data;
+							delete body.data.payload.parts;
 							file.localPath = `${appRoot}/public/${filename}`;
 							body.files.push(file);
 							resolve(body);

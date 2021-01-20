@@ -205,7 +205,64 @@ app.get('/process-attachments', (req, res) => {
 	// Get the 20 most recent emails and filter out the ones that don't have attachments
 	gmailer.list20().then(bodies => gmailer.downloadAttachments(bodies))
 		.then(bodies => {
-			let previews = _.map(bodies[0], body => {
+
+			// bodies is an array of arrays with only one first element, so flatten the array
+			let flatBodies = _.map(bodies, body => body[0]);
+
+			// Group emails by the sender's email address
+			let emailsBySender = _.groupBy(flatBodies, body => {
+				let sender = _.find(body.data.payload.headers, header => header.name === 'From');
+				from = sender.value;
+				if (from.includes('<')) {
+					from = from.match(/\<(.*?)\>/)[1];
+				}
+				return from;
+			});
+
+			// Put the senders back into an array for easier mapping
+			emailsBySender = _.values(_.mapKeys(emailsBySender, (val, key) => {
+				val.emails = _.clone(val);
+				val.id = key;
+				return val;
+			}));
+
+			// Create previews with the sender's email address and attachments
+			let previews = _.map(emailsBySender, e => {
+				
+				let files = _.map(e.emails, email => 
+					_.map(email.files, file => file.localPath.split(/(\\|\/)/g).pop()));
+
+				return {
+					from: e.id,
+					files,
+				};
+			});
+
+
+			/*let senders = _.keyBy(bodies, b => {
+				let body = b[0];
+				let sender = _.find(body.data.payload.headers, header => header.name === 'From');
+				from = sender.value;
+				if (from.includes('<')) {
+					from = from.match(/\<(.*?)\>/)[1];
+				}
+				return from;
+			});*/
+			console.log(JSON.stringify(previews, null, 4));
+
+			/*let previews = _.map(senders, sender => {
+
+			});*/
+
+			/*let b = _.map(bodies, body => _.map(body, b => {
+				b.files = '';
+				return b;
+			}));*/
+			// console.log(JSON.stringify(bodies, null, 4));
+
+			// Old way:
+			/*let previews = _.map(bodies[1], body => {
+
 				let sender = _.find(body.data.payload.headers, header => header.name === 'From');
 				from = sender.value;
 				if (from.includes('<')) {
@@ -219,7 +276,7 @@ app.get('/process-attachments', (req, res) => {
 					from,
 					files,
 				};
-			});
+			});*/
 			return res.render('processAttachments', { previews });
 		});
 
@@ -239,8 +296,17 @@ app.post('/process-attachments', (req, res) => {
 	// req.body.selectpicker
 	// req.body.file
 	// req.body.from
-	console.log(req.body.selectpicker);
-	console.log(JSON.stringify(req.body));
+	let attachments = _.zip(req.body.selectpicker, req.body.file, req.body.from);
+	attachments = _.map(attachments, attachment => {
+		return {
+			from: attachment[2],
+			file: attachment[1],
+			type: attachment[0],
+		};
+	});
+	console.log(attachments);
+	// console.log(req.body.selectpicker);
+	// console.log(JSON.stringify(req.body));
 	// console.log(JSON.parse(req.body));
 });
 
