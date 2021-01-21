@@ -15,3 +15,4 @@
 {"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-01-19 21:00:02"}
 {"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-01-20 00:00:03"}
 {"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-01-20 15:00:03"}
+{"message":"[AUTO-EMAILER] Added the following leads: {\n    \"initial\": [\n        {\n            \"id\": \"17725d98c7f4678c\",\n            \"content\": {\n                \"firstName\": \"Mark\",\n                \"lastName\": \"Do\",\n                \"email\": \"mdo@meritize.com\",\n                \"phone\": \"4694328549\",\n                \"studentType\": \"\",\n                \"message\": \"\"\n            }\n        }\n    ],\n    \"repeat\": []\n}","level":"info","service":"dfa-populi","timestamp":"2021-01-21 12:00:02"}

@@ -1,6 +1,7 @@
 const config = require('./config');
 const _ = require('lodash');
 const Airtable = require('airtable');
+const fs = require('fs');
 
 Airtable.configure({
     endpointUrl: 'https://api.airtable.com',
@@ -10,7 +11,7 @@ Airtable.configure({
 const base = Airtable.base(config.BASE);
 
 const getCurrentTerm = () => {
-	return currentTerm = JSON.parse(fs.readFileSync('settings.json')).current_term;
+	return JSON.parse(fs.readFileSync('settings.json')).current_term;
 };
 
 const add = (leads) => {
@@ -39,7 +40,6 @@ const insertUnique = (leads) => {
 
 		// Filter out leads that have already been added
 		const existingEmails = _.map(existingLeads, existingLead => {
-			// existingLead.Email.toLowercase()
 			let email = existingLead.Email;
 			if (email) {
 				return existingLead.Email.toLowerCase();
@@ -47,11 +47,7 @@ const insertUnique = (leads) => {
 				return '';
 			}
 		});
-		// console.log(existingEmails);
-		// console.log(JSON.stringify(_.includes(existingEmails, leads[0].content.email.toLowerCase())));
 
-		// console.log(JSON.stringify(_.filter(leads, lead => _.includes(existingEmails, lead.content.email.toLowerCase()))));
-		// return _.filter(leads, lead => !_.includes(existingEmails, lead.content.email.toLowercase()));
 		return {
 			// Leads making first contact
 			initial: _.filter(leads, lead => !_.includes(existingEmails, lead.content.email.toLowerCase())),
@@ -62,7 +58,7 @@ const insertUnique = (leads) => {
 	})
 	.then(newLeads => {
 		const formatted = _.map(newLeads.initial, lead => {
-			let currentTerm = getCurrentTerm;
+			let currentTerm = getCurrentTerm();
 			return {
 				fields: {
 					'id': lead.id,
@@ -145,4 +141,5 @@ module.exports = {
 	addPopuliLink,
 	getTerms,
 	getLeadByEmail,
+	getCurrentTerm,
 };
