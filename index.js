@@ -195,12 +195,6 @@ app.get('/process-attachments', (req, res) => {
 		return res.redirect('/');
 	}
 	gmailer.init(oAuth2Client);
-	drive.init(oAuth2Client);
-
-	// left off here
-	// next steps:
-	// create picker to rename files and send to airtable
-	// attach to drive save
 
 	// Get the 20 most recent emails and filter out the ones that don't have attachments
 	gmailer.list20().then(bodies => gmailer.downloadAttachments(bodies))
@@ -238,63 +232,17 @@ app.get('/process-attachments', (req, res) => {
 					files,
 				};
 			});
-
-
-			/*let senders = _.keyBy(bodies, b => {
-				let body = b[0];
-				let sender = _.find(body.data.payload.headers, header => header.name === 'From');
-				from = sender.value;
-				if (from.includes('<')) {
-					from = from.match(/\<(.*?)\>/)[1];
-				}
-				return from;
-			});*/
+			
 			console.log(JSON.stringify(previews, null, 4));
 
-			/*let previews = _.map(senders, sender => {
-
-			});*/
-
-			/*let b = _.map(bodies, body => _.map(body, b => {
-				b.files = '';
-				return b;
-			}));*/
-			// console.log(JSON.stringify(bodies, null, 4));
-
-			// Old way:
-			/*let previews = _.map(bodies[1], body => {
-
-				let sender = _.find(body.data.payload.headers, header => header.name === 'From');
-				from = sender.value;
-				if (from.includes('<')) {
-					from = from.match(/\<(.*?)\>/)[1];
-				}
-
-				// Get the filename
-				let files = _.map(body.files, file => file.localPath.split(/(\\|\/)/g).pop());
-
-				return {
-					from,
-					files,
-				};
-			});*/
 			return res.render('processAttachments', { previews });
 		});
-
-
-	// Find the lead in airtable
-	/*airtable.getLeadByEmail('zaimulaaa311@gmail.com')
-		.then(lead => {
-
-			// Fetch the student's folder, creating it if it doesn't exist
-			let studentName = `${lead.fields['Last Name']}${lead.fields['First Name']}`;
-			return drive.getOrCreateParentFolder()
-				.then(id => drive.getOrCreateStudentFolder(id, studentName));
-		});*/
 });
 
 app.post('/process-attachments', (req, res) => {
 	
+	drive.init(oAuth2Client);
+
 	// Organize uploads by who sent it, the file path, and the selected document type
 	let attachments = _.zip(req.body.selectpicker, req.body.file, req.body.from);
 	attachments = _.map(attachments, attachment => {
@@ -311,6 +259,8 @@ app.post('/process-attachments', (req, res) => {
 		// skip ignored attachments
 		if (attachment.type === '') { return Promise.resolve(attachment); }
 		else {
+
+			// Get lead and leaddoc records from airtable
 			return airtable.getLeadByEmail(attachment.from)
 				.then(lead => {
 					if (!lead) {
@@ -320,8 +270,14 @@ app.post('/process-attachments', (req, res) => {
 						return airtable.getOrCreateLeadDoc(lead);
 					}
 				})
-				.then(leadDoc => {
 
+				// Get or create student directory in Drive 
+				.then(records => {
+					// records.lead, records.leadDoc
+					let studentName = `${records.lead.fields['Last Name']}${records.lead.fields['First Name']}`;
+					return drive.getOrCreateParentFolder()
+						.then(id => drive.getOrCreateStudentFolder(id, studentName));
+						// Next step: rename files and upload to drive
 				});
 		}
 	}));

@@ -150,11 +150,20 @@ const getOrCreateLeadDoc = (record) => {
 			let newLeadDoc = {
 				'Lead': [ record.id ],
 			};
-			return addLeadDoc(newLeadDoc);
+			return addLeadDoc(newLeadDoc)
+				.then(l => {
+					return {
+						lead: record,
+						leadDoc: l,
+					}
+				});
 		}
 
 		// Otherwise, return what was found
-		return leadDoc;
+		return {
+			lead: record,
+			leadDoc,
+		};
 	});
 };
 
