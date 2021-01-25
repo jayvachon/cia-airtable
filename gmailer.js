@@ -121,7 +121,7 @@ const list20 = () => {
 				let excludeEmails = [
 					'admissions@codeimmersives.com',
 					'colleen.komar@digitalfilmacademy.edu',
-					'anthony.derosa@codeimmersives.com',
+					// 'anthony.derosa@codeimmersives.com',
 				];
 
 				if (from.includes('<')) {

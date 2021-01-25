@@ -15,7 +15,6 @@
 					<select class="selectpicker" data-style="btn-info" name="selectpicker">
 						<optgroup label="Document type">
 						<option value="">Document Type</option>
-							<option value="ignore">IGNORE THIS DOCUMENT</option>
 							<option value="id">ID</option>
 							<option value="ssc">Social Security Card</option>
 							<option value="diploma">Diploma / Transcript</option>
@@ -30,7 +29,7 @@
 					<br>
 					<embed src="<%= file %>" width="200px" />
 					<p><input type="text" name="file" value="<%= file %>" readonly=true></p>
-					<input type="text" name="from" value="<%= preview.from %>" style="display:none;">
+					<p>(Optional) change sender: <input type="text" name="from" value="<%= preview.from %>"></p>
 					<br>
 				<% }) %>
 			</li>

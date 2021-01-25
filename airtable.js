@@ -16,10 +16,16 @@ const getCurrentTerm = () => {
 
 const add = (leads) => {
 	return base('1. Leads')
-	.create(leads, { typecast: true })
-	.catch(err => {
-		console.error(err);
-	});
+		.create(leads, { typecast: true })
+		.catch(err => {
+			console.error(err);
+		});
+};
+
+const addLeadDoc = (leadDoc) => {
+	return base('2. Docs')
+		.create(leadDoc, { typecast: true })
+		.catch(err => console.error(err));
 };
 
 const insertUnique = (leads) => {
@@ -89,13 +95,13 @@ const insertUnique = (leads) => {
 };
 
 const listLeads = () => {
-	return base('1. Leads').select({ view: 'Interested' }).all().then(existing => {
+	return base('1. Leads').select({ view: 'Main' }).all().then(existing => {
 		return { name: 'leads', data: existing };
 	});
 }
 
 const listDocs = () => {
-	return base('2. Docs').select({ view: 'Upcoming term' }).all().then(existing => {
+	return base('2. Docs').select({ view: 'Main' }).all().then(existing => {
 		return { name: 'docs', data: existing };
 	});
 };
@@ -130,7 +136,30 @@ const getTerms = () => {
 const getLeadByEmail = (email) => {
 	return listLeads().then(leads => {
 		return _.find(leads.data, lead => lead.fields.Email === email);
-	})
+	});
+};
+
+const getOrCreateLeadDoc = (record) => {
+	return listDocs().then(leadDocs => {
+
+		// Find lead doc if it exists
+		let leadDoc = _.find(leadDocs.data, ld => ld.fields.Lead[0] === record.id);
+
+		// If none was found, create a new one
+		if (!leadDoc) {
+			let newLeadDoc = {
+				'Lead': [ record.id ],
+			};
+			return addLeadDoc(newLeadDoc);
+		}
+
+		// Otherwise, return what was found
+		return leadDoc;
+	});
+};
+
+const uploadAttachment = (leadDoc, attachment) => {
+
 };
 
 module.exports = {
@@ -142,4 +171,6 @@ module.exports = {
 	getTerms,
 	getLeadByEmail,
 	getCurrentTerm,
+	getOrCreateLeadDoc,
+	uploadAttachment,
 };

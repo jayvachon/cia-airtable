@@ -231,6 +231,7 @@ app.get('/process-attachments', (req, res) => {
 				
 				let files = _.map(e.emails, email => 
 					_.map(email.files, file => file.localPath.split(/(\\|\/)/g).pop()));
+				files = _.flatten(files);
 
 				return {
 					from: e.id,
@@ -293,21 +294,37 @@ app.get('/process-attachments', (req, res) => {
 });
 
 app.post('/process-attachments', (req, res) => {
-	// req.body.selectpicker
-	// req.body.file
-	// req.body.from
+	
+	// Organize uploads by who sent it, the file path, and the selected document type
 	let attachments = _.zip(req.body.selectpicker, req.body.file, req.body.from);
 	attachments = _.map(attachments, attachment => {
 		return {
-			from: attachment[2],
+			from: attachment[2].trim(),
 			file: attachment[1],
 			type: attachment[0],
 		};
 	});
 	console.log(attachments);
-	// console.log(req.body.selectpicker);
-	// console.log(JSON.stringify(req.body));
-	// console.log(JSON.parse(req.body));
+	
+	return Promise.all(_.map(attachments, attachment => {
+
+		// skip ignored attachments
+		if (attachment.type === '') { return Promise.resolve(attachment); }
+		else {
+			return airtable.getLeadByEmail(attachment.from)
+				.then(lead => {
+					if (!lead) {
+						console.log('No lead record exists for ' + attachment.from);
+						return;
+					} else {
+						return airtable.getOrCreateLeadDoc(lead);
+					}
+				})
+				.then(leadDoc => {
+
+				});
+		}
+	}));
 });
 
 app.get('/set-enrollment-term', (req, res) => {
