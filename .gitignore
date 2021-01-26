@@ -6,3 +6,5 @@ node_modules
 samples
 todo.txt
 uploads/
+public/*
+settings.json
