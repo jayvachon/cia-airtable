@@ -252,7 +252,7 @@ app.post('/process-attachments', (req, res) => {
 			type: attachment[0],
 		};
 	});
-	console.log(attachments);
+	// console.log(attachments);
 	
 	return Promise.all(_.map(attachments, attachment => {
 
@@ -275,14 +275,28 @@ app.post('/process-attachments', (req, res) => {
 				.then(records => {
 					let studentName = `${records.lead.fields['Last Name']}${records.lead.fields['First Name']}`;
 					let filePath = `${appRoot}/public/${attachment.file}`;
+
+					let urlPath = '';
+					if (process.env.NODE_ENV === 'development') {
+						urlPath = 'localhost:8080/';
+					} else if (process.env.NODE_ENV === 'production') {
+						urlPath = 'https://codeimmersivesadmissions.website/';
+					}
+					urlPath += attachment.file;
+
 					let fileName = `${records.lead.fields['Last Name']}${records.lead.fields['First Name']}_${attachment.type}${path.extname(filePath)}`;
+
 					return drive.getOrCreateParentFolder()
 						.then(id => drive.getOrCreateStudentFolder(id, studentName))
-						.then(directory => drive.uploadFile(directory, filePath, fileName));
+						.then(directory => drive.uploadFile(directory, filePath, fileName))
+						.then(fileId => airtable.uploadAttachment(records.leadDoc, urlPath, fileName));
 						// Next step: rename files and upload to drive
 				});
 		}
-	}));
+	}))
+	.then(response => {
+		res.redirect('/');
+	});
 });
 
 app.get('/set-enrollment-term', (req, res) => {

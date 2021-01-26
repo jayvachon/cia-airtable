@@ -17,9 +17,7 @@ const getCurrentTerm = () => {
 const add = (leads) => {
 	return base('1. Leads')
 		.create(leads, { typecast: true })
-		.catch(err => {
-			console.error(err);
-		});
+		.catch(err => console.error(err));
 };
 
 const addLeadDoc = (leadDoc) => {
@@ -167,8 +165,23 @@ const getOrCreateLeadDoc = (record) => {
 	});
 };
 
-const uploadAttachment = (leadDoc, attachment) => {
-
+const uploadAttachment = (leadDoc, filePath, fileName) => {
+	return base('2. Docs').update([
+		{
+			id: leadDoc.id,
+			fields: {
+				'Official ID': [
+					{
+						url: filePath,
+						filename: fileName,
+					}
+				]
+			},
+		}
+	], (err, records) => {
+		// console.log(records);
+		return records;
+	});
 };
 
 module.exports = {

@@ -22,7 +22,7 @@ describe('Airtable', () => {
 		});
 	});*/
 
-	it('should get lead by email', done => {
+	/*it('should get lead by email', done => {
 		airtable.getLeadByEmail('william.okai@nyfa.com').then(record => {
 			// console.log(record);
 			done();
@@ -33,20 +33,23 @@ describe('Airtable', () => {
 		// william.okai@nyfa.com
 		airtable.getLeadByEmail('jaylvachon@gmail.com')
 			.then(record => airtable.getOrCreateLeadDoc(record))
-			.then(docs => {
-				console.log(docs);
+			.then(leadDoc => {
+				console.log(leadDoc);
 				done();
 			});
-	});
+	});*/
 
 	it('should upload attachment', done => {
 		
-		let attachment = {
-			from: 'jaylvachon@gmail.com',
-			file: 'Screenshot_20210125-132159~2.png',
-			type: 'ssc',
-		};
+		let filePath = `${appRoot}/public/20200125_084614~2.jpg`;
+		let fileName = 'VachonJay_ID.jpg';
 
-		
+		airtable.getLeadByEmail('jaylvachon@gmail.com')
+			.then(record => airtable.getOrCreateLeadDoc(record))
+			.then(records => airtable.uploadAttachment(records.leadDoc, filePath, fileName))
+			.then(res => {
+				console.log(res);
+				done();
+			});
 	});
 });

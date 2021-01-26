@@ -91,10 +91,6 @@ const getOrCreateStudentFolder = (parentFolder, studentName) => {
 };
 
 const uploadFile = (directory, filePath, fileName) => {
-	
-	console.log(directory);
-	console.log(filePath);
-	console.log(fileName);
 
 	let fileMetadata = {
 		'name': fileName,
