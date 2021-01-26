@@ -273,10 +273,12 @@ app.post('/process-attachments', (req, res) => {
 
 				// Get or create student directory in Drive 
 				.then(records => {
-					// records.lead, records.leadDoc
 					let studentName = `${records.lead.fields['Last Name']}${records.lead.fields['First Name']}`;
+					let filePath = `${appRoot}/public/${attachment.file}`;
+					let fileName = `${records.lead.fields['Last Name']}${records.lead.fields['First Name']}_${attachment.type}${path.extname(filePath)}`;
 					return drive.getOrCreateParentFolder()
-						.then(id => drive.getOrCreateStudentFolder(id, studentName));
+						.then(id => drive.getOrCreateStudentFolder(id, studentName))
+						.then(directory => drive.uploadFile(directory, filePath, fileName));
 						// Next step: rename files and upload to drive
 				});
 		}

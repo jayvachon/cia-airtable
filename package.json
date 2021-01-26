@@ -23,6 +23,7 @@
     "got": "^11.8.1",
     "lodash": "^4.17.20",
     "memorystore": "^1.6.4",
+    "mime-types": "^2.1.28",
     "mz": "^2.7.0",
     "node-cron": "^2.0.3",
     "node-tesseract": "^0.2.7",

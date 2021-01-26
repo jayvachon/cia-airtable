@@ -38,4 +38,15 @@ describe('Airtable', () => {
 				done();
 			});
 	});
+
+	it('should upload attachment', done => {
+		
+		let attachment = {
+			from: 'jaylvachon@gmail.com',
+			file: 'Screenshot_20210125-132159~2.png',
+			type: 'ssc',
+		};
+
+		
+	});
 });

@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const fs = require('fs');
 const {google} = require('googleapis');
+const mime = require('mime-types');
 
 let drive = {};
 const init = (auth) => {
@@ -89,6 +90,36 @@ const getOrCreateStudentFolder = (parentFolder, studentName) => {
 	.catch(err => console.error(err));
 };
 
+const uploadFile = (directory, filePath, fileName) => {
+	
+	console.log(directory);
+	console.log(filePath);
+	console.log(fileName);
+
+	let fileMetadata = {
+		'name': fileName,
+		'parents': [directory],
+	};
+
+	var media = {
+		mimeType: mime.lookup(filePath),
+		body: fs.createReadStream(filePath),
+	};
+
+	return drive.files.create({
+		resource: fileMetadata,
+		media: media,
+		fields: 'id'
+	}, (err, file) => {
+		if (err) {
+			// Handle error
+			console.error(err);
+		} else {
+			return file.data.id;
+		}
+	});
+};
+
 const downloadAttachment = (data) => {
 	const fileContents = new Buffer(data, 'base64');
 	// fs.writeFile()
@@ -98,4 +129,5 @@ module.exports = {
 	init,
 	getOrCreateParentFolder,
 	getOrCreateStudentFolder,
+	uploadFile,
 };
