@@ -193,7 +193,7 @@ const uploadAttachment = (leadDoc, filePath, fileName, documentType) => {
 	return base('2. Docs').update([
 		updateField,
 	], (err, records) => {
-		// console.log(records);
+		console.log(records);
 		return records;
 	});
 };
