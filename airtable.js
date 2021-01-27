@@ -185,15 +185,15 @@ const uploadAttachment = (leadDoc, filePath, fileName, documentType) => {
 		id: leadDoc.id,
 		fields: {},
 	};
-	updateField.fields[documentType] = [{
+	updateField.fields[field] = [{
 		url: filePath,
 		filename: fileName,
 	}];
 
 	return base('2. Docs').update([
-		updateField,
+		updateField
 	], (err, records) => {
-		console.log(records);
+		// console.log(records);
 		return records;
 	});
 };
