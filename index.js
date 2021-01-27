@@ -289,7 +289,7 @@ app.post('/process-attachments', (req, res) => {
 					return drive.getOrCreateParentFolder()
 						.then(id => drive.getOrCreateStudentFolder(id, studentName))
 						.then(directory => drive.uploadFile(directory, filePath, fileName))
-						.then(fileId => airtable.uploadAttachment(records.leadDoc, urlPath, fileName));
+						.then(fileId => airtable.uploadAttachment(records.leadDoc, urlPath, fileName, attachment.type));
 						// Next step: rename files and upload to drive
 				});
 		}

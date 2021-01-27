@@ -165,19 +165,33 @@ const getOrCreateLeadDoc = (record) => {
 	});
 };
 
-const uploadAttachment = (leadDoc, filePath, fileName) => {
+const uploadAttachment = (leadDoc, filePath, fileName, documentType) => {
+
+	// Airtable does not allow local files to be uploaded, so this only works in production
+
+	let field = '';
+	switch(documentType) {
+		case 'ID': field = 'Official ID'; break;
+		case 'SSC': field = 'Social Security Card'; break;
+		case 'Diploma': field = 'High School Diploma'; break;
+		case 'DD214': field = 'DD-214'; break;
+		case 'COE': field = 'COE/Statement of Benefits'; break;
+		case 'ProofOfFunds': field = 'Proof of $32,000'; break;
+		case 'I20': field = 'I-20'; break;
+		case 'F1': field = 'F-1 visa'; break;
+	}
+
+	let updateField = {
+		id: leadDoc.id,
+	};
+	updateField[field] = [{
+		url: filePath,
+		filename: fileName,
+	}];
+	console.log(updateField);
+
 	return base('2. Docs').update([
-		{
-			id: leadDoc.id,
-			fields: {
-				'Official ID': [
-					{
-						url: filePath,
-						filename: fileName,
-					}
-				]
-			},
-		}
+		updateField,
 	], (err, records) => {
 		// console.log(records);
 		return records;
