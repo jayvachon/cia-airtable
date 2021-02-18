@@ -97,7 +97,7 @@ const uploadFile = (directory, filePath, fileName) => {
 		'parents': [directory],
 	};
 
-	var media = {
+	let media = {
 		mimeType: mime.lookup(filePath),
 		body: fs.createReadStream(filePath),
 	};

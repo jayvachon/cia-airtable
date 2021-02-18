@@ -8,4 +8,5 @@ todo.txt
 uploads/
 public/*
 settings.json
-logs/
+logs/*
+logs/**
