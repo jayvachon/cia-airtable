@@ -167,7 +167,7 @@ const getOrCreateLeadDoc = (record) => {
 
 const uploadAttachment = (leadDoc, filePath, fileName, documentType) => {
 
-	// Airtable does not allow local files to be uploaded, so this only works in production
+	// HEY! Airtable does not allow local files to be uploaded, so this only works in production
 
 	let field = '';
 	switch(documentType) {
