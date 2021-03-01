@@ -217,7 +217,7 @@ app.get('/process-attachments', (req, res) => {
 			emailsBySender = _.values(_.mapKeys(emailsBySender, (val, key) => {
 				val.emails = _.clone(val);
 				val.id = key;
-				return val;
+				return key;
 			}));
 
 			// Create previews with the sender's email address and attachments
@@ -232,7 +232,7 @@ app.get('/process-attachments', (req, res) => {
 					files,
 				};
 			});
-			
+
 			console.log(JSON.stringify(previews, null, 4));
 
 			return res.render('processAttachments', { previews });
