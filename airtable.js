@@ -141,7 +141,7 @@ const getOrCreateLeadDoc = (record) => {
 	return listDocs().then(leadDocs => {
 
 		// Find lead doc if it exists
-		let leadDoc = _.find(leadDocs.data, ld => ld.fields.Lead[0] === record.id);
+		let leadDoc = _.find(leadDocs.data, ld => ld.fields.Lead && ld.fields.Lead[0] === record.id);
 
 		// If none was found, create a new one
 		if (!leadDoc) {
