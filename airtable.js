@@ -134,9 +134,9 @@ const getTerms = () => {
 const getLeadByEmail = (email) => {
 	return listLeads().then(leads => {
 		return _.find(leads.data, lead => {
-			let email = lead.fields.Email;
-			if (!email) return false;
-			return email.toLowerCase() === email.toLowerCase()
+			let leadEmail = lead.fields.Email;
+			if (!leadEmail) return false;
+			return leadEmail.toLowerCase() === email.toLowerCase();
 		});
 	});
 };
