@@ -63,13 +63,17 @@ const insertUnique = (leads) => {
 	.then(newLeads => {
 		const formatted = _.map(newLeads.initial, lead => {
 			let currentTerm = getCurrentTerm();
+			let firstName = lead.content.firstName.toLowerCase();
+			let firstNameFormatted = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+			let lastName = lead.content.lastName.toLowerCase();
+			let lastNameFormatted = lastName.charAt(0).toUpperCase() + lastName.slice(1);
 			return {
 				fields: {
 					'id': lead.id,
 					'Email': lead.content.email,
 					'Phone': lead.content.phone,
-					'First Name': lead.content.firstName,
-					'Last Name': lead.content.lastName,
+					'First Name': firstNameFormatted,
+					'Last Name': lastNameFormatted,
 					'Student Type': lead.content.studentType,
 					'Financial Aid': lead.content.aid,
 					'Term': currentTerm.Name,
