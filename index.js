@@ -316,7 +316,7 @@ app.post('/set-enrollment-term', (req, res) => {
 	res.redirect('/');
 });
 
-cron.schedule('0 */3 * * *', () => {
+cron.schedule('0 */1 * * *', () => {
 	autoEmail();
 });
 

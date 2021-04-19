@@ -109,7 +109,7 @@ const listDocs = () => {
 };
 
 const listInfo = () => {
-	return base('3. Accepted Student Info').select({ view: 'Grid view'}).all().then(existing => {
+	return base('3. Accepted Student Info').select({ view: 'Main'}).all().then(existing => {
 		return { name: 'info', data: existing };
 	});
 };
