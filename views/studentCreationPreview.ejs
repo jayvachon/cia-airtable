@@ -1,0 +1,27 @@
+<%- include('partials/head'); -%>
+<body>
+	<%- include('partials/header'); -%>
+	<h2>Create Students in Populi</h2>
+	<% if (results) { %>
+		<% results.forEach(function(result) { %>
+			<ul>
+				<li><%= result['First Name'] %></li>
+				<li><%= result['Last Name'] %></li>
+				<li><%= result['Birth Date'] %></li>
+				<li><%= result['Phone Number'] %></li>
+				<li><%= result['Social Security Number'] %></li>
+				<li><%= result.street %></li>
+				<li><%= result.city %></li>
+				<li><%= result.state %></li>
+				<li><%= result.postal %></li>
+				<li><%= result.country %></li>
+				<li><%= result.Email %></li>
+				<li><%= result.program %></li>
+				<li><embed src="<%= result.image %>" width="200px" /></li>
+			</ul>
+			<hr />
+		<% }); %>
+		<a href="/dfa/studentCreation">Continue</a>
+	<% } %>
+	<a href="/">Back</a>
+</body>

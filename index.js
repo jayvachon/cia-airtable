@@ -6,6 +6,7 @@ const gmailer = require('./gmailer');
 const drive = require('./services/drive');
 const airtable = require('./airtable');
 const populi = require('./services/populi');
+const studentCreation = require('./services/studentCreation');
 const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
@@ -314,6 +315,13 @@ app.post('/set-enrollment-term', (req, res) => {
 	settings.current_term = JSON.parse(req.body.selectpicker);
 	fs.writeFileSync('settings.json', JSON.stringify(settings));
 	res.redirect('/');
+});
+
+app.get('/student-creation-preview', (req, res) => {
+	studentCreation.preview().then(results => {
+		res.render('studentCreationPreview', { results });
+	})
+	.catch(err => res.send(err));
 });
 
 cron.schedule('0 */1 * * *', () => {
