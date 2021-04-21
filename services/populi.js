@@ -70,7 +70,7 @@ const post = (path, keyvals) => {
 	}
 
 	if (_.some(Object.values(keyvals), _.isEmpty)) {
-		throw new Error('One of the values provided is undefined, so the request cannot be completed: '+ JSON.stringify(keyvals))
+		throw new Error('One of the values provided is undefined, so the request cannot be completed: '+ JSON.stringify(keyvals) + ' (it may be that the value needs to be turned into a string)')
 	}
 
 	let form = new FormData();
@@ -136,6 +136,7 @@ const addPerson = (person) => {
 			}
 		})
 		.then(response => {
+			// console.log('ssn')
 			if (!person['Social Security Number']) {
 				return Promise.resolve();
 			} else {
@@ -143,6 +144,7 @@ const addPerson = (person) => {
 			}
 		})
 		.then(response => {
+			// console.log('phone')
 			if (!person['Phone Number']) {
 				return Promise.resolve();
 			} else {
@@ -150,12 +152,15 @@ const addPerson = (person) => {
 			}
 		})
 		.then(response => {
+			// console.log('address')
 			return post('addAddress', { person_id: person.id, street: person.street, city: person.city, state: person.state, postal: person.postal, country: person.country, type: 'HOME', primary: 'true' });
 		})
 		.then(response => {
+			// console.log('email')
 			return post('addEmailAddress', { person_id: person.id, email_address: person['Email'], type: 'HOME', primary: 'true' })
 		})
 		.then(response => {
+			// console.log('image')
 			if (!person.image) {
 				return Promise.resolve();
 			} else {
@@ -165,12 +170,38 @@ const addPerson = (person) => {
 			}
 		})
 		.then(response => {
+			// console.log('tag')
+			return post('addTag', { person_id: person.id, tag_id: person.tag });
+		})
+		.then(response => {
+			// console.log(`person_id: ${person.id}\nadmissions_officer_id: ${person.leadInfo.admissions_officer_id}\nprogram_id: ${person.leadInfo.program_id[person.programShort]}\nterm_id: ${person.leadInfo.term_id}\ned_level_id: ${person.educationLevel}\nhigh_school_grad_date: ${person.highSchoolGradDate}`);
+			return post('setLeadInfo', {
+				person_id: person.id,
+				admissions_officer_id: person.leadInfo.admissions_officer_id,
+				status: 'PROSPECT',
+				program_id: person.leadInfo.program_id[person.programShort],
+				term_id: person.leadInfo.term_id,
+				ed_level_id: person.educationLevel,
+				high_school_grad_date: person.highSchoolGradDate,
+			});
+		})
+		/*.then(response => {
+			console.log('application')
+			return post('addApplication', {
+				person_id: person.id,
+				application_template_id: person.application.application_template_id,
+				representative_id: person.leadInfo.admissions_officer_id,
+				program_id: person.leadInfo.program_id[person.programShort],
+				academic_term_id: person.leadInfo.term_id,
+			});
+		})*/
+		.then(response => {
 			return person.id;
 		})
 		.catch(err => {
 			console.log(err);
-			throw new Error(err);
-		});
+			throw new Error(err)
+;		});
 };
 
 module.exports = {

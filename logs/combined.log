@@ -214,3 +214,7 @@
 {"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-18 21:00:02"}
 {"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-21 12:00:00"}
 {"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-21 12:00:00"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-21 13:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-21 13:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-21 14:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-21 14:00:01"}

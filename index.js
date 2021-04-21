@@ -324,6 +324,12 @@ app.get('/student-creation-preview', (req, res) => {
 	.catch(err => res.send(err));
 });
 
+app.get('/student-creation', (req, res) => {
+	studentCreation.create2().then(results => {
+		res.send(results);
+	});
+});
+
 cron.schedule('0 */1 * * *', () => {
 	autoEmail();
 });

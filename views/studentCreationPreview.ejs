@@ -2,9 +2,11 @@
 <body>
 	<%- include('partials/header'); -%>
 	<h2>Create Students in Populi</h2>
+	<p>NOTE! Make sure you've updated the tags to reflect this term (call getTags in Postman and update them in studentCreation.js)</p>
 	<% if (results) { %>
 		<% results.forEach(function(result) { %>
 			<ul>
+				<li><embed src="<%= result.image %>" width="200px" /></li>
 				<li><%= result['First Name'] %></li>
 				<li><%= result['Last Name'] %></li>
 				<li><%= result['Birth Date'] %></li>
@@ -16,12 +18,21 @@
 				<li><%= result.postal %></li>
 				<li><%= result.country %></li>
 				<li><%= result.Email %></li>
-				<li><%= result.program %></li>
-				<li><embed src="<%= result.image %>" width="200px" /></li>
+				<li><%= result.program %> (<%= result.tag %>)</li>
+				<li>
+					Lead Info:
+					<ul>
+						<li><strong>Admission Officer ID:</strong> <%= result.leadInfo.admissions_officer_id %></li>
+						<li><strong>Program ID:</strong> <%= result.leadInfo.program_id[result.programShort] %></li>
+						<li><strong>Term ID:</strong> <%= result.leadInfo.term_id %></li>
+						<li><strong>Education Level ID:</strong> <%= result.educationLevel %></li>
+						<li><strong>High School Graduation Date:</strong> <%= result.highSchoolGradDate %></li>
+					</ul>
+				</li>
 			</ul>
 			<hr />
 		<% }); %>
-		<a href="/dfa/studentCreation">Continue</a>
+		<a href="/student-creation">Continue</a>
 	<% } %>
 	<a href="/">Back</a>
 </body>
