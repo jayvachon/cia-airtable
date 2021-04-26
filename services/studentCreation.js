@@ -19,19 +19,19 @@ const tags = {
 
 const leadInfo = {
 	production: {
-		admissions_officer_id: '',
+		admissions_officer_id: '23356676',
 		program_id: {
-			python: '',
-			wdi: '',
+			python: '35666',
+			wdi: '35366',
 		},
-		term_id: '',
+		term_id: '273980',
 		ed_level: {
-			high_school: '',
-			some_college: '',
-			associates: '',
-			bachelors: '',
-			masters: '',
-			doctoral: '',
+			high_school: '3',
+			some_college: '4',
+			associates: '5',
+			bachelors: '6',
+			masters: '7',
+			doctoral: '8',
 		},
 	},
 	development: {
@@ -54,8 +54,8 @@ const leadInfo = {
 
 const application = {
 	production: {
-		application_template_id: '',
-		email_link_to_applicant: '',
+		application_template_id: '34334',
+		email_link_to_applicant: 'true',
 	},
 	development: {
 		application_template_id: '34334',
@@ -70,10 +70,16 @@ const findNewStudents = (info) => {
 		}
 
 		// only process one for now
-		if (student.fields['Legal Last Name'] !== "Bissell") {
+		/*if (student.fields['Legal Last Name'] !== "Kittel") {
 			return false;
 		}
-		return true;
+		return true;*/
+
+		if (student.fields['Legal Last Name'] === 'Cecil' || student.fields['Legal Last Name'] === 'Hagstrom') {
+			return true;
+		} else {
+			return false;
+		}
 	});
 };
 

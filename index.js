@@ -326,7 +326,9 @@ app.get('/student-creation-preview', (req, res) => {
 
 app.get('/student-creation', (req, res) => {
 	studentCreation.create2().then(results => {
-		res.send(results);
+		// res.send(results);
+		console.log(JSON.stringify(results))
+		res.render('studentCreationResults', { results });
 	});
 });
 

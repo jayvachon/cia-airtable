@@ -1,0 +1,14 @@
+<%- include('partials/head'); -%>
+<body>
+	<%- include('partials/header'); -%>
+	<h2>Create Students in Populi: Results</h2>
+	<% if (results) { %>
+		<ul>
+		<% results.forEach(function(result) { %>
+			<li><a href="<%= result[0].fields.Populi %>"><%= result[0].fields['Legal First Name'] %> <%= result[0].fields['Legal Last Name'] %></a></li>
+		<% }); %>
+		</ul>
+	<% } %>
+	<hr />
+	<a href="/">Back</a>
+</body>
