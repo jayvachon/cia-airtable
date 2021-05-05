@@ -220,3 +220,125 @@
 {"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-21 14:00:01"}
 {"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-26 11:00:00"}
 {"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-26 11:00:01"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-26 12:00:04"}
+{"message":"[AUTO-EMAILER] Added the following leads: {\n    \"initial\": [\n        {\n            \"id\": \"1790f059c66cebfb\",\n            \"content\": {\n                \"firstName\": \"Elias\",\n                \"lastName\": \"Popa\",\n                \"email\": \"elias.popa@citi.net\",\n                \"phone\": \"9172829553\",\n                \"studentType\": \"\",\n                \"message\": \"\"\n            }\n        }\n    ],\n    \"repeat\": []\n}","level":"info","service":"dfa-populi","timestamp":"2021-04-26 13:00:06"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-26 14:00:03"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-26 15:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-26 15:00:03"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-26 16:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-26 16:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-26 17:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-26 17:00:01"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-26 18:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-26 18:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-26 19:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-26 19:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-26 20:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-26 20:00:02"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-27 11:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-27 12:00:02"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-27 13:00:09"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-27 14:00:05"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-27 15:00:02"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-27 16:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-27 20:00:02"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-27 21:00:07"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-27 22:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-27 23:00:02"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-28 00:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-28 01:00:02"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-28 11:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-28 12:00:02"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-28 13:00:03"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-28 14:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-28 14:00:03"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-28 15:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-28 15:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-28 16:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-28 16:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-28 17:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-28 17:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-28 18:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-28 18:00:01"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-28 19:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-28 19:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-29 11:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-29 11:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-29 12:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-29 12:00:03"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-29 13:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-29 13:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-29 14:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-29 14:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-29 15:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-29 15:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-29 17:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-29 17:00:01"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-29 18:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-29 18:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-29 19:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-29 19:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-29 20:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-29 20:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-29 21:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-29 21:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-29 22:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-29 22:00:01"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-30 00:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-30 00:00:01"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-30 01:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-30 01:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-30 11:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-30 11:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-30 20:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-30 20:00:01"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-30 21:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-30 21:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-30 22:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-30 22:00:01"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-04-30 23:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-04-30 23:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-05-01 00:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-01 00:00:01"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-05-01 19:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-01 19:00:01"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-05-01 20:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-01 20:00:01"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-05-01 21:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-01 21:00:01"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-05-02 17:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-02 17:00:01"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-05-02 18:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-02 18:00:01"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-05-02 21:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-02 21:00:02"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-05-02 22:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-02 22:00:01"}
+{"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-05-02 23:00:00"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-02 23:00:02"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-03 11:00:02"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-03 12:00:02"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-03 13:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-03 14:00:03"}
+{"message":"[AUTO-EMAILER] Added the following leads: {\n    \"initial\": [\n        {\n            \"id\": \"179381d5b049bc89\",\n            \"content\": {\n                \"firstName\": \"Hassan\",\n                \"lastName\": \"Mostafa\",\n                \"email\": \"hassanmostafa545@gmail.com\",\n                \"phone\": \"01000635811\",\n                \"program\": \"Javascript - Web Development\",\n                \"studentType\": \"International - Need Visa. I can show proof of finances($32,000) later.\",\n                \"aid\": \"Yes\",\n                \"message\": \"\"\n            }\n        }\n    ],\n    \"repeat\": []\n}","level":"info","service":"dfa-populi","timestamp":"2021-05-04 13:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-04 14:00:02"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-04 15:00:04"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-04 16:00:02"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-04 17:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-04 18:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-04 19:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-04 20:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-04 21:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-04 22:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-04 23:00:47"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-05 00:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-05 01:00:02"}
+{"message":"[AUTO-EMAILER] Added the following leads: {\n    \"initial\": [],\n    \"repeat\": [\n        {\n            \"id\": \"1793aef2d3221f1f\",\n            \"content\": {\n                \"firstName\": \"PhillipprepePC\",\n                \"lastName\": \"Phillipprepe\",\n                \"email\": \"artem.antonov.10.3.1963@mail.ru\",\n                \"phone\": \"43510783802\",\n                \"studentType\": \"\",\n                \"message\": \"\"\n            }\n        }\n    ]\n}","level":"info","service":"dfa-populi","timestamp":"2021-05-05 02:00:02"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-05 03:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-05 04:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-05 05:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-05 06:00:02"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-05 07:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-05 08:00:02"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-05 09:00:03"}
+{"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-05-05 10:00:03"}

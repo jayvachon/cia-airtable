@@ -75,11 +75,13 @@ const findNewStudents = (info) => {
 		}
 		return true;*/
 
-		if (student.fields['Legal Last Name'] === 'Cecil' || student.fields['Legal Last Name'] === 'Hagstrom') {
+		/*if (student.fields['Legal Last Name'] === 'Alequin' || student.fields['Legal Last Name'] === 'Man' || student.fields['Legal Last Name'] === 'Mitchell') {
 			return true;
 		} else {
 			return false;
-		}
+		}*/
+
+		return true;
 	});
 };
 
