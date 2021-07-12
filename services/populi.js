@@ -137,6 +137,7 @@ const addPerson = (person) => {
 		})
 		.then(response => {
 			// console.log('ssn')
+			// TODO: fix. this doesn't work without a SSN
 			if (!person['Social Security Number']) {
 				return Promise.resolve();
 			} else {

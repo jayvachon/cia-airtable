@@ -103,6 +103,7 @@ app.get('/login', (req, res) => {
 			'https://www.googleapis.com/auth/gmail.readonly',
 			'https://www.googleapis.com/auth/gmail.send',
 			'https://www.googleapis.com/auth/gmail.modify',
+			'https://mail.google.com/',
 
 			// 'https://www.googleapis.com/auth/drive.appdata',
 			// 'https://www.googleapis.com/auth/drive.file',

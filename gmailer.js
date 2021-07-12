@@ -4,6 +4,7 @@ const _ = require('lodash');
 const fs = require('fs');
 const appRoot = require('app-root-path');
 const {google} = require('googleapis');
+const logger = require(`${appRoot}/config/winston`);
 
 const getCurrentTerm = () => {
 	let currentTerm = JSON.parse(fs.readFileSync('settings.json')).current_term;
@@ -95,7 +96,28 @@ const list = () => {
 
 		return _.filter(entries, entry => entry.content.email !== undefined);
 	})
+	.then(entries => filterSpam(entries))
 	.catch(err => console.error(err));
+};
+
+const filterSpam = (entries) => {
+
+	let filtered = _.filter(entries, entry => {
+		let fullname = `${entry.content.firstName} ${entry.content.lastName}`;
+		let re = /\b(\w+)[A-Z]{2}\s+\1/; // Matches a repeating first and last name with two capital letters at the end of the first name. Ex: WilliamPioneAH WilliamPione
+		return re.test(fullname) === false;
+	});
+
+	let spam = _.filter(entries, entry => {
+		let fullname = `${entry.content.firstName} ${entry.content.lastName}`;
+		let re = /\b(\w+)[A-Z]{2}\s+\1/; // Matches a repeating first and last name with two capital letters at the end of the first name. Ex: WilliamPioneAH WilliamPione
+		return re.test(fullname) === true;
+	});
+	logger.info(`[AUTO-EMAILER] Permanently deleting these spam entries: ${JSON.stringify(spam, null, 4)}`);
+	spam = _.map(spam, s => s.id);
+	
+	return deletePermanently(spam)
+		.then(() => { return filtered; });
 };
 
 // Returns the 20 most recent emails
@@ -238,6 +260,13 @@ const markRead = (ids) => {
 			removeLabelIds: ['UNREAD', 'SPAM'],
 		});
 	}));
+};
+
+const deletePermanently = (ids) => {
+	return gmail.users.messages.batchDelete({
+		ids: ids,
+		userId: 'me',
+	});
 };
 
 module.exports = {
