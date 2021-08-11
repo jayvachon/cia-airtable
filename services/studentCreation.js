@@ -8,8 +8,8 @@ const tags = {
 
 	// Students are tagged with the program they're in. These are updated every term!
 	production: {
-		python: '446549',
-		wdi: '446550',
+		python: '448278',
+		wdi: '448279',
 	},
 	development: {
 		python: '433046',
@@ -86,7 +86,25 @@ const findNewStudents = (info) => {
 };
 
 const prep = (newStudents, leads) => {
-	return Promise.all(_.map(newStudents, newStudent => {
+
+	/*console.log('...')
+	let test = _.map(newStudents, newStudent => {
+		console.log(newStudent);
+
+		let newLead = _.find(leads, lead => {
+			if (lead.fields['3. Accepted Student Info'] === undefined) return false;
+			return lead.fields['3. Accepted Student Info'][0] === newStudent.id;
+		});
+
+		console.log(newLead);
+
+		return newStudent;
+	})
+	console.log('...')*/
+
+	return _.map(newStudents, newStudent => {
+
+		// console.log(newStudent)
 
 		// Connect Lead and Accepted Student Info
 		let newLead = _.find(leads, lead => {
@@ -96,6 +114,7 @@ const prep = (newStudents, leads) => {
 
 		if (!newLead) {
 			throw new Error(`The student ${newStudent.fields['Legal Last Name']} has not been linked to a leads record`)
+			return { error: `The student ${newStudent.fields['Legal Last Name']} has not been linked to a leads record` };
 		}
 
 		// Format phone number
@@ -154,10 +173,12 @@ const prep = (newStudents, leads) => {
 			educationLevel: educationLevel,
 			highSchoolGradDate: newStudent.fields['High School Graduation Date'],
 			application: application[process.env.NODE_ENV],
+			error: '',
 		};
+		// console.log(profile);
 
 		return profile;
-	}));
+	});
 };
 
 // deprecate this
