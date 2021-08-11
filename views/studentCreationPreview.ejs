@@ -2,7 +2,7 @@
 <body>
 	<%- include('partials/header'); -%>
 	<h2>Create Students in Populi</h2>
-	<p>NOTE! Make sure you've updated the tags to reflect this term (call getTags in Postman and update them in studentCreation.js)</p>
+	<p>NOTE! Make sure you've updated the <strong>tags and term IDs</strong> to reflect this term (call getTags and getAcademicTerms in Postman and update them in studentCreation.js)</p>
 	<% if (results) { %>
 		<% results.forEach(function(result) { %>
 			<ul>
