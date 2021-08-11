@@ -322,7 +322,9 @@ app.get('/student-creation-preview', (req, res) => {
 	studentCreation.preview().then(results => {
 		res.render('studentCreationPreview', { results });
 	})
-	.catch(err => res.send(err));
+	.catch(err => {
+		res.render('error', { error: err });
+	});
 });
 
 app.get('/student-creation', (req, res) => {
