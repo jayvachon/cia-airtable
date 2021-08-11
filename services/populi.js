@@ -11,6 +11,7 @@ const fs = require('promise-fs');
 const path = require('path');
 const { createWriteStream } = require("fs");
 const { promisify } = require("util");
+const logger = require(`${appRoot}/config/winston`);
 
 const client = got.extend({
 	// hooks: before

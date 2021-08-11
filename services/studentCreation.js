@@ -101,7 +101,6 @@ const prep = (newStudents, leads) => {
 		if (newStudent.fields['Photo'] !== undefined && newStudent.fields['Photo'].length > 0) {
 			image = newStudent.fields['Photo'][0].url;
 		}
-		logger.info(image);
 
 		let tag = '';
 		let program = newLead.fields['Program'];
