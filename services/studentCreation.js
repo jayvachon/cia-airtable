@@ -24,7 +24,7 @@ const leadInfo = {
 			python: '35666',
 			wdi: '35366',
 		},
-		term_id: '273980',
+		term_id: '273986',
 		ed_level: {
 			high_school: '3',
 			some_college: '4',
