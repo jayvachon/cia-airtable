@@ -3,6 +3,8 @@ const airtable = require('../airtable');
 const populi = require('./populi');
 const _ = require('lodash');
 const constants = require('../constants');
+const appRoot = require('app-root-path');
+const logger = require(`${appRoot}/config/winston`);
 
 const tags = {
 
@@ -68,43 +70,13 @@ const findNewStudents = (info) => {
 		if (student.fields.Populi !== undefined) {
 			return false;
 		}
-
-		// only process one for now
-		/*if (student.fields['Legal Last Name'] !== "Kittel") {
-			return false;
-		}
-		return true;*/
-
-		/*if (student.fields['Legal Last Name'] === 'Alequin' || student.fields['Legal Last Name'] === 'Man' || student.fields['Legal Last Name'] === 'Mitchell') {
-			return true;
-		} else {
-			return false;
-		}*/
-
 		return true;
 	});
 };
 
 const prep = (newStudents, leads) => {
 
-	/*console.log('...')
-	let test = _.map(newStudents, newStudent => {
-		console.log(newStudent);
-
-		let newLead = _.find(leads, lead => {
-			if (lead.fields['3. Accepted Student Info'] === undefined) return false;
-			return lead.fields['3. Accepted Student Info'][0] === newStudent.id;
-		});
-
-		console.log(newLead);
-
-		return newStudent;
-	})
-	console.log('...')*/
-
 	return _.map(newStudents, newStudent => {
-
-		// console.log(newStudent)
 
 		// Connect Lead and Accepted Student Info
 		let newLead = _.find(leads, lead => {
@@ -129,6 +101,7 @@ const prep = (newStudents, leads) => {
 		if (newStudent.fields['Photo'] !== undefined && newStudent.fields['Photo'].length > 0) {
 			image = newStudent.fields['Photo'][0].url;
 		}
+		logger.info(image);
 
 		let tag = '';
 		let program = newLead.fields['Program'];
@@ -175,80 +148,9 @@ const prep = (newStudents, leads) => {
 			application: application[process.env.NODE_ENV],
 			error: '',
 		};
-		// console.log(profile);
 
 		return profile;
 	});
-};
-
-// deprecate this
-const createInPopuli = (newStudents, leads) => {
-	return Promise.all(_.map(newStudents, newStudent => {
-
-		// Connect Lead and Accepted Student Info
-		let newLead = _.find(leads, lead => {
-			if (lead.fields['3. Accepted Student Info'] === undefined) return false;
-			return lead.fields['3. Accepted Student Info'][0] === newStudent.id;
-		});
-
-		if (!newLead) {
-			throw new Error(`The student ${newStudent.fields['Legal Last Name']} has not been linked to a leads record`)
-		}
-
-		// Format phone number
-		let phone = '';
-		if (newLead.fields['Phone']) {
-			phone = newLead.fields['Phone'].replace('(','').replace(')','').replace(' ','').replace('-','');
-			phone = phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-		}
-
-		// Allow images to not be uploaded
-		let image = undefined;
-		if (newStudent.fields['Photo'] !== undefined && newStudent.fields['Photo'].length > 0) {
-			image = newStudent.fields['Photo'][0].url;
-		}
-
-		let profile = {
-			'First Name': newStudent.fields['Legal First Name'],
-			'Last Name': newStudent.fields['Legal Last Name'],
-			'Birth Date': newStudent.fields['Birth Date'],
-			'Phone Number': phone,
-			'Social Security Number': newStudent.fields['Social Security Number'],
-			street: newStudent.fields.Street,
-			city: newStudent.fields.City,
-			state: newStudent.fields.State,
-			postal: newStudent.fields['Zip Code'],
-			country: newStudent.fields.Country,
-			'Email': newLead.fields['Email'],
-			image: image,
-			// tag // program
-
-		};
-
-		return populi.addPerson(profile)
-			.then(id => {
-				return airtable.addPopuliLink(newStudent.id, `${constants[process.env.NODE_ENV].WEB_ROOT}router/contacts/people/${id}`)
-			});
-	}))
-};
-
-// deprecate this
-const create = () => {
-	let tables = {};
-	return Promise.all([airtable.listLeads(), airtable.listDocs(), airtable.listInfo()])
-		.then((values) => {
-			_.forEach(values, v => {
-				tables[v.name] = _.map(v.data, d => {
-					return {
-						id: d.id,
-						fields: d.fields,
-					};
-				});
-			})
-			return tables;
-		})
-		.then(tables => findNewStudents(tables.info))
-		.then(newStudents => createInPopuli(newStudents, tables.leads));
 };
 
 const preview = () => {
@@ -295,6 +197,5 @@ const create2 = () => {
 
 module.exports = {
 	preview,
-	create,
 	create2,
 };
