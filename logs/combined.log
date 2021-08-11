@@ -399,3 +399,5 @@
 {"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-08-11 10:00:04"}
 {"message":"[AUTO-EMAILER] Cannot auto-email because the user is not logged in","level":"info","service":"dfa-populi","timestamp":"2021-08-11 11:00:00"}
 {"message":"[AUTO-EMAILER] No new leads were found.","level":"info","service":"dfa-populi","timestamp":"2021-08-11 11:00:01"}
+{"message":"https://dl.airtable.com/.attachments/1728269350169b262a8960e3d489d4bd/9f654e31/Screenshotfrom2021-08-1111-01-59.png","level":"info","service":"dfa-populi","timestamp":"2021-08-11 11:58:15"}
+{"message":"https://dl.airtable.com/.attachments/1728269350169b262a8960e3d489d4bd/9f654e31/Screenshotfrom2021-08-1111-01-59.png","level":"info","service":"dfa-populi","timestamp":"2021-08-11 11:58:19"}
