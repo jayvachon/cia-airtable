@@ -147,7 +147,6 @@ app.post('/populi-login', (req, res, next) => {
 				return res.render('login', {error: 'The username and password you provided did not work'});
 			}
 			req.session.token = token;
-			console.log(token);
 			res.redirect('/');
 		})
 		.catch(err => {
@@ -249,8 +248,8 @@ function uploadAttachment(attachment) {
 		return airtable.getLeadByEmail(attachment.from)
 			.then(lead => {
 				if (!lead) {
-					console.log('No lead record exists for ' + attachment.from);
-					return;
+					// console.log('No lead record exists for ' + attachment.from);
+					throw new Error('No lead record exists for ' + attachment.from);
 				} else {
 					return airtable.getOrCreateLeadDoc(lead);
 				}
@@ -294,10 +293,16 @@ app.post('/process-attachments', async (req, res, next) => {
 		};
 	});
 
-	for (attachment of attachments) {
-		await uploadAttachment(attachment);
+
+	try {
+		for (attachment of attachments) {
+			await uploadAttachment(attachment);
+		}
+		res.redirect('/');
 	}
-	res.redirect('/');
+	catch (e) {
+		res.render('error', { error: e });
+	}
 });
 
 app.get('/set-enrollment-term', (req, res) => {
