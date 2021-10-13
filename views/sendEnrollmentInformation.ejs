@@ -1,0 +1,23 @@
+<%- include('partials/head'); -%>
+<body>
+	<%- include('partials/header'); -%>
+	<h2>Send Enrollment Information</h2>
+	<form id="attachments" action="/process-attachments" method="post">
+		<% emails.forEach(function(email){ %>
+		<input type="radio" id="<%= email.id %>" value="<%= email.id %>" name="reply_email">
+		<label for="<%= email.id %>"><strong><%= email.from %>:</strong> <%= email.subject %><br /><%= email.snippet %></label><br /><br />
+		<% }) %>
+		<label for="reply_text">Reply text:</label>
+		<br>
+		<textarea id="reply_text" name="reply_text" rows=24 cols=200>
+			<%= template %>
+		</textarea>
+		<br>
+		<br>
+		<input type="submit" value="Submit" />
+		<br>
+		<br>
+	</form>
+
+	<a href="/">Back</a>
+</body>

@@ -7,6 +7,7 @@ const drive = require('./services/drive');
 const airtable = require('./airtable');
 const populi = require('./services/populi');
 const studentCreation = require('./services/studentCreation');
+const templates = require('./templates');
 const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
@@ -338,6 +339,30 @@ app.get('/student-creation', (req, res) => {
 		console.log(JSON.stringify(results))
 		res.render('studentCreationResults', { results });
 	});
+});
+
+app.get('/send-enrollment-information', (req, res) => {
+	if (isLoggedIn() === false) {
+		return res.redirect('/');
+	}
+	gmailer.init(oAuth2Client);
+	gmailer.list20(false)
+		.then(emails => {
+			let simpleEmails = _.map(emails, email => {
+				let from = _.find(email.data.payload.headers, header => header.name === 'From').value;
+				let subject = _.find(email.data.payload.headers, header => header.name === 'Subject').value;
+				return {
+					from,
+					subject,
+					snippet: email.data.snippet,
+					id: email.data.id,
+				};
+			});
+
+			let template = templates.enrollmentInformation('testname');
+
+			res.render('sendEnrollmentInformation', { emails: simpleEmails, template });
+		});
 });
 
 cron.schedule('0 */1 * * *', () => {

@@ -54,7 +54,29 @@ const repeat = (firstName, program, upcomingTerm) => {
 	return str;
 };
 
+const enrollmentInformation = (firstName) => {
+	let str = `<div dir="ltr"><p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt">Hi ${firstName},</p>
+		<br>
+		<p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt">I'm happy to hear that you'd like to sign up! To get started, please see the attached documents to enroll in our upcoming January 24th term:</p>
+		<br>
+		<ul>
+			<li><strong>Enrollment Information packet:</strong> read carefully and return the requested documents.</li>
+			<li><strong>New York State Student Rights:</strong> for your reference.</li>
+		</ul>
+		<br>
+		<p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt">Due to the pandemic, we will be offering students the option of taking classes online or in-person beginning in January.</p>
+		<br>
+		<p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt">If you have any questions, I'll be happy to help!</p>
+		<br>
+		<br>
+		<p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt">Warmly,</p>
+		<p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt">Jay</p></div>
+		${signature}`;
+	return str;
+};
+
 module.exports = {
 	initial,
 	repeat,
+	enrollmentInformation,
 };

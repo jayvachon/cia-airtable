@@ -115,13 +115,20 @@ const filterSpam = (entries) => {
 	});
 	logger.info(`[AUTO-EMAILER] Permanently deleting these spam entries: ${JSON.stringify(spam, null, 4)}`);
 	spam = _.map(spam, s => s.id);
-	
-	return deletePermanently(spam)
-		.then(() => { return filtered; });
+
+	// Only perform the delete if there are spam entries
+	if (spam.length > 0) {
+		return deletePermanently(spam)
+			.then(() => { return filtered; });
+	} else {
+		return new Promise((resolve, reject) => {
+			resolve(filtered);
+		});
+	}
 };
 
 // Returns the 20 most recent emails
-const list20 = () => {
+const list20 = (requireAttachments = true) => {
 	return gmail.users.messages.list({
 		userId: 'me',
 		maxResults: 20,
@@ -154,6 +161,11 @@ const list20 = () => {
 					return false; // the sender cannot be one of the excluded email addresses
 				}
 				
+				// early out if not filtering out emails without attachments
+				if (!requireAttachments) {
+					return true;
+				}
+
 				let parts = body.data.payload.parts;
 				let attachments = _.find(parts, part => part.filename !== '');
 				if (!attachments) return false; // the email must have attachments
