@@ -11,7 +11,7 @@ const tags = {
 	// Students are tagged with the program they're in. These are updated every term!
 	production: {
 		python: '448278',
-		wdi: '448279',
+		wdi: '448288',
 	},
 	development: {
 		python: '433046',
@@ -26,7 +26,7 @@ const leadInfo = {
 			python: '35666',
 			wdi: '35366',
 		},
-		term_id: '273986',
+		term_id: '283058',
 		ed_level: {
 			high_school: '3',
 			some_college: '4',
