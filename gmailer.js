@@ -100,26 +100,45 @@ const list = () => {
 	.catch(err => console.error(err));
 };
 
-const filterSpam = (entries) => {
+const filterSpam = (entries, deleteSpam) => {
+
+	let nameFilter = /\b(\w+)[A-Z]{2}\s+\1/; // Matches a repeating first and last name with two capital letters at the end of the first name. Ex: WilliamPioneAH WilliamPione
+	let urlFilter = /^(ftp|http|https):\/\/[^ "]+$/; // Matches with a url
 
 	let filtered = _.filter(entries, entry => {
+
 		let fullname = `${entry.content.firstName} ${entry.content.lastName}`;
-		let re = /\b(\w+)[A-Z]{2}\s+\1/; // Matches a repeating first and last name with two capital letters at the end of the first name. Ex: WilliamPioneAH WilliamPione
-		return re.test(fullname) === false;
+		let passNameFilter = nameFilter.test(fullname);
+		let passUrlFilter = urlFilter.test(entry.content.firstName);
+
+		// If it's not spam, it's true. If it's spam it's false.
+		return !(passNameFilter || passUrlFilter);
 	});
 
 	let spam = _.filter(entries, entry => {
+
 		let fullname = `${entry.content.firstName} ${entry.content.lastName}`;
-		let re = /\b(\w+)[A-Z]{2}\s+\1/; // Matches a repeating first and last name with two capital letters at the end of the first name. Ex: WilliamPioneAH WilliamPione
-		return re.test(fullname) === true;
+		let passNameFilter = nameFilter.test(fullname);
+		let passUrlFilter = urlFilter.test(entry.content.firstName);
+
+		// If it's not spam, it's false. If it's spam it's true.
+		return passNameFilter || passUrlFilter;
 	});
+
 	logger.info(`[AUTO-EMAILER] Permanently deleting these spam entries: ${JSON.stringify(spam, null, 4)}`);
 	spam = _.map(spam, s => s.id);
 
 	// Only perform the delete if there are spam entries
 	if (spam.length > 0) {
-		return deletePermanently(spam)
-			.then(() => { return filtered; });
+
+		if (deleteSpam !== false) { // In practice this is only for testing
+			return deletePermanently(spam)
+				.then(() => { return filtered; });
+		} else {
+			return new Promise((resolve, reject) => {
+				resolve(filtered);
+			})
+		}
 	} else {
 		return new Promise((resolve, reject) => {
 			resolve(filtered);
@@ -289,4 +308,5 @@ module.exports = {
 	sendRepeat,
 	markRead,
 	downloadAttachments,
+	filterSpam,
 };
