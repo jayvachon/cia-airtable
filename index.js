@@ -345,7 +345,7 @@ app.post('/set-enrollment-term', (req, res) => {
 		settings.current_associates_tag = JSON.parse(body.selectpicker_tags_associates);
 	}
 	if (body.selectpicker_academicTerm !== '') {
-		settings.current_academic_term = JSON.parse(body.selectpicker_tags_certificate);
+		settings.current_academic_term = JSON.parse(body.selectpicker_academicTerm);
 	}
 	fs.writeFileSync('settings.json', JSON.stringify(settings));
 	res.redirect('/');
