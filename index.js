@@ -365,6 +365,12 @@ app.get('/send-enrollment-information', (req, res) => {
 		});
 });
 
+app.get('/logs', (req, res) => {
+	let combined = fs.readFileSync(`${appRoot}/logs/combined.log`);
+	let error = fs.readFileSync(`${appRoot}/logs/error.log`);
+	res.render('logs', { combined, error });
+});
+
 cron.schedule('0 */1 * * *', () => {
 	autoEmail();
 });
