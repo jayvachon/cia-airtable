@@ -70,6 +70,8 @@ const post = (path, keyvals) => {
 		throw new Error('You are not logged in');
 	}
 
+	if (!keyvals) { keyvals = {}; }
+
 	if (_.some(Object.values(keyvals), _.isEmpty)) {
 		throw new Error('One of the values provided is undefined, so the request cannot be completed: '+ JSON.stringify(keyvals) + ' (it may be that the value needs to be turned into a string)')
 	}
@@ -202,12 +204,49 @@ const addPerson = (person) => {
 		})
 		.catch(err => {
 			console.log(err);
-			throw new Error(err)
-;		});
+			throw new Error(err);
+		});
+};
+
+const getTags = () => {
+	return post('getTags')
+		.then(response => {
+			let tags = _.map(response.js.tags.tag, tag => {
+				return {
+					id: tag.id._text,
+					name: tag.name._text,
+				};
+			});
+			tags = _.keyBy(tags, 'id');
+			tags = _.filter(tags, tag => tag.name.includes('/CS/'));
+			return tags;
+		})
+		.catch(err => {
+			throw new Error(err);
+		})
+};
+
+const getAcademicTerms = () => {
+	return post('getAcademicTerms')
+		.then(response => {
+			let terms = response.js.academic_term;
+			terms = _.map(terms, term => {
+				return {
+					id: term.termid._text,
+					name: term.name._text,
+				}
+			})
+			return terms;
+		})
+		.catch(err => {
+			throw new Error(err);
+		});
 };
 
 module.exports = {
 	getAccessToken,
 	addPerson,
+	getTags,
+	getAcademicTerms,
 	image2base64,
 };

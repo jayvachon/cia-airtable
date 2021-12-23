@@ -7,6 +7,7 @@ const drive = require('./services/drive');
 const airtable = require('./airtable');
 const populi = require('./services/populi');
 const studentCreation = require('./services/studentCreation');
+const configureEnrollment = require('./services/configureEnrollment');
 const templates = require('./templates');
 const fs = require('fs');
 const _ = require('lodash');
@@ -162,11 +163,12 @@ app.get('/', (req, res) => {
 	let pack = JSON.parse(file);
 	let environment = process.env.NODE_ENV;
 	let root = constants[process.env.NODE_ENV].ROOT;
+	let currentTerm = JSON.parse(fs.readFileSync('settings.json')).current_term.Name;
 
 	let tokens = JSON.parse(fs.readFileSync(TOKEN_PATH, 'utf8'));
 	oAuth2Client.setCredentials(tokens);
 
-	res.render('index', { loggedIn: isLoggedIn(), environment, root });
+	res.render('index', { loggedIn: isLoggedIn(), environment, root, currentTerm });
 });
 
 app.get('/email-new-leads', (req, res) => {
@@ -310,16 +312,41 @@ app.get('/set-enrollment-term', (req, res) => {
 	if (isLoggedIn() === false) {
 		return res.redirect('/');
 	}
-	let currentTerm = JSON.parse(fs.readFileSync('settings.json')).current_term.Name;
-	airtable.getTerms()
-		.then(terms => {
-			res.render('setEnrollmentTerm', { terms, currentTerm });
-		});
+	let settings = JSON.parse(fs.readFileSync('settings.json'));
+	let currentTerm = settings.current_term.Name;
+	let currentCertificateTag = settings.current_certificate_tag.name;
+	let currentAssociatesTag = settings.current_associates_tag.name;
+	let currentAcademicTerm = settings.current_academic_term.name;
+
+	configureEnrollment.getDropdownData()
+		.then(dropdowns => {
+			res.render('setEnrollmentTerm', { 
+				currentTerm,
+				currentCertificateTag,
+				currentAssociatesTag,
+				currentAcademicTerm,
+				terms: dropdowns.terms,
+				tags: dropdowns.tags,
+				academicTerms:dropdowns.academicTerms 
+			});
+		})
 });
 
 app.post('/set-enrollment-term', (req, res) => {
 	let settings = JSON.parse(fs.readFileSync('settings.json'));
-	settings.current_term = JSON.parse(req.body.selectpicker);
+	let body = req.body;
+	if (body.selectpicker_term !== '') {
+		settings.current_term = JSON.parse(req.body.selectpicker_term);
+	}
+	if (body.selectpicker_tags_certificate !== '') {
+		settings.current_certificate_tag = JSON.parse(body.selectpicker_tags_certificate);
+	}
+	if (body.selectpicker_tags_associates !== '') {
+		settings.current_associates_tag = JSON.parse(body.selectpicker_tags_associates);
+	}
+	if (body.selectpicker_academicTerm !== '') {
+		settings.current_academic_term = JSON.parse(body.selectpicker_tags_certificate);
+	}
 	fs.writeFileSync('settings.json', JSON.stringify(settings));
 	res.redirect('/');
 });

@@ -31,9 +31,24 @@ describe('Populi', () => {
 		});
 	});
 
+	it('should get tags', done => {
+		populi.getTags().then(res => {
+			console.log(res);
+			done();
+		});
+	});
+
 	it('should convert image', done => {
 		populi.image2base64('https://dl.airtable.com/.attachments/d1230ddbf32249ba2e362b1d7433f79f/c28531de/FB_IMG_1599275082632__01.jpg').then(base64 => {
 			console.log(base64);
+			done();
+		});
+	});
+
+	it('should get academic terms', function(done) {
+		this.timeout(5000);
+		populi.getAcademicTerms().then(res => {
+			console.log(res);
 			done();
 		});
 	});

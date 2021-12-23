@@ -2,10 +2,11 @@
 <body>
 	<%- include('partials/header'); -%>
 
-	<p>Current term: <%= currentTerm %></p>
-
 	<form id="term" action="/set-enrollment-term" method="post">
-	    <select class="selectpicker" data-style="btn-info" name="selectpicker">
+
+		<p>Current term: <%= currentTerm %></p>
+		<!-- Term select -->
+	    <select class="selectpicker_term" data-style="btn-info" name="selectpicker_term">
 	        <optgroup label="Select Term">
 	            <option value="">Select Enrollment Term</option>
 	            <% terms.forEach(function(term){ %>
@@ -13,7 +14,55 @@
 	            <% }) %>
 	        </optgroup>
 	    </select>
+
+	    <br>
+	    <br>
+
+	    <p>Current WDI certificate tag: <%= currentCertificateTag %></p>
+	    <!-- Tag select -->
+	    <select class="selectpicker_tags" data-style="btn-info" name="selectpicker_tags_certificate">
+	        <optgroup label="Select Tags">
+	            <option value="">Select Tags</option>
+	            <% tags.forEach(function(tag){ %>
+	            <option value="<%= JSON.stringify(tag) %>"><%= tag.name %></option>
+	            <% }) %>
+	        </optgroup>
+	    </select>
+
+	    <br>
+	    <br>
+
+	    <p>Current WDI Associate's tag: <%= currentAssociatesTag %></p>
+	    <!-- Tag select -->
+	    <select class="selectpicker_tags" data-style="btn-info" name="selectpicker_tags_associates">
+	        <optgroup label="Select Tags">
+	            <option value="">Select Tags</option>
+	            <% tags.forEach(function(tag){ %>
+	            <option value="<%= JSON.stringify(tag) %>"><%= tag.name %></option>
+	            <% }) %>
+	        </optgroup>
+	    </select>
+
+	    <br>
+	    <br>
+
+	    <p>Current academic term: <%= currentAcademicTerm %></p>
+	    <!-- Academic term select -->
+	    <select class="selectpicker_academicTerm" data-style="btn-info" name="selectpicker_academicTerm">
+	        <optgroup label="Select Academic Term">
+	            <option value="">Select Academic Term</option>
+	            <% academicTerms.forEach(function(academicTerm){ %>
+	            <option value="<%= JSON.stringify(academicTerm) %>"><%= academicTerm.name %></option>
+	            <% }) %>
+	        </optgroup>
+	    </select>
+
+	    <br>
+	    <br>
 	    <input type="submit" value="Submit" />
+
+	    <br>
+	    <br>
 	</form>
 
 	<a href="/">Back</a>

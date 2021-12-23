@@ -7,24 +7,24 @@
 		<% results.forEach(function(result) { %>
 			<ul>
 				<li><embed src="<%= result.image %>" width="200px" /></li>
-				<li><%= result['First Name'] %></li>
-				<li><%= result['Last Name'] %></li>
-				<li><%= result['Birth Date'] %></li>
-				<li><%= result['Phone Number'] %></li>
-				<li><%= result['Social Security Number'] %></li>
-				<li><%= result.street %></li>
-				<li><%= result.city %></li>
-				<li><%= result.state %></li>
-				<li><%= result.postal %></li>
-				<li><%= result.country %></li>
-				<li><%= result.Email %></li>
-				<li><%= result.program %> (<%= result.tag %>)</li>
+				<li><strong>First name: </strong><%= result['First Name'] %></li>
+				<li><strong>Last name: </strong><%= result['Last Name'] %></li>
+				<li><strong>Birth date: </strong><%= result['Birth Date'] %></li>
+				<li><strong>Phone number: </strong><%= result['Phone Number'] %></li>
+				<li><strong>Social Security Number: </strong><%= result['Social Security Number'] %></li>
+				<li><strong>Street: </strong><%= result.street %></li>
+				<li><strong>City: </strong><%= result.city %></li>
+				<li><strong>State: </strong><%= result.state %></li>
+				<li><strong>Zip Code: </strong><%= result.postal %></li>
+				<li><strong>Country: </strong><%= result.country %></li>
+				<li><strong>Email: </strong><%= result.Email %></li>
+				<li><strong>Program: </strong><%= result.program %> (<%= result.tag %>)</li>
 				<li>
 					Lead Info:
 					<ul>
 						<li><strong>Admission Officer ID:</strong> <%= result.leadInfo.admissions_officer_id %></li>
-						<li><strong>Program ID:</strong> <%= result.leadInfo.program_id[result.programShort] %></li>
-						<li><strong>Term ID:</strong> <%= result.leadInfo.term_id %></li>
+						<li><strong>Program:</strong> <%= result.tagName %> (<%= result.leadInfo.program_id[result.programShort] %>)</li>
+						<li><strong>Term:</strong> <%= result.termName %> (<%= result.leadInfo.term_id %>)</li>
 						<li><strong>Education Level ID:</strong> <%= result.educationLevel %></li>
 						<li><strong>High School Graduation Date:</strong> <%= result.highSchoolGradDate %></li>
 					</ul>

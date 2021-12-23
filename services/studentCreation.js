@@ -5,6 +5,7 @@ const _ = require('lodash');
 const constants = require('../constants');
 const appRoot = require('app-root-path');
 const logger = require(`${appRoot}/config/winston`);
+const fs = require('fs');
 
 const tags = {
 
@@ -12,10 +13,12 @@ const tags = {
 	production: {
 		python: '448278',
 		wdi: '448288',
+		as:'',
 	},
 	development: {
 		python: '433046',
 		wdi: '413894',
+		// as: ','
 	},
 };
 
@@ -25,6 +28,7 @@ const leadInfo = {
 		program_id: {
 			python: '35666',
 			wdi: '35366',
+			as: '35348',
 		},
 		term_id: '283058',
 		ed_level: {
@@ -41,6 +45,7 @@ const leadInfo = {
 		program_id: {
 			python: '35666',
 			wdi: '35366',
+			as: 'XXXX',
 		},
 		term_id: '283070',
 		ed_level: {
@@ -102,16 +107,38 @@ const prep = (newStudents, leads) => {
 			image = newStudent.fields['Photo'][0].url;
 		}
 
+		let settings = JSON.parse(fs.readFileSync('settings.json'));
 		let tag = '';
+		let tagName = '';
 		let program = newLead.fields['Program'];
 		let programShort = ''
+		
+		// v1. Taken from configuration in this file
+		/*
 		if (program.includes('Python')) {
 			programShort = 'python';
 		}
-		if (program.includes('Javascript')) {
+		if (program.includes('Associates')) {
+			programShort = 'as';
+		}
+		else if (program.includes('Javascript')) {
 			programShort = 'wdi';
 		}
 		tag = tags[process.env.NODE_ENV][programShort];
+		*/
+
+		// v2. Taken from settings
+		if (program.includes('Associates')) {
+			tag = settings.current_associates_tag.id;
+			tagName = settings.current_associates_tag.name;
+			programShort = 'as';
+		}
+		else if (program.includes('Javascript')) {
+			tag = settings.current_certificate_tag.id;
+			tagName = settings.current_certificate_tag.name;
+			programShort = 'wdi';
+		}
+		leadInfo.term_id = settings.current_academic_term.id;
 
 		let educationLevel = '';
 		switch(newStudent.fields['Education Level']) {
@@ -139,9 +166,11 @@ const prep = (newStudents, leads) => {
 			'Email': newLead.fields['Email'],
 			image: image,
 			tag: tag,
+			tagName: tagName,
 			program: program,
 			programShort: programShort,
 			leadInfo: leadInfo[process.env.NODE_ENV],
+			termName: settings.current_academic_term.name,
 			educationLevel: educationLevel,
 			highSchoolGradDate: newStudent.fields['High School Graduation Date'],
 			application: application[process.env.NODE_ENV],
