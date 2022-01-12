@@ -2,10 +2,13 @@
 <body>
 	<%- include('partials/header'); -%>
 	<h2>Create Students in Populi</h2>
-	<p>NOTE! Make sure you've updated the <strong>tags and term IDs</strong> to reflect this term (call getTags and getAcademicTerms in Postman and update them in studentCreation.js)</p>
+	<p>NOTE! Make sure you've updated the <strong>tags and term IDs</strong> to reflect this term (<a href="/set-enrollment-term">here</a>)</p>
 	<% if (results) { %>
 		<% results.forEach(function(result) { %>
 			<ul>
+			<% if (result.error !== '') { %>
+				<li><strong>Error: </strong><%= result.error %></li>
+			<% } else { %>
 				<li><embed src="<%= result.image %>" width="200px" /></li>
 				<li><strong>First name: </strong><%= result['First Name'] %></li>
 				<li><strong>Last name: </strong><%= result['Last Name'] %></li>
@@ -20,7 +23,7 @@
 				<li><strong>Email: </strong><%= result.Email %></li>
 				<li><strong>Program: </strong><%= result.program %> (<%= result.tag %>)</li>
 				<li>
-					Lead Info:
+					<strong>Lead Info:</strong>
 					<ul>
 						<li><strong>Admission Officer ID:</strong> <%= result.leadInfo.admissions_officer_id %></li>
 						<li><strong>Program:</strong> <%= result.tagName %> (<%= result.leadInfo.program_id[result.programShort] %>)</li>
@@ -29,6 +32,7 @@
 						<li><strong>High School Graduation Date:</strong> <%= result.highSchoolGradDate %></li>
 					</ul>
 				</li>
+			<% } %>
 			</ul>
 			<hr />
 		<% }); %>

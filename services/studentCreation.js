@@ -90,8 +90,11 @@ const prep = (newStudents, leads) => {
 		});
 
 		if (!newLead) {
-			throw new Error(`The student ${newStudent.fields['Legal Last Name']} has not been linked to a leads record`)
-			return { error: `The student ${newStudent.fields['Legal Last Name']} has not been linked to a leads record` };
+			// throw new Error(`The student ${newStudent.fields['Legal Last Name']} has not been linked to a leads record`)
+			// return { error: `The student ${newStudent.fields['Legal Last Name']} has not been linked to a leads record` };
+			return {
+				error: `The student ${newStudent.fields['Email Last Name']} has not been linked to a leads record and will be skipped.`,
+			};
 		}
 
 		// Format phone number
@@ -112,20 +115,6 @@ const prep = (newStudents, leads) => {
 		let tagName = '';
 		let program = newLead.fields['Program'];
 		let programShort = ''
-		
-		// v1. Taken from configuration in this file
-		/*
-		if (program.includes('Python')) {
-			programShort = 'python';
-		}
-		if (program.includes('Associates')) {
-			programShort = 'as';
-		}
-		else if (program.includes('Javascript')) {
-			programShort = 'wdi';
-		}
-		tag = tags[process.env.NODE_ENV][programShort];
-		*/
 
 		// v2. Taken from settings
 		if (program.includes('Associates')) {
@@ -215,12 +204,20 @@ const create2 = () => {
 		})
 		.then(tables => findNewStudents(tables.info))
 		.then(newStudents => prep(newStudents, tables.leads))
-		.then(profiles => Promise.all(_.map(profiles, profile => {
-			return populi.addPerson(profile)
-				.then(id => {
-					return airtable.addPopuliLink(profile.airtableId, `${constants[process.env.NODE_ENV].WEB_ROOT}router/contacts/people/${id}`)
-				});
-			})));
+		.then(profiles => Promise.all(
+			_.map(profiles, profile => {
+
+				if (profile.error === '') {
+					return populi.addPerson(profile)
+						.then(id => {
+							return airtable.addPopuliLink(profile.airtableId, `${constants[process.env.NODE_ENV].WEB_ROOT}router/contacts/people/${id}`)
+						});
+				} else {
+					return Promise.resolve();
+				}
+
+				})
+			));
 };
 
 module.exports = {
