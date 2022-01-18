@@ -110,6 +110,17 @@ const prep = (newStudents, leads) => {
 			image = newStudent.fields['Photo'][0].url;
 		}
 
+		// Standardize address
+		let country = newStudent.fields.Country;
+		if (country.toLowerCase() === 'united states' || country.toLowerCase() === 'us') {
+			country = 'US';
+		}
+
+		let state = newStudent.fields.State;
+		if (state.toLowerCase() === 'other') {
+			state = newStudent.fields['Other State'];
+		}
+
 		let settings = JSON.parse(fs.readFileSync('settings.json'));
 		let tag = '';
 		let tagName = '';
@@ -117,7 +128,7 @@ const prep = (newStudents, leads) => {
 		let programShort = ''
 
 		// v2. Taken from settings
-		if (program.includes('Associates')) {
+		if (program.includes('Associate')) {
 			tag = settings.current_associates_tag.id;
 			tagName = settings.current_associates_tag.name;
 			programShort = 'as';
@@ -149,9 +160,9 @@ const prep = (newStudents, leads) => {
 			'Social Security Number': newStudent.fields['Social Security Number'],
 			street: newStudent.fields.Street,
 			city: newStudent.fields.City,
-			state: newStudent.fields.State,
+			state: state,
 			postal: newStudent.fields['Zip Code'],
-			country: newStudent.fields.Country,
+			country: country,
 			'Email': newLead.fields['Email'],
 			image: image,
 			tag: tag,

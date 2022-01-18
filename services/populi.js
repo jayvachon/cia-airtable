@@ -92,6 +92,10 @@ const post = (path, keyvals) => {
 		})
 		.then(response => {
 			return { raw: response.body, js: xmlConvert.xml2js(response.body, {compact: true}).response };
+		})
+		.catch(err => {
+			logger.error(err);
+			throw new Error(err);
 		});
 	});
 };
@@ -139,8 +143,6 @@ const addPerson = (person) => {
 			}
 		})
 		.then(response => {
-			// console.log('ssn')
-			// TODO: fix. this doesn't work without a SSN
 			if (!person['Social Security Number']) {
 				return Promise.resolve();
 			} else {
@@ -148,7 +150,6 @@ const addPerson = (person) => {
 			}
 		})
 		.then(response => {
-			// console.log('phone')
 			if (!person['Phone Number']) {
 				return Promise.resolve();
 			} else {
@@ -156,15 +157,17 @@ const addPerson = (person) => {
 			}
 		})
 		.then(response => {
-			// console.log('address')
-			return post('addAddress', { person_id: person.id, street: person.street, city: person.city, state: person.state, postal: person.postal, country: person.country, type: 'HOME', primary: 'true' });
+			if (person.country !== 'US') {
+				return Promise.resolve();
+			} else {
+				return post('addAddress', { person_id: person.id, street: person.street, city: person.city, state: person.state, postal: person.postal, country: person.country, type: 'HOME', primary: 'true' });
+			}
 		})
 		.then(response => {
-			// console.log('email')
+			console.log('email');
 			return post('addEmailAddress', { person_id: person.id, email_address: person['Email'], type: 'HOME', primary: 'true' })
 		})
 		.then(response => {
-			// console.log('image')
 			if (!person.image) {
 				return Promise.resolve();
 			} else {
@@ -174,11 +177,9 @@ const addPerson = (person) => {
 			}
 		})
 		.then(response => {
-			// console.log('tag')
 			return post('addTag', { person_id: person.id, tag_id: person.tag });
 		})
 		.then(response => {
-			// console.log(`person_id: ${person.id}\nadmissions_officer_id: ${person.leadInfo.admissions_officer_id}\nprogram_id: ${person.leadInfo.program_id[person.programShort]}\nterm_id: ${person.leadInfo.term_id}\ned_level_id: ${person.educationLevel}\nhigh_school_grad_date: ${person.highSchoolGradDate}`);
 			return post('setLeadInfo', {
 				person_id: person.id,
 				admissions_officer_id: person.leadInfo.admissions_officer_id,
@@ -190,7 +191,6 @@ const addPerson = (person) => {
 			});
 		})
 		.then(response => {
-			console.log('application')
 			return post('addApplication', {
 				person_id: person.id,
 				application_template_id: person.application.application_template_id,
@@ -204,6 +204,7 @@ const addPerson = (person) => {
 		})
 		.catch(err => {
 			console.log(err);
+			logger.error(err);
 			throw new Error(err);
 		});
 };
