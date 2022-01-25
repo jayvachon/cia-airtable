@@ -12,7 +12,7 @@ describe('Gmailer', () => {
 		});
 	});*/
 
-	it('should filter spam', done => {
+	/*it('should filter spam', done => {
 		
 		let entries = [
 			{
@@ -41,5 +41,5 @@ describe('Gmailer', () => {
 				done();
 			}
 		});
-	})
+	})*/
 });

@@ -5,6 +5,7 @@ const config = require('./config');
 const gmailer = require('./gmailer');
 const drive = require('./services/drive');
 const airtable = require('./airtable');
+const monday = require('./services/monday');
 const populi = require('./services/populi');
 const studentCreation = require('./services/studentCreation');
 const configureEnrollment = require('./services/configureEnrollment');
@@ -63,7 +64,8 @@ const autoEmail = (res) => {
 
 	gmailer.init(oAuth2Client);
 	gmailer.list()
-		.then(leads => airtable.insertUnique(leads))
+		// .then(leads => airtable.insertUnique(leads))
+		.then(leads => monday.insertUnique(leads))
 		.then(newLeads => {
 
 			// Send emails

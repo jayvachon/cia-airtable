@@ -4,12 +4,12 @@ const monday = require('../services/monday');
 
 describe('Monday', () => {
 
-	it('should get the terms', done => {
+	/*it('should get the terms', done => {
 		monday.getTerms().then(res => {
-			console.log(res);
+			res.should.be.an.Array();
 			done();
 		});
-	});
+	});*/
 
 	/*it('should get access token', done => {
 		let token = monday.getAccessToken();
@@ -52,4 +52,43 @@ describe('Monday', () => {
 			done();
 		})
 	});*/
+
+	it('should insert a unique new lead', done => {
+		const leads = [
+			{
+				id: '0',
+				content: {
+					email: 'jay.vachon@codeimmersives.com',
+				}
+			},
+			{
+				id: '1',
+				content: {
+					email: 'test@codeimmersives.com',
+				}
+			},
+			{
+				id: '2',
+				content: {
+					email: 'test@codeimmersives.com', // this one should be skipped
+				}
+			},
+			{
+				id: '3',
+				content: {
+					email: 'crazy@new.com',
+					phone: '1234567899',
+					firstName: 'crazy',
+					lastName: 'newlead',
+					studentType: 'Veteran - CH-33',
+					program: 'Javascript - Web Development',
+				}
+			}
+		];
+
+		monday.insertUnique(leads).then(res => {
+			console.log(res)
+			done();
+		});
+	});
 });
