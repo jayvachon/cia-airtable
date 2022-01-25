@@ -50,10 +50,13 @@ const getTerms = () => {
 				id
 				name
 			}
+			columnds {
+				id
+			}
 		}
 	}`;
 	return post(q).then(res => {
-		return res.data.boards[0].items;
+		return res.data.boards[0];//.items;
 	});
 };
 
