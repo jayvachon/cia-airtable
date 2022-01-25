@@ -33,6 +33,34 @@ const TERM_COLUMN = {
 }
 const CURRENT_TERM = 2199255521; // Summer 2022
 
+const mapColumnIds = (columnValues, asArray) => {
+
+	// Takes the column values as returned by Monday
+	// and maps them to the sensible names mapped out in COLUMN
+
+	const mapped = _.chain(columnValues)
+		.map(cv => {
+			let key = _.findKey(COLUMN, item => {
+				return item === cv.id;
+			});
+			return {
+				id: key,
+				text: cv.text,
+			};
+		})
+		.filter(cv => cv.id !== undefined)
+		.value();
+
+	if (asArray) {
+		return mapped;
+	} else {
+		return _.chain(mapped)
+		    .keyBy('id')
+		    .mapValues('text')
+		    .value();
+	}
+};
+
 const client = got.extend({
 	// hooks: before
 });
@@ -100,12 +128,28 @@ const getLead = (email) => {
 	const query = `query {
 	    items_by_column_values (board_id: ${BOARD}, column_id: "${COLUMN.email}", column_value: "${email}") {
 	        id
+	        column_values {
+	        	id
+	        	value
+	        	text
+	        }
 	    }
 	}`;
 	return post(query).then(res => {
-		return res.data.items_by_column_values;
+		return mapColumnIds(res.data.items_by_column_values[0].column_values)
 	});
-	// example output: [ { id: '2136020550' } ]
+	// example output: {
+	//   status: 'New',
+	//   email: 'jay.vachon@codeimmersives.com',
+	//   phone: '9876541234',
+	//   lastName: 'Mctest',
+	//   firstName: 'Test',
+	//   dateAdded: '2022-01-24 19:00',
+	//   term: 'Summer 2022',
+	//   course: 'Associate of Science in Computer Science and Web Architecture',
+	//   type: 'American Veteran',
+	//   financialAid: 'Other - veteran'
+	// }
 };
 
 const insertUnique = (leads) => {

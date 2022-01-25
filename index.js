@@ -1,4 +1,5 @@
 const dotenv = require('dotenv');
+const cors = require('cors');
 const cron = require('node-cron');
 const constants = require('./constants');
 const config = require('./config');
@@ -42,6 +43,8 @@ const sessionOptions = {
 };
 
 app.use(session(sessionOptions));
+
+app.use(cors());
 
 // 1. Create client
 let oAuth2Client = new google.auth.OAuth2(
@@ -392,6 +395,15 @@ app.get('/send-enrollment-information', (req, res) => {
 
 			res.render('sendEnrollmentInformation', { emails: simpleEmails, template });
 		});
+});
+
+// req.body for POST
+// req.query for GET
+
+app.get('/api/lead', (req, res) => {
+	monday.getLead(req.query.email).then(leads => {
+		res.json(leads);
+	});
 });
 
 app.get('/logs', (req, res) => {

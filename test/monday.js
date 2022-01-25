@@ -30,13 +30,14 @@ describe('Monday', () => {
 			done();
 		});
 	});
-
+*/
 	it('should find a lead by email', done => {
-		monday.getLead().then(res => {
-			// console.log(res);
+		monday.getLead('jay.vachon@codeimmersives.com').then(res => {
+			// console.log(JSON.stringify(res, null, 2));
+			console.log(res);
 			done();
 		})
-	});*/
+	});
 /*
 	it('should list the columns', done => {
 		monday.getColumns().then(res => {
@@ -53,7 +54,7 @@ describe('Monday', () => {
 		})
 	});*/
 
-	it('should insert a unique new lead', done => {
+	/*it('should insert a unique new lead', done => {
 		const leads = [
 			{
 				id: '0',
@@ -90,5 +91,5 @@ describe('Monday', () => {
 			console.log(res)
 			done();
 		});
-	});
+	});*/
 });
