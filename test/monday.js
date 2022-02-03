@@ -31,15 +31,26 @@ describe('Monday', () => {
 		});
 	});
 */
-	it('should find a lead by email', done => {
+	/*it('should find a lead by email', done => {
 		monday.getLead('jay.vachon@codeimmersives.com').then(res => {
 			// console.log(JSON.stringify(res, null, 2));
 			console.log(res);
 			done();
 		})
+	});*/
+
+	it('should update item columns', done => {
+
+		const columnValues = [
+			{ column: 'socialSecurityNumber', value: '012345678' }
+		];
+		monday.updateLeadValues('2200080442', columnValues).then(res => {
+			console.log(res);
+			done();
+		});
 	});
-/*
-	it('should list the columns', done => {
+
+	/*it('should list the columns', done => {
 		monday.getColumns().then(res => {
 			console.log(res);
 			res.should.be.an.Object;

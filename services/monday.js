@@ -25,6 +25,7 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	term: 'connect_boards8',
 	course: 'status_15',
 	status: 'status',
+	socialSecurityNumber: 'text1',
 };
 const TERM_COLUMN = {
 	name: 'name',
@@ -136,7 +137,9 @@ const getLead = (email) => {
 	    }
 	}`;
 	return post(query).then(res => {
-		return mapColumnIds(res.data.items_by_column_values[0].column_values)
+		let values = mapColumnIds(res.data.items_by_column_values[0].column_values)
+		values.id = res.data.items_by_column_values[0].id;
+		return values;
 	});
 	// example output: {
 	//   status: 'New',
@@ -295,6 +298,36 @@ const createLead = (lead) => {
 		});
 }
 
+const updateLeadValues = (leadId, columnValues) => {
+
+	/* columnValues ex:
+		[
+			{ column: "socialSecurityNumber", value: 999999999 },
+			{ column: "phone", value: 9999999 }
+		]
+	*/
+
+	let vals = {};
+	_.forEach(columnValues, cv => {
+		vals[COLUMN[cv.column]] = cv.value;
+	});
+
+	const json = JSON.stringify(JSON.stringify(vals));
+	const q = `mutation {
+	  change_multiple_column_values(item_id: ${leadId}, board_id: ${BOARD}, column_values: ${json}) {
+	    id
+	  }
+	}`
+	return post(q)
+		.then(res => {
+			return res.data;
+		})
+		.catch(err => {
+			logger.error(err);
+			throw new Error(err);
+		})
+};
+
 const test = () => {
 	return post('{ boards (limit:1) {id name} }');
 };
@@ -329,5 +362,6 @@ module.exports = {
 	createLead,
 	getTerms,
 	insertUnique,
+	updateLeadValues,
 	test,
 };

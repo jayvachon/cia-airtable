@@ -13,6 +13,9 @@ const { createWriteStream } = require("fs");
 const { promisify } = require("util");
 const logger = require(`${appRoot}/config/winston`);
 
+// TODO: give international students the "International" tag
+
+
 const client = got.extend({
 	// hooks: before
 });

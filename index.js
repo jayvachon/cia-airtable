@@ -45,6 +45,7 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 
 app.use(cors());
+app.use(express.json({limit:'1mb'}))
 
 // 1. Create client
 let oAuth2Client = new google.auth.OAuth2(
@@ -401,8 +402,18 @@ app.get('/send-enrollment-information', (req, res) => {
 // req.query for GET
 
 app.get('/api/lead', (req, res) => {
-	monday.getLead(req.query.email).then(leads => {
-		res.json(leads);
+	monday.getLead(req.query.email).then(lead => {
+		res.json(lead);
+	});
+});
+
+app.post('/api/updateLead', (req, res) => {
+	monday.updateLeadValues(req.body.leadId, req.body.columnValues).then(update => {
+		if (update.change_multiple_column_values) {
+			res.json({ success: true });
+		} else {
+			res.json({ success: false });
+		}
 	});
 });
 
