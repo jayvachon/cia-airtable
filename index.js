@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 const cors = require('cors');
 const cron = require('node-cron');
+const fileUpload = require('express-fileupload');
 const constants = require('./constants');
 const config = require('./config');
 const gmailer = require('./gmailer');
@@ -45,7 +46,8 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 
 app.use(cors());
-app.use(express.json({limit:'1mb'}))
+app.use(express.json({limit:'1mb'}));
+app.use(fileUpload());
 
 // 1. Create client
 let oAuth2Client = new google.auth.OAuth2(
@@ -402,19 +404,38 @@ app.get('/send-enrollment-information', (req, res) => {
 // req.query for GET
 
 app.get('/api/lead', (req, res) => {
-	monday.getLead(req.query.email).then(lead => {
+	monday.getOrCreateLead(req.query.email).then(lead => {
 		res.json(lead);
 	});
 });
 
 app.post('/api/updateLead', (req, res) => {
+	console.log(req.body)
 	monday.updateLeadValues(req.body.leadId, req.body.columnValues).then(update => {
-		if (update.change_multiple_column_values) {
-			res.json({ success: true });
+		if (update && update.change_multiple_column_values) {
+			monday.getLeadById(update.change_multiple_column_values.id).then(lead => {
+				res.json(lead);
+			})
 		} else {
-			res.json({ success: false });
+			res.json({ error: true });
 		}
 	});
+});
+
+app.post('/api/upload', (req, res) => {
+	const files = req.files;
+	if (!files || Object.keys(files).length === 0) {
+		return res.status(400).send('No files were uploaded.');
+	}
+	const file = files.file;
+	// console.log(files)
+	const uploadPath = `${appRoot}/uploads/${file.name}`;
+	file.mv(uploadPath, err => {
+		if (err) {
+			return res.status(500).send(err);
+		}
+		res.status(200);
+	})
 });
 
 app.get('/logs', (req, res) => {

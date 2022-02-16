@@ -39,7 +39,14 @@ describe('Monday', () => {
 		})
 	});*/
 
-	it('should update item columns', done => {
+	/*it('should get or create a new lead', done => {
+		monday.getOrCreateLead('test3@test.com').then(res => {
+			console.log(res);
+			done();
+		});
+	});*/
+
+	/*it('should update item columns', done => {
 
 		const columnValues = [
 			{ column: 'socialSecurityNumber', value: '012345678' }
@@ -48,15 +55,23 @@ describe('Monday', () => {
 			console.log(res);
 			done();
 		});
-	});
+	});*/
 
-	/*it('should list the columns', done => {
+	/*it('should get lead by id', done => {
+		const id = 2200080442;
+		monday.getLeadById(id).then(res => {
+			console.log(res);
+			done();
+		});
+	});*/
+
+	it('should list the columns', done => {
 		monday.getColumns().then(res => {
 			console.log(res);
 			res.should.be.an.Object;
 			done();
 		})
-	});*/
+	});
 
 	/*it('should create a new lead', done => {
 		monday.createLead().then(res => {

@@ -26,6 +26,16 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	course: 'status_15',
 	status: 'status',
 	socialSecurityNumber: 'text1',
+	dateOfBirth: 'date_1',
+	graduationDate: 'date',
+	street: 'text4',
+	city: 'text27',
+	state: 'text3',
+	zip: 'text01',
+	educationLevel: 'dropdown',
+
+	identification: 'files7',
+	diploma: 'files6',
 };
 const TERM_COLUMN = {
 	name: 'name',
@@ -79,6 +89,10 @@ const getAccessToken = () => {
 	}
 };
 
+const formatDate = (date) => {
+	return new Date(date).toISOString().split('T')[0];
+}
+
 const getTerms = () => {
 	const q = `query {
 		boards (ids: ${TERM_BOARD}) {
@@ -125,6 +139,27 @@ const getColumns = () => {
 	});
 };
 
+const getOrCreateLead = (email) => {
+	return getLead(email)
+		.then(values => {
+			if (values) {
+				return values;
+			} else {
+				const lead = {
+					content: {
+						email: email,
+						studentType: 'Not Specified',
+						program: 'Not Specified',
+					}
+				}
+				return createLead(lead)
+					.then(data => {
+						return getLeadById(data.create_item.id);
+					});
+			}
+		})
+};
+
 const getLead = (email) => {
 	const query = `query {
 	    items_by_column_values (board_id: ${BOARD}, column_id: "${COLUMN.email}", column_value: "${email}") {
@@ -136,11 +171,20 @@ const getLead = (email) => {
 	        }
 	    }
 	}`;
-	return post(query).then(res => {
-		let values = mapColumnIds(res.data.items_by_column_values[0].column_values)
-		values.id = res.data.items_by_column_values[0].id;
-		return values;
-	});
+	return post(query)
+		.then(res => {
+			if (res.data.items_by_column_values.length === 0) {
+				return undefined;
+			}
+			else {
+				let values = mapColumnIds(res.data.items_by_column_values[0].column_values)
+				values.id = res.data.items_by_column_values[0].id;
+				return values;
+			}
+		})
+		.catch(err => {
+			throw new Error(err);
+		});
 	// example output: {
 	//   status: 'New',
 	//   email: 'jay.vachon@codeimmersives.com',
@@ -148,12 +192,31 @@ const getLead = (email) => {
 	//   lastName: 'Mctest',
 	//   firstName: 'Test',
 	//   dateAdded: '2022-01-24 19:00',
+	//   dateOfBirth: '2022-01-24 19:00',
 	//   term: 'Summer 2022',
 	//   course: 'Associate of Science in Computer Science and Web Architecture',
 	//   type: 'American Veteran',
 	//   financialAid: 'Other - veteran'
 	// }
 };
+
+const getLeadById = (id) => {
+	const query = `query {
+	    items (ids: [${id}]) {
+	    	id
+	        column_values {
+	        	id
+	        	value
+	        	text
+	        }
+	    }
+	}`;
+	return post(query).then(res => {
+		let values = mapColumnIds(res.data.items[0].column_values);
+		values.id = res.data.items[0].id;
+		return values;
+	});
+}
 
 const insertUnique = (leads) => {
 
@@ -219,13 +282,34 @@ const insertUnique = (leads) => {
 
 const createLead = (lead) => {
 
+	let vals = {};
+
 	const currentTerm = CURRENT_TERM;
 	const today = new Date().toISOString().split('T')[0];
-	const firstName = lead.content.firstName.toLowerCase();
-	const firstNameFormatted = firstName.charAt(0).toUpperCase() + firstName.slice(1);
-	const lastName = lead.content.lastName.toLowerCase();
-	const lastNameFormatted = lastName.charAt(0).toUpperCase() + lastName.slice(1);
-	
+	vals[COLUMN.dateAdded] = { date: today, time: "00:00:00" };
+
+	const email = lead.content.email;
+	vals[COLUMN.email] = { email: email, text: email };
+
+	let itemName = '';
+
+	if (lead.content.firstName) {
+		const firstName = lead.content.firstName.toLowerCase();
+		const firstNameFormatted = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+		vals[COLUMN.firstName] = firstNameFormatted;
+	}
+	if (lead.content.lastName) {
+		const lastName = lead.content.lastName.toLowerCase();
+		const lastNameFormatted = lastName.charAt(0).toUpperCase() + lastName.slice(1);
+		vals[COLUMN.lastName] = lastNameFormatted;
+	}
+	if (lead.content.firstName && lead.content.lastName) {
+		itemName = `${firstNameFormatted} ${lastNameFormatted}`;
+	}
+	else {
+		itemName = email;
+	}
+
 	let isVeteran = false;
 	let normalizedType = lead.content.studentType.toLowerCase();
 	let type = 'American Civilian';
@@ -236,6 +320,10 @@ const createLead = (lead) => {
 	if (normalizedType.includes('international')) {
 		type = 'International';
 	}
+	if (normalizedType.includes('not specified')) {
+		type = 'Not Specified';
+	}
+	vals[COLUMN.type] = { label: type };
 
 	let finAid = 'None'
 	if (isVeteran) {
@@ -252,6 +340,7 @@ const createLead = (lead) => {
 			finAid = 'Other - veteran';
 		}
 	}
+	vals[COLUMN.financialAid] = { label: finAid };
 
 	let program = 'Not Specified';
 	if (lead.content.program) {
@@ -262,26 +351,20 @@ const createLead = (lead) => {
 			program = 'Associate of Science in Computer Science and Web Architecture';
 		}
 	}
+	vals[COLUMN.course] = { label: program };
+	vals[COLUMN.status] = { label: 'New' };
 
-	const email = lead.content.email;
-	const vals = {
-		[COLUMN.email]: { email: email, text: email },
-		[COLUMN.firstName]: firstNameFormatted,
-		[COLUMN.lastName]: lastNameFormatted,
-		[COLUMN.type]: { label: type },
-		[COLUMN.financialAid]: { label: finAid },
-		[COLUMN.phone]: { phone: lead.content.phone },
-		[COLUMN.dateAdded]: { date: today, time: "00:00:00" },
-		[COLUMN.term]: { item_ids: [currentTerm] },
-		[COLUMN.course]: { label: program },
-		[COLUMN.status]: { label: 'New' },
-	};
+	if (lead.content.phone) {
+		vals[COLUMN.phone] = { phone: lead.content.phone };
+	}
+	vals[COLUMN.term] = { item_ids: [currentTerm] };
+
 	const json = JSON.stringify(JSON.stringify(vals));
 	const q = `mutation {
 	    create_item (
 	    	board_id: ${BOARD},
 	    	group_id: "${GROUP.new}",
-	    	item_name: "${firstNameFormatted} ${lastNameFormatted}",
+	    	item_name: "${itemName}",
 	    	column_values: ${json}) {
 
 	        id
@@ -289,7 +372,7 @@ const createLead = (lead) => {
 	}`;
 	return post(q)
 		.then(res => {
-			console.log(res);
+			// console.log(res);
 			return res.data;
 		})
 		.catch(err => {
@@ -301,17 +384,20 @@ const createLead = (lead) => {
 const updateLeadValues = (leadId, columnValues) => {
 
 	/* columnValues ex:
-		[
-			{ column: "socialSecurityNumber", value: 999999999 },
-			{ column: "phone", value: 9999999 }
-		]
+		{ 
+			'socialSecurityNumber': '999999999',
+			'phone': '9999999999',
+		}
 	*/
 
-	let vals = {};
-	_.forEach(columnValues, cv => {
-		vals[COLUMN[cv.column]] = cv.value;
-	});
+	if (columnValues.dateOfBirth) {
+		columnValues.dateOfBirth = formatDate(columnValues.dateOfBirth);
+	}
+	if (columnValues.graduationDate) {
+		columnValues.graduationDate = formatDate(columnValues.graduationDate);
+	}
 
+	const vals = _.mapKeys(columnValues, (v, k) => COLUMN[k]);
 	const json = JSON.stringify(JSON.stringify(vals));
 	const q = `mutation {
 	  change_multiple_column_values(item_id: ${leadId}, board_id: ${BOARD}, column_values: ${json}) {
@@ -358,7 +444,9 @@ module.exports = {
 	getAccessToken,
 	getGroups,
 	getColumns,
+	getOrCreateLead,
 	getLead,
+	getLeadById,
 	createLead,
 	getTerms,
 	insertUnique,
