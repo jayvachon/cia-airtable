@@ -428,13 +428,22 @@ app.post('/api/upload', (req, res) => {
 		return res.status(400).send('No files were uploaded.');
 	}
 	const file = files.file;
-	// console.log(files)
+	// console.log(file)
 	const uploadPath = `${appRoot}/uploads/${file.name}`;
 	file.mv(uploadPath, err => {
 		if (err) {
 			return res.status(500).send(err);
 		}
-		res.status(200);
+		monday.uploadLeadDocument(req.body.leadId, req.body.documentType, uploadPath)
+			.then(err => {
+				if (err) {
+					console.log(err);
+				}
+				// res.end();
+				monday.getLeadById(req.body.leadId).then(lead => {
+					res.json(lead);
+				})
+			});
 	})
 });
 

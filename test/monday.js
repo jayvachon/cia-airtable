@@ -1,4 +1,5 @@
 require('should');
+const appRoot = require('app-root-path');
 const monday = require('../services/monday');
 // const appRoot = require('app-root-path');
 
@@ -72,6 +73,18 @@ describe('Monday', () => {
 			done();
 		})
 	});
+
+	/*it('should upload a file', done => {
+
+		const leadId = 2200080442;
+		const file = `${appRoot}/uploads/IES.pdf`;
+
+		monday.uploadLeadDocument(leadId, 'identification', file)
+			.then(res => {
+				console.log(res)
+				done();
+			})
+	});*/
 
 	/*it('should create a new lead', done => {
 		monday.createLead().then(res => {

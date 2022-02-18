@@ -4,6 +4,7 @@ const xmlConvert = require('xml-js');
 const Bottleneck = require('bottleneck');
 const got = require('got');
 const logger = require(`${appRoot}/config/winston`);
+const fileUploader = require('./fileUploader');
 const _ = require('lodash');
 
 const ROOT = 'https://api.monday.com/v2';
@@ -34,8 +35,13 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	zip: 'text01',
 	educationLevel: 'dropdown',
 
+	essay: 'files8',
 	identification: 'files7',
 	diploma: 'files6',
+	dd214: 'files4',
+	coe: 'files9',
+	proof32k: 'files75',
+	affidavit: 'files76',
 };
 const TERM_COLUMN = {
 	name: 'name',
@@ -414,6 +420,12 @@ const updateLeadValues = (leadId, columnValues) => {
 		})
 };
 
+const uploadLeadDocument = (leadId, documentType, file) => {
+
+	// documentType matches the name of the column
+	return fileUploader.upload(Number(leadId), COLUMN[documentType], file);
+}
+
 const test = () => {
 	return post('{ boards (limit:1) {id name} }');
 };
@@ -451,5 +463,6 @@ module.exports = {
 	getTerms,
 	insertUnique,
 	updateLeadValues,
+	uploadLeadDocument,
 	test,
 };
