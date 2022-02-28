@@ -45,11 +45,11 @@ const sessionOptions = {
 	cookie: {},
 };
 
-app.use(session(sessionOptions));
+router.use(session(sessionOptions));
 
-app.use(cors());
-app.use(express.json({limit:'1mb'}));
-app.use(fileUpload());
+router.use(cors());
+router.use(express.json({limit:'1mb'}));
+router.use(fileUpload());
 
 // 1. Create client
 let oAuth2Client = new google.auth.OAuth2(
