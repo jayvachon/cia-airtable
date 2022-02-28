@@ -34,6 +34,7 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	state: 'text3',
 	zip: 'text01',
 	educationLevel: 'dropdown',
+	visa: 'status_113',
 
 	essay: 'files8',
 	identification: 'files7',
@@ -42,6 +43,8 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	coe: 'files9',
 	proof32k: 'files75',
 	affidavit: 'files76',
+	i20transfer: 'files46',
+	i20creationAndDelivery: 'files1',
 };
 const TERM_COLUMN = {
 	name: 'name',
@@ -146,8 +149,10 @@ const getColumns = () => {
 };
 
 const getOrCreateLead = (email) => {
+	console.log('get or create: ' + email)
 	return getLead(email)
 		.then(values => {
+			console.log('values: ' + JSON.stringify(values))
 			if (values) {
 				return values;
 			} else {
@@ -160,6 +165,7 @@ const getOrCreateLead = (email) => {
 				}
 				return createLead(lead)
 					.then(data => {
+						console.log('create: ' + JSON.stringify(lead))
 						return getLeadById(data.create_item.id);
 					});
 			}
@@ -185,7 +191,28 @@ const getLead = (email) => {
 			else {
 				let values = mapColumnIds(res.data.items_by_column_values[0].column_values)
 				values.id = res.data.items_by_column_values[0].id;
-				return values;
+
+				// Censor sensitive information (with the exception of the keys in the following array)
+				const includeKeys = [
+					'status',
+					'email',
+					'firstName',
+					'course',
+					'type',
+					'financialAid',
+					'visa',
+					'id',
+				];
+				let censoredLead = {};
+				_.forOwn(values, (v, k) => {
+					if (includeKeys.includes(k)) {
+						censoredLead[k] = v;
+					} else {
+						censoredLead[k] = v === "" ? "" : "*";
+					}
+				});
+
+				return censoredLead;
 			}
 		})
 		.catch(err => {
