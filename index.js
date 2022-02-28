@@ -104,7 +104,7 @@ const autoEmail = (res) => {
 		});
 };
 
-app.get('/login', (req, res) => {
+router.get('/login', (req, res) => {
 
 	// 2. Generate authorize url
 	authorizeUrl = oAuth2Client.generateAuthUrl({
@@ -126,7 +126,7 @@ app.get('/login', (req, res) => {
 	res.redirect(authorizeUrl);
 });
 
-app.get('/auth/google/callback', (req, res) => {
+router.get('/auth/google/callback', (req, res) => {
 
 	// 3. Save code
 	const code = req.query.code;
@@ -141,7 +141,7 @@ app.get('/auth/google/callback', (req, res) => {
 	.catch(err => console.error(err));
 });
 
-app.get('/populi-login', (req, res) => {
+router.get('/populi-login', (req, res) => {
 	
 	let file = fs.readFileSync('./package.json');
 	let pack = JSON.parse(file);
@@ -151,7 +151,7 @@ app.get('/populi-login', (req, res) => {
 	res.render('populiLogin', { pack, environment, root });
 });
 
-app.post('/populi-login', (req, res, next) => {
+router.post('/populi-login', (req, res, next) => {
 	populi.getAccessToken(req.body.username, req.body.password)
 		.then(token => {
 			logger.info('Login succeeded for user ' + req.body.username);
@@ -167,7 +167,7 @@ app.post('/populi-login', (req, res, next) => {
 		});
 });
 
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
 
 	let file = fs.readFileSync('./package.json');
 	let pack = JSON.parse(file);
@@ -181,7 +181,7 @@ app.get('/', (req, res) => {
 	res.render('index', { loggedIn: isLoggedIn(), environment, root, currentTerm });
 });
 
-app.get('/email-new-leads', (req, res) => {
+router.get('/email-new-leads', (req, res) => {
 
 	if (isLoggedIn() === false) {
 		return res.redirect('/');
@@ -190,21 +190,21 @@ app.get('/email-new-leads', (req, res) => {
 	return autoEmail(res);
 });
 
-app.get('/log-correspondence', (req, res) => {
+router.get('/log-correspondence', (req, res) => {
 	if (isLoggedIn() === false) {
 		return res.redirect('/');
 	}
 	res.render('logCorrespondence');
 });
 
-app.get('/manually-add-lead', (req, res) => {
+router.get('/manually-add-lead', (req, res) => {
 	if (isLoggedIn() === false) {
 		return res.redirect('/');
 	}
 	res.render('manuallyAddLead');
 });
 
-app.get('/process-attachments', (req, res) => {
+router.get('/process-attachments', (req, res) => {
 	if (isLoggedIn() === false) {
 		return res.redirect('/');
 	}
@@ -292,7 +292,7 @@ function uploadAttachment(attachment) {
 	}
 };
 
-app.post('/process-attachments', async (req, res, next) => {
+router.post('/process-attachments', async (req, res, next) => {
 	
 	drive.init(oAuth2Client);
 
@@ -318,7 +318,7 @@ app.post('/process-attachments', async (req, res, next) => {
 	}
 });
 
-app.get('/set-enrollment-term', (req, res) => {
+router.get('/set-enrollment-term', (req, res) => {
 	if (isLoggedIn() === false) {
 		return res.redirect('/');
 	}
@@ -342,7 +342,7 @@ app.get('/set-enrollment-term', (req, res) => {
 		})
 });
 
-app.post('/set-enrollment-term', (req, res) => {
+router.post('/set-enrollment-term', (req, res) => {
 	let settings = JSON.parse(fs.readFileSync('settings.json'));
 	let body = req.body;
 	if (body.selectpicker_term !== '') {
@@ -361,7 +361,7 @@ app.post('/set-enrollment-term', (req, res) => {
 	res.redirect('/');
 });
 
-app.get('/student-creation-preview', (req, res) => {
+router.get('/student-creation-preview', (req, res) => {
 	studentCreation.preview().then(results => {
 		res.render('studentCreationPreview', { results });
 	})
@@ -370,7 +370,7 @@ app.get('/student-creation-preview', (req, res) => {
 	});
 });
 
-app.get('/student-creation', (req, res) => {
+router.get('/student-creation', (req, res) => {
 	studentCreation.create2().then(results => {
 		// res.send(results);
 		console.log(JSON.stringify(results))
@@ -378,7 +378,7 @@ app.get('/student-creation', (req, res) => {
 	});
 });
 
-app.get('/send-enrollment-information', (req, res) => {
+router.get('/send-enrollment-information', (req, res) => {
 	if (isLoggedIn() === false) {
 		return res.redirect('/');
 	}
@@ -405,13 +405,13 @@ app.get('/send-enrollment-information', (req, res) => {
 // req.body for POST
 // req.query for GET
 
-app.get('/api/lead', (req, res) => {
+router.get('/api/lead', (req, res) => {
 	monday.getOrCreateLead(req.query.email).then(lead => {
 		res.json(lead);
 	});
 });
 
-app.post('/api/updateLead', (req, res) => {
+router.post('/api/updateLead', (req, res) => {
 	console.log(req.body)
 	monday.updateLeadValues(req.body.leadId, req.body.columnValues).then(update => {
 		if (update && update.change_multiple_column_values) {
@@ -424,7 +424,7 @@ app.post('/api/updateLead', (req, res) => {
 	});
 });
 
-app.post('/api/upload', (req, res) => {
+router.post('/api/upload', (req, res) => {
 	const files = req.files;
 	if (!files || Object.keys(files).length === 0) {
 		return res.status(400).send('No files were uploaded.');
@@ -449,7 +449,7 @@ app.post('/api/upload', (req, res) => {
 	})
 });
 
-app.get('/logs', (req, res) => {
+router.get('/logs', (req, res) => {
 	let combined = fs.readFileSync(`${appRoot}/logs/combined.log`);
 	let error = fs.readFileSync(`${appRoot}/logs/error.log`);
 	res.render('logs', { combined, error });
