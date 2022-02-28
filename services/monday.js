@@ -39,12 +39,15 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	essay: 'files8',
 	identification: 'files7',
 	diploma: 'files6',
+	credentialEvaluation: 'files62',
 	dd214: 'files4',
 	coe: 'files9',
 	proof32k: 'files75',
 	affidavit: 'files76',
+	f1: 'files71',
 	i20transfer: 'files46',
 	i20creationAndDelivery: 'files1',
+	i20: 'files85',
 };
 const TERM_COLUMN = {
 	name: 'name',

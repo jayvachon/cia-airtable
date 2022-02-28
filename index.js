@@ -25,11 +25,13 @@ const appRoot = require('app-root-path');
 const logger = require(`${appRoot}/config/winston`);
 const TOKEN_PATH = 'token.json';
 const PORT = process.env.PORT;
+const router = express.Router();
 
 dotenv.config({path: __dirname + '/.env'})
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use('/ci', router);
 app.set('view engine', 'ejs');
 
 const sessionOptions = {
