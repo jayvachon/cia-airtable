@@ -155,7 +155,7 @@ const getOrCreateLead = (email) => {
 	console.log('get or create: ' + email)
 	return getLead(email)
 		.then(values => {
-			console.log('values: ' + JSON.stringify(values))
+			console.log('values: ' + JSON.stringify(values, null, 4))
 			if (values) {
 				return values;
 			} else {
@@ -168,7 +168,7 @@ const getOrCreateLead = (email) => {
 				}
 				return createLead(lead)
 					.then(data => {
-						console.log('create: ' + JSON.stringify(lead))
+						console.log('create: ' + JSON.stringify(lead, null, 4))
 						return getLeadById(data.create_item.id);
 					});
 			}
@@ -328,15 +328,17 @@ const createLead = (lead) => {
 	vals[COLUMN.email] = { email: email, text: email };
 
 	let itemName = '';
+	let firstNameFormatted = '';
+	let lastNameFormatted = '';
 
 	if (lead.content.firstName) {
 		const firstName = lead.content.firstName.toLowerCase();
-		const firstNameFormatted = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+		firstNameFormatted = firstName.charAt(0).toUpperCase() + firstName.slice(1);
 		vals[COLUMN.firstName] = firstNameFormatted;
 	}
 	if (lead.content.lastName) {
 		const lastName = lead.content.lastName.toLowerCase();
-		const lastNameFormatted = lastName.charAt(0).toUpperCase() + lastName.slice(1);
+		lastNameFormatted = lastName.charAt(0).toUpperCase() + lastName.slice(1);
 		vals[COLUMN.lastName] = lastNameFormatted;
 	}
 	if (lead.content.firstName && lead.content.lastName) {

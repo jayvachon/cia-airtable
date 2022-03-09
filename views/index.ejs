@@ -3,20 +3,20 @@
 	<%- include('partials/header'); -%>
 	
 	<% if (loggedIn) { %>
-		<p><a href="/email-new-leads">Auto-email new leads</a></p>
-		<p><a href="/send-enrollment-information">Send enrollment information</a></p>
-		<p><a href="/log-correspondence">Log correspondence</a></p>
-		<p><a href="/manually-add-lead">Manually add new lead</a></p>
+		<p><a href="/ci/email-new-leads">Auto-email new leads</a></p>
+		<p><a href="/ci/send-enrollment-information">Send enrollment information</a></p>
+		<p><a href="/ci/log-correspondence">Log correspondence</a></p>
+		<p><a href="/ci/manually-add-lead">Manually add new lead</a></p>
 		<hr />
-		<p><a href="/process-attachments">Process attachments</a></p>
-		<p><a href="/set-enrollment-term">Configure enrollment term</a> <i>(currently <%= currentTerm %>)</i></p>
-		<p><a href="/populi-login">Login to populi</a></p>
-		<p><a href="/student-creation-preview">Create students in Populi</a></p>
+		<p><a href="/ci/process-attachments">Process attachments</a></p>
+		<p><a href="/ci/set-enrollment-term">Configure enrollment term</a> <i>(currently <%= currentTerm %>)</i></p>
+		<p><a href="/ci/populi-login">Login to populi</a></p>
+		<p><a href="/ci/student-creation-preview">Create students in Populi</a></p>
 		<hr />
-		<p><a href="/logs">Logs</a></p>
+		<p><a href="/ci/logs">Logs</a></p>
 	<% } %>
 	<% if (!loggedIn) { %>
-	    <a href="/login">Login</a>
+	    <a href="/ci/login">Login</a>
 	<% } %>
 
 	<p><%= environment %> || <%= root %></p>

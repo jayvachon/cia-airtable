@@ -2,7 +2,7 @@
 <body>
 	<%- include('partials/header'); -%>
 	<h2>Create Students in Populi</h2>
-	<p>NOTE! Make sure you've updated the <strong>tags and term IDs</strong> to reflect this term (<a href="/set-enrollment-term">here</a>)</p>
+	<p>NOTE! Make sure you've updated the <strong>tags and term IDs</strong> to reflect this term (<a href="/ci/set-enrollment-term">here</a>)</p>
 	<% if (results) { %>
 		<% results.forEach(function(result) { %>
 			<ul>
@@ -36,7 +36,7 @@
 			</ul>
 			<hr />
 		<% }); %>
-		<a href="/student-creation">Continue</a>
+		<a href="/ci/student-creation">Continue</a>
 	<% } %>
-	<a href="/">Back</a>
+	<a href="/ci">Back</a>
 </body>
