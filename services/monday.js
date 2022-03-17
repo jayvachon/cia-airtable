@@ -48,6 +48,7 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	i20transfer: 'files46',
 	i20creationAndDelivery: 'files1',
 	i20: 'files85',
+	picture: 'files5',
 };
 const TERM_COLUMN = {
 	name: 'name',
@@ -152,6 +153,7 @@ const getColumns = () => {
 };
 
 const getOrCreateLead = (email) => {
+	email = email.toLowerCase();
 	console.log('get or create: ' + email)
 	return getLead(email)
 		.then(values => {
@@ -176,6 +178,7 @@ const getOrCreateLead = (email) => {
 };
 
 const getLead = (email) => {
+	email = email.toLowerCase();
 	const query = `query {
 	    items_by_column_values (board_id: ${BOARD}, column_id: "${COLUMN.email}", column_value: "${email}") {
 	        id
@@ -324,7 +327,7 @@ const createLead = (lead) => {
 	const today = new Date().toISOString().split('T')[0];
 	vals[COLUMN.dateAdded] = { date: today, time: "00:00:00" };
 
-	const email = lead.content.email;
+	const email = lead.content.email.toLowerCase();
 	vals[COLUMN.email] = { email: email, text: email };
 
 	let itemName = '';
