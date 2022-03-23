@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 const airtable = require('../airtable');
 const populi = require('./populi');
+const monday = require('./monday');
 const _ = require('lodash');
 const constants = require('../constants');
 const appRoot = require('app-root-path');
@@ -79,6 +80,18 @@ const findNewStudents = (info) => {
 	});
 };
 
+const mapEducationLevel = (educationLevel) => {
+	switch(educationLevel) {
+		case 'High School Diploma': return leadInfo[process.env.NODE_ENV].ed_level.high_school;
+		case 'Some College': return leadInfo[process.env.NODE_ENV].ed_level.some_college;
+		case 'Associate\'s Degree': return leadInfo[process.env.NODE_ENV].ed_level.associates;
+		case 'Bachelor\'s Degree': return leadInfo[process.env.NODE_ENV].ed_level.bachelors;
+		case 'Master\'s Degree': return leadInfo[process.env.NODE_ENV].ed_level.masters;
+		case 'Doctoral Degree': return leadInfo[process.env.NODE_ENV].ed_level.doctoral;
+		default: return leadInfo[process.env.NODE_ENV].ed_level.high_school;
+	}
+};
+
 const prep = (newStudents, leads) => {
 
 	return _.map(newStudents, newStudent => {
@@ -125,7 +138,7 @@ const prep = (newStudents, leads) => {
 		let tag = '';
 		let tagName = '';
 		let program = newLead.fields['Program'];
-		let programShort = ''
+		let programShort = '';
 
 		// v2. Taken from settings
 		if (program.includes('Associate')) {
@@ -181,6 +194,68 @@ const prep = (newStudents, leads) => {
 	});
 };
 
+const preview_monday = () => {
+	
+	let obj = {}
+
+	return populi.getAcademicTermByName('Summer 2022')
+		.then(term => {
+			obj.term = term;
+			return monday.getStudentsForPopuliCreation()
+		})
+		.then(students => {
+
+			leadInfo.term_id = obj.term.id;
+
+			return _.map(students, newStudent => {
+				// return newStudent;
+				console.log(newStudent)
+
+				let program = newStudent.course;
+				let programShort = '';
+
+				if (program.includes('Associate')) {
+					// tag = settings.current_associates_tag.id;
+					// tagName = settings.current_associates_tag.name;
+					programShort = 'as';
+				}
+				else if (program.includes('Certificate')) {
+					// tag = settings.current_certificate_tag.id;
+					// tagName = settings.current_certificate_tag.name;
+					programShort = 'wdi';
+				}
+
+				let profile = {
+					// airtableId: newStudent.id,
+					'First Name': newStudent.firstName,
+					'Last Name': newStudent.lastName,
+					'Birth Date': newStudent.dateOfBirth,
+					'Phone Number': newStudent.phone,
+					'Social Security Number': newStudent.socialSecurityNumber,
+					street: newStudent.street,
+					city: newStudent.city,
+					state: newStudent.state,
+					postal: newStudent.zip,
+					country: 'US',
+					'Email': newStudent.email,
+					image: newStudent.picture,
+					// tag: tag,
+					// tagName: tagName,
+					program: program,
+					programShort: programShort,
+					leadInfo: leadInfo[process.env.NODE_ENV],
+					educationLevel: mapEducationLevel(newStudent.educationLevel),
+					highSchoolGradDate: newStudent.graduationDate,
+					application: application[process.env.NODE_ENV],
+					error: '',
+				};
+				console.log(profile)
+
+				return profile;
+		});
+	});
+};
+
 const preview = () => {
 	let tables = {};
 	return Promise.all([airtable.listLeads(), airtable.listDocs(), airtable.listInfo()])
@@ -233,5 +308,6 @@ const create2 = () => {
 
 module.exports = {
 	preview,
+	preview_monday,
 	create2,
 };

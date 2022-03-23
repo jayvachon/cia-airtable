@@ -12,6 +12,7 @@ const populi = require('./services/populi');
 const studentCreation = require('./services/studentCreation');
 const configureEnrollment = require('./services/configureEnrollment');
 const templates = require('./templates');
+const multer = require('multer');
 const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
@@ -46,6 +47,22 @@ const sessionOptions = {
 };
 
 router.use(session(sessionOptions));
+
+// Upload config
+const storage = multer.diskStorage({
+	destination: '/tmp/uploads',
+	filename: function (req, file, cb) {
+		cb(null, file.fieldname + '-' + Date.now());
+	},
+	limits: {
+		fieldSize: 50 * 1024 * 1024, // 5 MB
+	},
+});
+const upload = multer({ storage: storage });
+
+const validateExtension = (filename, extension) => {
+	return filename.substring(filename.lastIndexOf('.') + 1) === extension;
+};
 
 router.use(cors());
 router.use(express.json({limit:'1mb'}));
@@ -104,6 +121,34 @@ const autoEmail = (res) => {
 		});
 };
 
+app.get('/dfa/transfer-credit-upload', (req, res) => {
+
+	let environment = process.env.NODE_ENV;
+	let root = constants[process.env.NODE_ENV].ROOT;
+
+	res.render('transferCreditUpload', { environment, root });
+});
+
+app.post('/upload-va', upload.single('fileupload'), (req, res, next) => {
+
+	if (req.file.size > 5 * 1000000) { // 5 MB
+		res.render('error', { message: 'File size is too large. File must be less than 5 MB' });
+		return;
+	}
+
+	if (validateExtension(req.file.originalname, 'xlsx') === false) {
+		res.render('error', { message: `The uploaded file "${req.file.originalname}" could not be processed because it is not type xlsx`})
+		return;
+	}
+
+	console.log(req.file)
+	res.send('/dfa/transfer-credit-upload')
+});
+
+router.get('/create-student', (req, res) => {
+	console.log(req)
+});
+
 router.get('/login', (req, res) => {
 
 	// 2. Generate authorize url
@@ -126,6 +171,7 @@ router.get('/login', (req, res) => {
 	res.redirect(authorizeUrl);
 });
 
+// might have to update this redirect route in google services
 router.get('/auth/google/callback', (req, res) => {
 
 	// 3. Save code
@@ -358,7 +404,7 @@ router.post('/set-enrollment-term', (req, res) => {
 		settings.current_academic_term = JSON.parse(body.selectpicker_academicTerm);
 	}
 	fs.writeFileSync('settings.json', JSON.stringify(settings));
-	res.redirect('/');
+	res.redirect('/ci');
 });
 
 router.get('/student-creation-preview', (req, res) => {

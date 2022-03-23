@@ -247,10 +247,54 @@ const getAcademicTerms = () => {
 		});
 };
 
+const getAcademicTermByName = (termName) => {
+	return post('getAcademicTerms')
+		.then(response => {
+			let terms = response.js.academic_term;
+			let term = _.find(terms, term => {
+				return term.name._text === termName;
+			});
+			if (!term) return undefined;
+			return {
+				id: term.termid._text,
+				name: term.name._text,
+				startDate: term.start_date._text,
+				endDate: term.end_date._text,
+			};
+		})
+		.catch(err => {
+			throw new Error(err);
+		});
+};
+
+const addTransferCredit = (transferCreditDetails) => {
+
+	transferCreditDetails.status = 'APPROVED';
+	transferCreditDetails.applies_to_all_programs = 'false';
+	transferCreditDetails.affects_standing = 'true';
+	transferCreditDetails.pass_fail_fail_affects_gpa = 'false';
+	transferCreditDetails.pass_fail_pass_affects_gpa = 'false';
+	transferCreditDetails.fail_affects_gpa = 'false';
+	transferCreditDetails.pass_affects_gpa = 'false';
+	transferCreditDetails.fulfills_program_requirements = 'true';
+
+	console.log(transferCreditDetails)
+
+	return post('addTransferCredit', transferCreditDetails)
+		.then(response => {
+			return response;
+		})
+		.catch(err => {
+			throw new Error(err);
+		});
+}
+
 module.exports = {
 	getAccessToken,
 	addPerson,
 	getTags,
 	getAcademicTerms,
 	image2base64,
+	getAcademicTermByName,
+	addTransferCredit,
 };

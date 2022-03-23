@@ -49,6 +49,8 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	i20creationAndDelivery: 'files1',
 	i20: 'files85',
 	picture: 'files5',
+
+	createInPopuli: 'checkbox',
 };
 const TERM_COLUMN = {
 	name: 'name',
@@ -149,6 +151,39 @@ const getColumns = () => {
 	}`;
 	return post(query).then(res => {
 		return res.data.boards[0];
+	});
+};
+
+const getStudentsForPopuliCreation = () => {
+	const vals = {
+		checked: true
+	};
+	const json = JSON.stringify(JSON.stringify(vals));
+	const q = `query {
+		items_by_column_values (board_id: ${BOARD}, column_id: "${COLUMN['status']}", column_value: "Finalized Documents") {
+	        id
+	        name
+	        column_values {
+	        	id
+	        	value
+	        	text
+	        }
+		}
+	}`;
+	return post(q).then(res => {
+
+		// Early out if there are no students to create
+		const items = res.data.items_by_column_values;
+		if (items.length === 0) {
+			return [];
+		}
+
+		// Only return students that are marked as ready to be created
+		const readyStudents = _.filter(items, item => {
+			const checkbox = _.find(item.column_values, cv => cv.id === COLUMN['createInPopuli'])
+			return checkbox.text !== '';
+		})
+		return _.map(readyStudents, item => mapColumnIds(item.column_values));
 	});
 };
 
@@ -459,7 +494,7 @@ const uploadLeadDocument = (leadId, documentType, file) => {
 
 	// documentType matches the name of the column
 	return fileUploader.upload(Number(leadId), COLUMN[documentType], file);
-}
+};
 
 const test = () => {
 	return post('{ boards (limit:1) {id name} }');
@@ -494,6 +529,7 @@ module.exports = {
 	getOrCreateLead,
 	getLead,
 	getLeadById,
+	getStudentsForPopuliCreation,
 	createLead,
 	getTerms,
 	insertUnique,

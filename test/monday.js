@@ -33,7 +33,7 @@ describe('Monday', () => {
 	});
 */
 	/*it('should find a lead by email', done => {
-		monday.getLead('jay.vachon@codeimmersives.com').then(res => {
+		monday.getLead('luisespinal294@gmail.com').then(res => {
 			// console.log(JSON.stringify(res, null, 2));
 			console.log(res);
 			done();
@@ -58,13 +58,13 @@ describe('Monday', () => {
 		});
 	});*/
 
-	/*it('should get lead by id', done => {
-		const id = 2200080442;
+	it('should get lead by id', done => {
+		const id = 2233510679;
 		monday.getLeadById(id).then(res => {
 			console.log(res);
 			done();
 		});
-	});*/
+	});
 
 	it('should list the columns', done => {
 		monday.getColumns().then(res => {
@@ -73,6 +73,13 @@ describe('Monday', () => {
 			done();
 		})
 	});
+
+	it('should get students for creation in populi', done => {
+		monday.getStudentsForPopuliCreation().then(res => {
+			console.log(res);
+			done();
+		});
+	})
 
 	/*it('should upload a file', done => {
 

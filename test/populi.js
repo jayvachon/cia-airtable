@@ -4,7 +4,25 @@ const appRoot = require('app-root-path');
 
 describe('Populi', () => {
 
-	it('should add a new person', done => {
+	it('should transfer credit', done => {
+		// https://dfa-validation.populi.co/router/contacts/people/24547447/show
+		// Might be able to add grade using the addTransferCreditProgram endpoint (but need program_id)
+		const transferCreditDetails = {
+			organization_id: '2983353',
+			person_id: '24547447',
+			course_number: '101',
+			course_name: 'TEST',
+			credits: '3',
+			catalog_course_id: '1776020',
+			effective_date: '2020-09-05',
+		};
+		populi.addTransferCredit(transferCreditDetails).then(res => {
+			console.log(res);
+			done();
+		});
+	});
+
+	/*it('should add a new person', done => {
 
 		const person = {
 			'First name': 'Chanel',
@@ -29,27 +47,34 @@ describe('Populi', () => {
 			// console.log(person);
 			done();
 		});
-	});
+	});*/
 
-	it('should get tags', done => {
+	/*it('should get tags', done => {
 		populi.getTags().then(res => {
 			console.log(res);
 			done();
 		});
-	});
+	});*/
 
-	it('should convert image', done => {
+	/*it('should convert image', done => {
 		populi.image2base64('https://dl.airtable.com/.attachments/d1230ddbf32249ba2e362b1d7433f79f/c28531de/FB_IMG_1599275082632__01.jpg').then(base64 => {
 			console.log(base64);
 			done();
 		});
-	});
+	});*/
 
-	it('should get academic terms', function(done) {
+	/*it('should get academic terms', function(done) {
 		this.timeout(5000);
 		populi.getAcademicTerms().then(res => {
 			console.log(res);
 			done();
 		});
-	});
+	});*/
+
+	/*it('should get academic term by name', done => {
+		populi.getAcademicTermByName('Summer 2022').then(res => {
+			console.log(res);
+			done();
+		})
+	});*/
 });

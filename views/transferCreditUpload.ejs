@@ -1,0 +1,12 @@
+<%- include('partials/dfaHead'); -%>
+<body>
+	<h1>Transfer Credit CSV Uploader</h1>
+	<form method='POST' enctype='multipart/form-data'>
+		<input type='file' name='fileupload' />
+		<p>Accepted file type: .xlsx</p>
+		<p>Maximum file size: 5 MB</p>
+		<br>
+		<input type='submit' name='uploadfile' value='Upload Transfer Credit'>
+	</form>
+</body>
+<%- include('partials/footer'); -%>
