@@ -1,5 +1,11 @@
 <%- include('partials/head'); -%>
 <body>
+	<h1>Error</h1>
 	<p><%= error %></p>
-	<p><a href="/">Go Home</a></p>
+	<% if (home) { %>
+		<p><a href="<%= home %>">Go Home</a></p>
+	<% } %>
+	<% if (!home) { %>
+		<p><a href="/">Go Home</a></p>
+	<% } %>
 </body>

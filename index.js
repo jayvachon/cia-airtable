@@ -129,20 +129,24 @@ app.get('/dfa/transfer-credit-upload', (req, res) => {
 	res.render('transferCreditUpload', { environment, root });
 });
 
-app.post('/upload-va', upload.single('fileupload'), (req, res, next) => {
+app.post('/dfa/transfer-credit-upload', upload.single('fileupload'), (req, res, next) => {
 
 	if (req.file.size > 5 * 1000000) { // 5 MB
-		res.render('error', { message: 'File size is too large. File must be less than 5 MB' });
+		res.render('error', { error: 'File size is too large. File must be less than 5 MB', home: '/dfa/transfer-credit-upload' });
 		return;
 	}
 
 	if (validateExtension(req.file.originalname, 'xlsx') === false) {
-		res.render('error', { message: `The uploaded file "${req.file.originalname}" could not be processed because it is not type xlsx`})
+		res.render('error', { error: `The uploaded file "${req.file.originalname}" could not be processed because it is not type xlsx`, home: '/dfa/transfer-credit-upload'})
 		return;
 	}
 
-	console.log(req.file)
-	res.send('/dfa/transfer-credit-upload')
+	const file = fs.readFileSync(req.file.path);
+
+	// console.log(req.file)
+	const tc = require('./services/transferCredit');
+	tc.readXlsx(file.buffer);
+	res.redirect('/dfa/transfer-credit-upload')
 });
 
 router.get('/create-student', (req, res) => {

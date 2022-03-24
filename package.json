@@ -36,6 +36,7 @@
     "promise-fs": "^2.1.1",
     "update": "^0.7.4",
     "winston": "^3.3.3",
+    "xlsx": "^0.18.5",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
