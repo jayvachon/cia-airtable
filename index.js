@@ -146,12 +146,23 @@ app.post('/dfa/transfer-credit-upload', upload.single('fileupload'), (req, res, 
 	// console.log(req.file)
 	const tc = require('./services/transferCredit');
 	const transfers = tc.readXlsx(file.buffer);
-	/*Promise.all(_.map(transfers, transfer => {
-		populi.addTransferCredit(transfer);
-	})).then(response => {
-		console.log(response);
-		res.redirect('/dfa/transfer-credit-upload')
-	});*/
+
+	const errors = _.filter(transfers, transfer => transfer.error);
+	if (errors.length > 0) {
+		res.render('error', { error: errors[0].error, home: '/dfa/transfer-credit-upload' });
+	} else {
+		Promise.all(_.map(transfers, transfer => {
+			populi.addTransferCredit(transfer);
+		})).then(response => {
+			console.log(response);
+			res.redirect('/dfa/transfer-credit-upload')
+		});
+	}
+});
+
+app.get('/dfa/transfer-credit-template', function(req, res){
+  const file = `${appRoot}/public/TransferCreditTemplate.xlsx`;
+  res.download(file);
 });
 
 router.get('/create-student', (req, res) => {

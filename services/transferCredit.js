@@ -29,13 +29,28 @@ const readXlsx = (file) => {
 	let headers = result.shift(); // the first row is headers
 	headers = _.filter(headers, header => header !== undefined); // remove any columns that come in as "undefined"
 
+	if (validateHeaders(headers) === false) {
+		return [ { error: 'Wrong headers' }];
+	}
+
 	_.remove(result, r => { return _.uniq(r).length < 2; }) // remove empty rows
 	let transfers = _.map(result, r => { return _.zipObject(headers, r); });
 	transfers = _.map(transfers, transfer => validate(transfer));
-	console.log(transfers)
 
 	return transfers;
 };
+
+const validateHeaders = (headers) => {
+	return _.isEqual(headers, [
+		'Organization ID',
+		'Person ID',
+		'Course Number',
+		'Course Name',
+		'Credits',
+		'Catalog Course ID',
+		'Effective Date'
+	]);
+}
 
 const validate = (transfer) => {
 	if (_.some(transfer, _.isEmpty)) {
