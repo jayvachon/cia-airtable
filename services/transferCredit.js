@@ -27,10 +27,22 @@ const readXlsx = (file) => {
 	}
 	
 	let headers = result.shift(); // the first row is headers
+	headers = _.filter(headers, header => header !== undefined); // remove any columns that come in as "undefined"
+
 	_.remove(result, r => { return _.uniq(r).length < 2; }) // remove empty rows
 	let transfers = _.map(result, r => { return _.zipObject(headers, r); });
+	transfers = _.map(transfers, transfer => validate(transfer));
+	console.log(transfers)
 
 	return transfers;
+};
+
+const validate = (transfer) => {
+	if (_.some(transfer, _.isEmpty)) {
+		return { error: 'row is missing one or more values' }
+	} else {
+		return transfer;
+	}
 };
 
 module.exports = {

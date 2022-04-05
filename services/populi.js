@@ -267,16 +267,27 @@ const getAcademicTermByName = (termName) => {
 		});
 };
 
-const addTransferCredit = (transferCreditDetails) => {
+const addTransferCredit = (variableFields) => {
 
-	transferCreditDetails.status = 'APPROVED';
-	transferCreditDetails.applies_to_all_programs = 'false';
-	transferCreditDetails.affects_standing = 'true';
-	transferCreditDetails.pass_fail_fail_affects_gpa = 'false';
-	transferCreditDetails.pass_fail_pass_affects_gpa = 'false';
-	transferCreditDetails.fail_affects_gpa = 'false';
-	transferCreditDetails.pass_affects_gpa = 'false';
-	transferCreditDetails.fulfills_program_requirements = 'true';
+	let transferCreditDetails = {
+		status: 'APPROVED',
+		applies_to_all_programs: 'false',
+		affects_standing: 'true',
+		pass_fail_fail_affects_gpa: 'false',
+		pass_fail_pass_affects_gpa: 'false',
+		fail_affects_gpa: 'false',
+		pass_affects_gpa: 'false',
+		fulfills_program_requirements: 'true',
+
+
+		organization_id: variableFields['Organization ID'],
+		person_id: variableFields['Person ID'],
+		course_number: variableFields['Course Number'],
+		course_name: variableFields['Course Name'],
+		credits: variableFields.Credits,
+		catalog_course_id: variableFields['Catalog Course ID'],
+		effective_date: variableFields['Effective Date'],
+	}
 
 	console.log(transferCreditDetails)
 

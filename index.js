@@ -145,8 +145,13 @@ app.post('/dfa/transfer-credit-upload', upload.single('fileupload'), (req, res, 
 
 	// console.log(req.file)
 	const tc = require('./services/transferCredit');
-	tc.readXlsx(file.buffer);
-	res.redirect('/dfa/transfer-credit-upload')
+	const transfers = tc.readXlsx(file.buffer);
+	/*Promise.all(_.map(transfers, transfer => {
+		populi.addTransferCredit(transfer);
+	})).then(response => {
+		console.log(response);
+		res.redirect('/dfa/transfer-credit-upload')
+	});*/
 });
 
 router.get('/create-student', (req, res) => {
