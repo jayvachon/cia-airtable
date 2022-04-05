@@ -121,7 +121,7 @@ const autoEmail = (res) => {
 		});
 };
 
-app.get('/dfa/transfer-credit-upload', (req, res) => {
+app.get('/registrar/transfer-credit-upload', (req, res) => {
 
 	let environment = process.env.NODE_ENV;
 	let root = constants[process.env.NODE_ENV].ROOT;
@@ -129,15 +129,15 @@ app.get('/dfa/transfer-credit-upload', (req, res) => {
 	res.render('transferCreditUpload', { environment, root });
 });
 
-app.post('/dfa/transfer-credit-upload', upload.single('fileupload'), (req, res, next) => {
+app.post('/registrar/transfer-credit-upload', upload.single('fileupload'), (req, res, next) => {
 
 	if (req.file.size > 5 * 1000000) { // 5 MB
-		res.render('error', { error: 'File size is too large. File must be less than 5 MB', home: '/dfa/transfer-credit-upload' });
+		res.render('error', { error: 'File size is too large. File must be less than 5 MB', home: '/registrar/transfer-credit-upload' });
 		return;
 	}
 
 	if (validateExtension(req.file.originalname, 'xlsx') === false) {
-		res.render('error', { error: `The uploaded file "${req.file.originalname}" could not be processed because it is not type xlsx`, home: '/dfa/transfer-credit-upload'})
+		res.render('error', { error: `The uploaded file "${req.file.originalname}" could not be processed because it is not type xlsx`, home: '/registrar/transfer-credit-upload'})
 		return;
 	}
 
@@ -149,18 +149,18 @@ app.post('/dfa/transfer-credit-upload', upload.single('fileupload'), (req, res, 
 
 	const errors = _.filter(transfers, transfer => transfer.error);
 	if (errors.length > 0) {
-		res.render('error', { error: errors[0].error, home: '/dfa/transfer-credit-upload' });
+		res.render('error', { error: errors[0].error, home: '/registrar/transfer-credit-upload' });
 	} else {
 		Promise.all(_.map(transfers, transfer => {
 			populi.addTransferCredit(transfer);
 		})).then(response => {
 			console.log(response);
-			res.redirect('/dfa/transfer-credit-upload')
+			res.redirect('/registrar/transfer-credit-upload')
 		});
 	}
 });
 
-app.get('/dfa/transfer-credit-template', function(req, res){
+app.get('/registrar/transfer-credit-template', function(req, res){
   const file = `${appRoot}/public/TransferCreditTemplate.xlsx`;
   res.download(file);
 });
