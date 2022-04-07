@@ -58,28 +58,48 @@ describe('Monday', () => {
 		});
 	});*/
 
-	it('should get lead by id', done => {
+	/*it('should get lead by id', done => {
 		const id = 2233510679;
 		monday.getLeadById(id).then(res => {
 			console.log(res);
 			done();
 		});
-	});
+	});*/
 
-	it('should list the columns', done => {
+	/*it('should list the columns', done => {
 		monday.getColumns().then(res => {
 			console.log(res);
 			res.should.be.an.Object;
 			done();
 		})
-	});
+	});*/
 
-	it('should get students for creation in populi', done => {
+	/*it('should list the term columns', done => {
+		monday.getTermColumns().then(res => {
+			console.log(res);
+			res.should.be.an.Object;
+			done();
+		})
+	});*/
+
+	it('should get current term', done => {
+		monday.getCurrentTerm().then(res => {
+			console.log(res);
+			res.should.be.an.Object;
+			done();
+		})
+		.catch(err => {
+			console.error(err);
+			done();
+		});
+	})
+
+	/*it('should get students for creation in populi', done => {
 		monday.getStudentsForPopuliCreation().then(res => {
 			console.log(res);
 			done();
 		});
-	})
+	})*/
 
 	/*it('should upload a file', done => {
 

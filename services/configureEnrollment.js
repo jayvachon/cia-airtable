@@ -6,7 +6,7 @@ const getDropdownData = () => {
 	return airtable.getTerms()
 		.then(terms => {
 			dropdowns.terms = terms;
-			return populi.getTags();
+			return populi.getTags_deprecated();
 		})
 		.then(tags => {
 			dropdowns.tags = tags;

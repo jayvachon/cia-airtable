@@ -13,7 +13,7 @@ describe('Student Creation', () => {
 
 	it('should preview monday students', function(done) {
 		studentCreation.preview_monday().then(result => {
-			console.log(result);
+			// console.log(result);
 			done();
 		})
 	});

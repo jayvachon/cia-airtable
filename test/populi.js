@@ -4,7 +4,15 @@ const appRoot = require('app-root-path');
 
 describe('Populi', () => {
 
-	it('should transfer credit', done => {
+	it('should find a tag by name', done => {
+		const tag = '2022-01/ATL/CS/AOS/WA';
+		populi.findTag(tag).then(res => {
+			console.log(res);
+			done();
+		})
+	});
+
+	/*it('should transfer credit', done => {
 		// https://dfa-validation.populi.co/router/contacts/people/24547447/show
 		// Might be able to add grade using the addTransferCreditProgram endpoint (but need program_id)
 		const transferCreditDetails = {
@@ -20,7 +28,7 @@ describe('Populi', () => {
 			console.log(res);
 			done();
 		});
-	});
+	});*/
 
 	/*it('should add a new person', done => {
 
@@ -71,10 +79,10 @@ describe('Populi', () => {
 		});
 	});*/
 
-	/*it('should get academic term by name', done => {
+	it('should get academic term by name', done => {
 		populi.getAcademicTermByName('Summer 2022').then(res => {
 			console.log(res);
 			done();
 		})
-	});*/
+	});
 });

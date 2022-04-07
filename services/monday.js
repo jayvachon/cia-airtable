@@ -54,8 +54,12 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 };
 const TERM_COLUMN = {
 	name: 'name',
-	startDate: 'date_4', // start and end date id's might need to be switched
-	endDate: 'date_1',
+	startDate: 'date_1',
+	endDate: 'date4',
+	orientationDate: 'date',
+	current: 'checkbox',
+	wdiTag: 'text7',
+	waTag: 'text73',
 }
 const CURRENT_TERM = 2199255521; // Summer 2022
 
@@ -67,6 +71,34 @@ const mapColumnIds = (columnValues, asArray) => {
 	const mapped = _.chain(columnValues)
 		.map(cv => {
 			let key = _.findKey(COLUMN, item => {
+				return item === cv.id;
+			});
+			return {
+				id: key,
+				text: cv.text,
+			};
+		})
+		.filter(cv => cv.id !== undefined)
+		.value();
+
+	if (asArray) {
+		return mapped;
+	} else {
+		return _.chain(mapped)
+		    .keyBy('id')
+		    .mapValues('text')
+		    .value();
+	}
+};
+
+const mapTermColumnIds = (columnValues, asArray) => {
+
+	// Takes the column values as returned by Monday
+	// and maps them to the sensible names mapped out in TERM_COLUMN
+
+	const mapped = _.chain(columnValues)
+		.map(cv => {
+			let key = _.findKey(TERM_COLUMN, item => {
 				return item === cv.id;
 			});
 			return {
@@ -114,6 +146,11 @@ const getTerms = () => {
 			items {
 				id
 				name
+				column_values {
+					id
+					value
+					text
+				}
 			}
 			columns {
 				id
@@ -122,6 +159,23 @@ const getTerms = () => {
 	}`;
 	return post(q).then(res => {
 		return res.data.boards[0].items;
+	});
+};
+
+const getCurrentTerm = () => {
+	return getTerms().then(terms => {
+		const currentTerm = _.find(terms, term => {
+			const cvs = term.column_values;
+			const checkbox = _.find(cvs, cv => cv.id === TERM_COLUMN['current']);
+			return checkbox.value !== null;
+		});
+		if (!currentTerm) {
+			return Promise.reject(new Error('No current term has been selected'));
+		}
+		let cv = mapTermColumnIds(currentTerm.column_values);
+		cv.name = currentTerm.name;
+		cv.mondayId = currentTerm.id;
+		return cv;
 	});
 };
 
@@ -142,6 +196,21 @@ const getGroups = () => {
 const getColumns = () => {
 	const query = `query {
 	    boards (ids: ${BOARD}) {
+	        columns {
+	            id
+	            title
+	            type
+	        }       
+	    }
+	}`;
+	return post(query).then(res => {
+		return res.data.boards[0];
+	});
+};
+
+const getTermColumns = () => {
+	const query = `query {
+	    boards (ids: ${TERM_BOARD}) {
 	        columns {
 	            id
 	            title
@@ -526,12 +595,14 @@ module.exports = {
 	getAccessToken,
 	getGroups,
 	getColumns,
+	getTermColumns,
 	getOrCreateLead,
 	getLead,
 	getLeadById,
 	getStudentsForPopuliCreation,
 	createLead,
 	getTerms,
+	getCurrentTerm,
 	insertUnique,
 	updateLeadValues,
 	uploadLeadDocument,

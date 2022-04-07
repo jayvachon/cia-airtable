@@ -201,7 +201,7 @@ const preview_monday = () => {
 	return populi.getAcademicTermByName('Summer 2022')
 		.then(term => {
 			obj.term = term;
-			return monday.getStudentsForPopuliCreation()
+			return monday.getStudentsForPopuliCreation();
 		})
 		.then(students => {
 
@@ -209,6 +209,7 @@ const preview_monday = () => {
 
 			return _.map(students, newStudent => {
 				// return newStudent;
+				console.log('new student:')
 				console.log(newStudent)
 
 				let program = newStudent.course;
@@ -249,7 +250,7 @@ const preview_monday = () => {
 					application: application[process.env.NODE_ENV],
 					error: '',
 				};
-				console.log(profile)
+				// console.log(profile)
 
 				return profile;
 		});

@@ -221,6 +221,24 @@ const getTags = () => {
 					name: tag.name._text,
 				};
 			});
+			// tags = _.keyBy(tags, 'id');
+			// tags = _.filter(tags, tag => tag.name.includes('/CS/'));
+			return tags;
+		})
+		.catch(err => {
+			throw new Error(err);
+		})
+};
+
+const getTags_deprecated = () => {
+	return post('getTags')
+		.then(response => {
+			let tags = _.map(response.js.tags.tag, tag => {
+				return {
+					id: tag.id._text,
+					name: tag.name._text,
+				};
+			});
 			tags = _.keyBy(tags, 'id');
 			tags = _.filter(tags, tag => tag.name.includes('/CS/'));
 			return tags;
@@ -245,6 +263,19 @@ const getAcademicTerms = () => {
 		.catch(err => {
 			throw new Error(err);
 		});
+};
+
+const findTag = (tagName) => {
+	return post('getTags')
+		.then(response => {
+			let tags = _.map(response.js.tags.tag, tag => {
+				return {
+					id: tag.id._text,
+					name: tag.name._text,
+				};
+			});
+			return _.find(tags, tag => tag.name === tagName);
+		})
 };
 
 const getAcademicTermByName = (termName) => {
@@ -289,7 +320,7 @@ const addTransferCredit = (variableFields) => {
 		effective_date: variableFields['Effective Date'],
 	}
 
-	console.log(transferCreditDetails)
+	// console.log(transferCreditDetails)
 
 	return post('addTransferCredit', transferCreditDetails)
 		.then(response => {
@@ -304,8 +335,10 @@ module.exports = {
 	getAccessToken,
 	addPerson,
 	getTags,
+	getTags_deprecated,
 	getAcademicTerms,
 	image2base64,
 	getAcademicTermByName,
 	addTransferCredit,
+	findTag,
 };

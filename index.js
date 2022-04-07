@@ -154,8 +154,9 @@ app.post('/registrar/transfer-credit-upload', upload.single('fileupload'), (req,
 		Promise.all(_.map(transfers, transfer => {
 			populi.addTransferCredit(transfer);
 		})).then(response => {
-			console.log(response);
-			res.redirect('/registrar/transfer-credit-upload')
+			// console.log(response);
+			// res.redirect('/registrar/transfer-credit-upload')
+			res.render('transferCreditSuccess');
 		});
 	}
 });
