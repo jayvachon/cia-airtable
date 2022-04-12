@@ -145,20 +145,22 @@ app.post('/registrar/transfer-credit-upload', upload.single('fileupload'), (req,
 
 	// console.log(req.file)
 	const tc = require('./services/transferCredit');
-	const transfers = tc.readXlsx(file.buffer);
+	// const transfers = tc.readXlsx(file.buffer);
 
-	const errors = _.filter(transfers, transfer => transfer.error);
-	if (errors.length > 0) {
-		res.render('error', { error: errors[0].error, home: '/registrar/transfer-credit-upload' });
-	} else {
-		Promise.all(_.map(transfers, transfer => {
-			populi.addTransferCredit(transfer);
-		})).then(response => {
-			// console.log(response);
-			// res.redirect('/registrar/transfer-credit-upload')
-			res.render('transferCreditSuccess');
-		});
-	}
+	tc.readXlsx(file.buffer).then(transfers => {
+		if (transfers.error) {
+			res.render('error', { error: transfers.error, home: '/registrar/transfer-credit-upload' });
+		} else {
+			Promise.all(_.map(transfers.transfers, transfer => {
+				populi.addTransferCredit(transfer.transfer);
+			})).then(response => {
+				// console.log(response);
+				// res.redirect('/registrar/transfer-credit-upload')
+				res.render('transferCreditSuccess');
+			})
+		}
+	})
+
 });
 
 app.get('/registrar/transfer-credit-template', function(req, res){

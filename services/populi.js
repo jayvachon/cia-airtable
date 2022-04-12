@@ -212,6 +212,44 @@ const addPerson = (person) => {
 		});
 };
 
+const getUsers = () => {
+	return post('getUsers')
+		.then(response => {
+			let users = _.map(response.js.person, person => {
+				return {
+					id: person.person_id._text,
+					firstName: person.first._text,
+					lastName: person.last._text,
+					username: person.username._text,
+				};
+			});
+			return users;
+		})
+		.catch(err => {
+			throw new Error(err);
+		});
+};
+
+const getPerson = (id) => {
+	return post('getPerson', { person_id: id })
+		.then(response => {
+			return response.js;
+		})
+		.catch(err => {
+			throw new Error(`No person with the id ${id} exists`);
+		});
+};
+
+const getOrganization = (id) => {
+	return post('getOrganization', { organization_id: id })
+		.then(response => {
+			return response.js;
+		})
+		.catch(err => {
+			throw new Error(`No organization with the ID ${id} exists`);
+		});
+};
+
 const getTags = () => {
 	return post('getTags')
 		.then(response => {
@@ -334,8 +372,11 @@ const addTransferCredit = (variableFields) => {
 module.exports = {
 	getAccessToken,
 	addPerson,
+	getPerson,
+	getOrganization,
 	getTags,
 	getTags_deprecated,
+	getUsers,
 	getAcademicTerms,
 	image2base64,
 	getAcademicTermByName,

@@ -2,6 +2,8 @@ const appRoot = require('app-root-path');
 const fs = require('fs');
 const xlsx = require('xlsx');
 const _ = require('lodash');
+const logger = require(`${appRoot}/config/winston`);
+const populi = require('./populi');
 
 const readXlsx = (file) => {
 
@@ -37,7 +39,23 @@ const readXlsx = (file) => {
 	let transfers = _.map(result, r => { return _.zipObject(headers, r); });
 	transfers = _.map(transfers, transfer => validate(transfer));
 
-	return transfers;
+	console.log(transfers)
+
+
+	return Promise.all(_.map(transfers, transfer => populi.getPerson(transfer['Person ID']))) // make sure all people exist
+		.then(() => Promise.all(_.map(transfers, transfer => populi.getOrganization(transfer['Organization ID'])))) // make sure all oganizations exist
+		.then(res => {
+			console.log(transfers)
+			console.log('success');
+			return { transfers };
+		})
+		.catch(err => {
+			return { error: err }
+		})
+	
+	// console.log(transfers)
+
+	// return transfers;
 };
 
 const validateHeaders = (headers) => {
