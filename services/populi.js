@@ -236,7 +236,7 @@ const getPerson = (id) => {
 			return response.js;
 		})
 		.catch(err => {
-			throw new Error(`No person with the id ${id} exists`);
+			throw new Error(`No person with the id "${id}" exists`);
 		});
 };
 
@@ -246,9 +246,19 @@ const getOrganization = (id) => {
 			return response.js;
 		})
 		.catch(err => {
-			throw new Error(`No organization with the ID ${id} exists`);
+			throw new Error(`No organization with the ID "${id}" exists`);
 		});
 };
+
+const getCatalogCourse = (id) => {
+	return post('getCatalogCourse', { catalog_course_id: id })
+		.then(response => {
+			return response.js;
+		})
+		.catch(err => {
+			throw new Error(`No catalog course with the ID "${id}" exists`);
+		});
+}
 
 const getTags = () => {
 	return post('getTags')
@@ -377,6 +387,7 @@ module.exports = {
 	getTags,
 	getTags_deprecated,
 	getUsers,
+	getCatalogCourse,
 	getAcademicTerms,
 	image2base64,
 	getAcademicTermByName,

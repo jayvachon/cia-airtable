@@ -143,19 +143,15 @@ app.post('/registrar/transfer-credit-upload', upload.single('fileupload'), (req,
 
 	const file = fs.readFileSync(req.file.path);
 
-	// console.log(req.file)
 	const tc = require('./services/transferCredit');
-	// const transfers = tc.readXlsx(file.buffer);
 
 	tc.readXlsx(file.buffer).then(transfers => {
 		if (transfers.error) {
 			res.render('error', { error: transfers.error, home: '/registrar/transfer-credit-upload' });
 		} else {
 			Promise.all(_.map(transfers.transfers, transfer => {
-				populi.addTransferCredit(transfer.transfer);
+				populi.addTransferCredit(transfer);
 			})).then(response => {
-				// console.log(response);
-				// res.redirect('/registrar/transfer-credit-upload')
 				res.render('transferCreditSuccess');
 			})
 		}
