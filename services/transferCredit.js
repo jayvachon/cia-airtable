@@ -47,11 +47,7 @@ const readXlsx = (file) => {
 		})
 		.catch(err => {
 			return { error: err }
-		})
-	
-	// console.log(transfers)
-
-	// return transfers;
+		});
 };
 
 const validateHeaders = (headers) => {

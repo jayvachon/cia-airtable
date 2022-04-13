@@ -19,7 +19,7 @@ describe('Populi', () => {
 		});
 	});*/
 
-	it('should get person', done => {
+	/*it('should get person', done => {
 		populi.getPerson('23220692').then(res => {
 			console.log(res);
 			done();
@@ -51,7 +51,8 @@ describe('Populi', () => {
 			console.error(err);
 			done();
 		});
-	});
+	});*/
+	
 	/*it('should transfer credit', done => {
 		// https://dfa-validation.populi.co/router/contacts/people/24547447/show
 		// Might be able to add grade using the addTransferCreditProgram endpoint (but need program_id)
@@ -119,10 +120,10 @@ describe('Populi', () => {
 		});
 	});*/
 
-	/*it('should get academic term by name', done => {
+	it('should get academic term by name', done => {
 		populi.getAcademicTermByName('Summer 2022').then(res => {
 			console.log(res);
 			done();
 		})
-	});*/
+	});
 });

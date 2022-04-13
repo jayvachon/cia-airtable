@@ -51,6 +51,7 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	picture: 'files5',
 
 	createInPopuli: 'checkbox',
+	populiLink: 'text33',
 };
 const TERM_COLUMN = {
 	name: 'name',
@@ -249,10 +250,15 @@ const getStudentsForPopuliCreation = () => {
 
 		// Only return students that are marked as ready to be created
 		const readyStudents = _.filter(items, item => {
-			const checkbox = _.find(item.column_values, cv => cv.id === COLUMN['createInPopuli'])
-			return checkbox.text !== '';
+			const checkbox = _.find(item.column_values, cv => cv.id === COLUMN['createInPopuli']); // marked as ready to be created AND...
+			const populiLink = _.find(item.column_values, cv => cv.id === COLUMN['populiLink']); // ...hasn't already been created
+			return checkbox.text !== '' && populiLink.text === '';
 		})
-		return _.map(readyStudents, item => mapColumnIds(item.column_values));
+		return _.map(readyStudents, item => {
+			let student = mapColumnIds(item.column_values);
+			student.mondayId = item.id;
+			return student;
+		});
 	});
 };
 

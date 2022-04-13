@@ -427,7 +427,7 @@ router.post('/set-enrollment-term', (req, res) => {
 });
 
 router.get('/student-creation-preview', (req, res) => {
-	studentCreation.preview().then(results => {
+	studentCreation.preview_monday().then(results => {
 		res.render('studentCreationPreview', { results });
 	})
 	.catch(err => {
@@ -436,7 +436,7 @@ router.get('/student-creation-preview', (req, res) => {
 });
 
 router.get('/student-creation', (req, res) => {
-	studentCreation.create2().then(results => {
+	studentCreation.create_monday().then(results => {
 		// res.send(results);
 		console.log(JSON.stringify(results))
 		res.render('studentCreationResults', { results });

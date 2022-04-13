@@ -174,12 +174,16 @@ const addPerson = (person) => {
 			if (!person.image) {
 				return Promise.resolve();
 			} else {
+
+				// left off here: the image downloaded from monday is somehow corrupt
+
 				return image2base64(person.image).then(base64 => {
+					console.log(base64)
 					return post('addProfilePicture', { person_id: person.id, image: base64 });
 				});
 			}
 		})
-		.then(response => {
+		/*.then(response => {
 			return post('addTag', { person_id: person.id, tag_id: person.tag });
 		})
 		.then(response => {
@@ -201,7 +205,7 @@ const addPerson = (person) => {
 				program_id: person.leadInfo.program_id[person.programShort],
 				academic_term_id: person.leadInfo.term_id,
 			});
-		})
+		})*/
 		.then(response => {
 			return person.id;
 		})
