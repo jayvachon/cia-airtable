@@ -6,7 +6,7 @@
 		<ul>
 		<% results.forEach(function(result) { %>
 			<% if (result !== undefined) { %>
-			<li><a href="<%= result[0].fields.Populi %>"><%= result[0].fields['Legal First Name'] %> <%= result[0].fields['Legal Last Name'] %></a></li>
+			<li><a href="<%= result.populiLink %>"><%= result.firstName %> <%= result.lastName %></a></li>
 			<% } %>
 		<% }); %>
 		</ul>

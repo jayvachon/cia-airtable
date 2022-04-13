@@ -311,10 +311,17 @@ const create2 = () => {
 const create_monday = () => {
 	return preview_monday()
 		.then(profiles => Promise.all(_.map(profiles, profile => {
-			console.log(profile)
 			return populi.addPerson(profile)
 				.then(id => {
-					return monday.updateLeadValues(profile.mondayId, { populiLink: `${constants[process.env.NODE_ENV].WEB_ROOT}router/contacts/people/${id}` }); 
+					const populiLink = `${constants[process.env.NODE_ENV].WEB_ROOT}router/contacts/people/${id}`;
+					return monday.updateLeadValues(profile.mondayId, { populiLink })
+						.then(update => {
+							return {
+								populiLink,
+								firstName: profile['First Name'],
+								lastName: profile['Last Name'],
+							};
+						}); 
 				});
 			})));
 };

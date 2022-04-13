@@ -431,13 +431,14 @@ router.get('/student-creation-preview', (req, res) => {
 		res.render('studentCreationPreview', { results });
 	})
 	.catch(err => {
-		res.render('error', { error: err });
+		res.render('error', { error: err, home: '/ci' });
 	});
 });
 
 router.get('/student-creation', (req, res) => {
 	studentCreation.create_monday().then(results => {
 		// res.send(results);
+		console.log("HERE:")
 		console.log(JSON.stringify(results))
 		res.render('studentCreationResults', { results });
 	});

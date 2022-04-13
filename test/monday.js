@@ -66,13 +66,13 @@ describe('Monday', () => {
 		});
 	});*/
 
-	it('should list the columns', done => {
+	/*it('should list the columns', done => {
 		monday.getColumns().then(res => {
 			console.log(res);
 			res.should.be.an.Object;
 			done();
 		})
-	});
+	});*/
 
 	/*it('should list the term columns', done => {
 		monday.getTermColumns().then(res => {
@@ -94,12 +94,21 @@ describe('Monday', () => {
 		});
 	});*/
 
-	/*it('should get students for creation in populi', done => {
-		monday.getStudentsForPopuliCreation().then(res => {
-			console.log(res);
+	/*it('should get the public url for the image', function(done) {
+		this.timeout(5000);
+		monday.getImageUrl('434716177').then(res => {
+			console.log(res)
 			done();
 		});
-	})*/
+	});*/
+
+	it('should get students for creation in populi', function(done) {
+		this.timeout(10000);
+		monday.getStudentsForPopuliCreation().then(res => {
+			// console.log(res);
+			done();
+		});
+	})
 
 	/*it('should upload a file', done => {
 

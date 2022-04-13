@@ -224,6 +224,19 @@ const getTermColumns = () => {
 	});
 };
 
+const getImageUrl = (assetId) => {
+	const q = `query {
+		assets(ids: [${assetId}]) {
+			id
+			name
+			public_url
+		}
+	}`;
+	return post(q).then(res => {
+		return res.data.assets[0].public_url;
+	})
+};
+
 const getStudentsForPopuliCreation = () => {
 	const vals = {
 		checked: true
@@ -243,7 +256,7 @@ const getStudentsForPopuliCreation = () => {
 	return post(q).then(res => {
 
 		// Early out if there are no students to create
-		const items = res.data.items_by_column_values;
+		const items = res.data.items_by_column_values; // this is the line when using items_by_column_values as the query
 		if (items.length === 0) {
 			return [];
 		}
@@ -252,13 +265,23 @@ const getStudentsForPopuliCreation = () => {
 		const readyStudents = _.filter(items, item => {
 			const checkbox = _.find(item.column_values, cv => cv.id === COLUMN['createInPopuli']); // marked as ready to be created AND...
 			const populiLink = _.find(item.column_values, cv => cv.id === COLUMN['populiLink']); // ...hasn't already been created
+			// console.log(checkbox)
 			return checkbox.text !== '' && populiLink.text === '';
-		})
-		return _.map(readyStudents, item => {
-			let student = mapColumnIds(item.column_values);
-			student.mondayId = item.id;
-			return student;
 		});
+
+		return Promise.all(_.map(readyStudents, item => {
+				
+			// monday files are only publicly accessible for an hour at a time, so it's necessary to get the temporary image url
+			const assetId = JSON.parse(_.find(item.column_values, cv => cv.id === COLUMN['picture']).value).files[0].assetId;
+
+			return getImageUrl(assetId)
+				.then(publicUrl => {
+					let student = mapColumnIds(item.column_values);
+					student.mondayId = item.id;
+					student.picture = publicUrl;
+					return student;
+				})
+		}));
 	});
 };
 
@@ -605,6 +628,7 @@ module.exports = {
 	getOrCreateLead,
 	getLead,
 	getLeadById,
+	getImageUrl,
 	getStudentsForPopuliCreation,
 	createLead,
 	getTerms,

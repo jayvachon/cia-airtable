@@ -9,6 +9,7 @@ const FormData = require('form-data');
 const xmlConvert = require('xml-js');
 const fs = require('promise-fs');
 const path = require('path');
+const imageToBase64 = require('image-to-base64');
 const { createWriteStream } = require("fs");
 const { promisify } = require("util");
 const logger = require(`${appRoot}/config/winston`);
@@ -104,7 +105,16 @@ const post = (path, keyvals) => {
 };
 
 const image2base64 = (url) => {
-	let filename = path.basename(url);
+
+	return imageToBase64(url)
+	    .then(base64 => {
+            return base64;
+        })
+	    .catch(error => {
+            console.error(error);
+	    })
+
+	/*let filename = path.basename(url);
 	const downloadStream = got.stream(url);
 	const downloadPath = `${appRoot}/uploads/${filename}`;
 	const fileWriterStream = createWriteStream(downloadPath);
@@ -119,7 +129,7 @@ const image2base64 = (url) => {
 		.then(() => {
 			return fs.readFile(downloadPath, 'base64');
 		})
-		.catch((error) => console.error(`Something went wrong. ${error.message}`));
+		.catch((error) => console.error(`Something went wrong. ${error.message}`));*/
 };
 
 const addPerson = (person) => {
@@ -174,16 +184,12 @@ const addPerson = (person) => {
 			if (!person.image) {
 				return Promise.resolve();
 			} else {
-
-				// left off here: the image downloaded from monday is somehow corrupt
-
 				return image2base64(person.image).then(base64 => {
-					console.log(base64)
 					return post('addProfilePicture', { person_id: person.id, image: base64 });
 				});
 			}
 		})
-		/*.then(response => {
+		.then(response => {
 			return post('addTag', { person_id: person.id, tag_id: person.tag });
 		})
 		.then(response => {
@@ -205,7 +211,7 @@ const addPerson = (person) => {
 				program_id: person.leadInfo.program_id[person.programShort],
 				academic_term_id: person.leadInfo.term_id,
 			});
-		})*/
+		})
 		.then(response => {
 			return person.id;
 		})

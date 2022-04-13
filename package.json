@@ -25,6 +25,7 @@
     "googleapis": "^50.0.0",
     "got": "^11.8.1",
     "graphql": "^16.2.0",
+    "image-to-base64": "^2.2.0",
     "lodash": "^4.17.20",
     "memorystore": "^1.6.4",
     "mime-types": "^2.1.28",
