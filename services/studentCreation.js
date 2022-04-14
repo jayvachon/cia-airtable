@@ -251,7 +251,7 @@ const preview_monday = () => {
 					application: application[process.env.NODE_ENV],
 					error: '',
 				};
-				// console.log(profile)
+				console.log(profile)
 
 				return profile;
 		});

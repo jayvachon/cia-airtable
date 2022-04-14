@@ -379,8 +379,6 @@ const addTransferCredit = (variableFields) => {
 		effective_date: variableFields['Effective Date'],
 	}
 
-	// console.log(transferCreditDetails)
-
 	return post('addTransferCredit', transferCreditDetails)
 		.then(response => {
 			return response;
