@@ -150,9 +150,18 @@ app.post('/registrar/transfer-credit-upload', upload.single('fileupload'), (req,
 			res.render('error', { error: transfers.error, home: '/registrar/transfer-credit-upload' });
 		} else {
 			Promise.all(_.map(transfers.transfers, transfer => {
-				populi.addTransferCredit(transfer);
+				return populi.addTransferCredit(transfer)
+					.catch(err => {
+						return { error: err };
+					});
 			})).then(response => {
+				if (response[0].error) {
+					res.render('error', { error: response[0].error, home: '/registrar/transfer-credit-upload' });
+				}
 				res.render('transferCreditSuccess');
+			})
+			.catch(err => {
+				res.render('error', { error: err, home: '/registrar/transfer-credit-upload' });
 			})
 		}
 	})

@@ -98,8 +98,9 @@ const post = (path, keyvals) => {
 			return { raw: response.body, js: xmlConvert.xml2js(response.body, {compact: true}).response };
 		})
 		.catch(err => {
-			logger.error(err);
-			throw new Error(err);
+			const msg = xmlConvert.xml2js(err.response.body, {compact: true}).error.message._text;
+			logger.error(msg);
+			throw new Error(msg);
 		});
 	});
 };

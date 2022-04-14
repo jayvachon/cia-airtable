@@ -43,6 +43,7 @@ const readXlsx = (file) => {
 		.then(() => Promise.all(_.map(transfers, transfer => populi.getOrganization(transfer['Organization ID'])))) // make sure all oganizations exist
 		.then(() => Promise.all(_.map(transfers, transfer => populi.getCatalogCourse(transfer['Catalog Course ID'])))) // make sure all the course catalogs exist
 		.then(res => {
+			console.log(transfers)
 			return { transfers };
 		})
 		.catch(err => {
