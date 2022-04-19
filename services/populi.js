@@ -105,34 +105,6 @@ const post = (path, keyvals) => {
 	});
 };
 
-const image2base64 = (url) => {
-
-	return imageToBase64(url)
-	    .then(base64 => {
-            return base64;
-        })
-	    .catch(error => {
-            console.error(error);
-	    })
-
-	/*let filename = path.basename(url);
-	const downloadStream = got.stream(url);
-	const downloadPath = `${appRoot}/uploads/${filename}`;
-	const fileWriterStream = createWriteStream(downloadPath);
-	const pipeline = promisify(stream.pipeline);
-
-	downloadStream
-		.on('error', (error) => {
-			console.error(`Download failed: ${error.message}`);
-		});
-
-	return pipeline(downloadStream, fileWriterStream)
-		.then(() => {
-			return fs.readFile(downloadPath, 'base64');
-		})
-		.catch((error) => console.error(`Something went wrong. ${error.message}`));*/
-};
-
 const addPerson = (person) => {
 
 	return post('getPossibleDuplicatePeople', { first_name: person['First Name'], last_name: person['Last Name'], birth_date: person['Birth Date'] })
@@ -223,31 +195,126 @@ const addPerson = (person) => {
 		});
 };
 
-const getUsers = () => {
-	return post('getUsers')
+const addTransferCredit = (variableFields) => {
+
+	let transferCreditDetails = {
+		status: 'APPROVED',
+		applies_to_all_programs: 'false',
+		affects_standing: 'true',
+		pass_fail_fail_affects_gpa: 'false',
+		pass_fail_pass_affects_gpa: 'false',
+		fail_affects_gpa: 'false',
+		pass_affects_gpa: 'false',
+		fulfills_program_requirements: 'true',
+
+
+		organization_id: variableFields['Organization ID'],
+		person_id: variableFields['Person ID'],
+		course_number: variableFields['Course Number'],
+		course_name: variableFields['Course Name'],
+		credits: variableFields.Credits,
+		catalog_course_id: variableFields['Catalog Course ID'],
+		effective_date: variableFields['Effective Date'],
+	}
+
+	return post('addTransferCredit', transferCreditDetails)
 		.then(response => {
-			let users = _.map(response.js.person, person => {
-				return {
-					id: person.person_id._text,
-					firstName: person.first._text,
-					lastName: person.last._text,
-					username: person.username._text,
-				};
-			});
-			return users;
+			return response;
 		})
 		.catch(err => {
 			throw new Error(err);
 		});
 };
 
-const getPerson = (id) => {
-	return post('getPerson', { person_id: id })
+const addTransferCreditProgram = (id, programId, grade) => {
+	return post('getTransferCreditProgramGradeOptions', { program_id: programId })
+		.then(response => {
+
+			return post('addTransferCreditPrograme', { transfer_credit_id: id, program_id: programId, grade: grade })
+				.then(response => {
+					return response;
+				})
+				.catch(err => {
+					throw new Error(err);
+				});
+		})
+
+};
+
+const findTag = (tagName) => {
+	return post('getTags')
+		.then(response => {
+			let tags = _.map(response.js.tags.tag, tag => {
+				return {
+					id: tag.id._text,
+					name: tag.name._text,
+				};
+			});
+			return _.find(tags, tag => tag.name === tagName);
+		})
+};
+
+const getAcademicTermByName = (termName) => {
+	return post('getAcademicTerms')
+		.then(response => {
+			let terms = response.js.academic_term;
+			let term = _.find(terms, term => {
+				return term.name._text === termName;
+			});
+			if (!term) return undefined;
+			return {
+				id: term.termid._text,
+				name: term.name._text,
+				startDate: term.start_date._text,
+				endDate: term.end_date._text,
+			};
+		})
+		.catch(err => {
+			throw new Error(err);
+		});
+};
+
+const getAcademicTerms = () => {
+	return post('getAcademicTerms')
+		.then(response => {
+			let terms = response.js.academic_term;
+			terms = _.map(terms, term => {
+				return {
+					id: term.termid._text,
+					name: term.name._text,
+				}
+			})
+			return terms;
+		})
+		.catch(err => {
+			throw new Error(err);
+		});
+};
+
+const getCatalogCourse = (id) => {
+	return post('getCatalogCourse', { catalog_course_id: id })
 		.then(response => {
 			return response.js;
 		})
 		.catch(err => {
-			throw new Error(`No person with the id "${id}" exists`);
+			throw new Error(`No catalog course with the ID "${id}" exists`);
+		});
+}
+
+const getFinancialAidYears = () => {
+	return post('getFinancialAidYears')
+		.then(years => {
+			return _.map(years.js.aid_year, year => {
+				return {
+					id: year.id._text,
+					name: year.name._text,
+					startDate: year.start_date._text,
+					endDate: year.end_date._text,
+				}
+			});
+		})
+		.catch(err => {
+			throw new Error(err);
 		});
 };
 
@@ -261,15 +328,39 @@ const getOrganization = (id) => {
 		});
 };
 
-const getCatalogCourse = (id) => {
-	return post('getCatalogCourse', { catalog_course_id: id })
+const getPerson = (id) => {
+	return post('getPerson', { person_id: id })
 		.then(response => {
 			return response.js;
 		})
 		.catch(err => {
-			throw new Error(`No catalog course with the ID "${id}" exists`);
+			throw new Error(`No person with the id "${id}" exists`);
 		});
-}
+};
+
+const getPrograms = () => {
+	return post('getPrograms')
+		.then(response => {
+			console.log(response.js)
+			return response;
+		})
+		.catch(err => {
+			throw new Error(err);
+		});
+};
+
+const getStudentInfo = (personId) => {
+	return post('getStudentInfo', { person_id: personId })
+		.then(studentInfo => {
+			const info = studentInfo.js;
+			return {
+				studentId: info.student_id,
+			};
+		})
+		.catch(err => {
+			throw new Error(err);
+		});
+};
 
 const getTags = () => {
 	return post('getTags')
@@ -307,99 +398,67 @@ const getTags_deprecated = () => {
 		})
 };
 
-const getAcademicTerms = () => {
-	return post('getAcademicTerms')
+const getUsers = () => {
+	return post('getUsers')
 		.then(response => {
-			let terms = response.js.academic_term;
-			terms = _.map(terms, term => {
+			let users = _.map(response.js.person, person => {
 				return {
-					id: term.termid._text,
-					name: term.name._text,
-				}
-			})
-			return terms;
-		})
-		.catch(err => {
-			throw new Error(err);
-		});
-};
-
-const findTag = (tagName) => {
-	return post('getTags')
-		.then(response => {
-			let tags = _.map(response.js.tags.tag, tag => {
-				return {
-					id: tag.id._text,
-					name: tag.name._text,
+					id: person.person_id._text,
+					firstName: person.first._text,
+					lastName: person.last._text,
+					username: person.username._text,
 				};
 			});
-			return _.find(tags, tag => tag.name === tagName);
-		})
-};
-
-const getAcademicTermByName = (termName) => {
-	return post('getAcademicTerms')
-		.then(response => {
-			let terms = response.js.academic_term;
-			let term = _.find(terms, term => {
-				return term.name._text === termName;
-			});
-			if (!term) return undefined;
-			return {
-				id: term.termid._text,
-				name: term.name._text,
-				startDate: term.start_date._text,
-				endDate: term.end_date._text,
-			};
+			return users;
 		})
 		.catch(err => {
 			throw new Error(err);
 		});
 };
 
-const addTransferCredit = (variableFields) => {
+const image2base64 = (url) => {
 
-	let transferCreditDetails = {
-		status: 'APPROVED',
-		applies_to_all_programs: 'false',
-		affects_standing: 'true',
-		pass_fail_fail_affects_gpa: 'false',
-		pass_fail_pass_affects_gpa: 'false',
-		fail_affects_gpa: 'false',
-		pass_affects_gpa: 'false',
-		fulfills_program_requirements: 'true',
+	return imageToBase64(url)
+	    .then(base64 => {
+            return base64;
+        })
+	    .catch(error => {
+            console.error(error);
+	    })
 
+	/*let filename = path.basename(url);
+	const downloadStream = got.stream(url);
+	const downloadPath = `${appRoot}/uploads/${filename}`;
+	const fileWriterStream = createWriteStream(downloadPath);
+	const pipeline = promisify(stream.pipeline);
 
-		organization_id: variableFields['Organization ID'],
-		person_id: variableFields['Person ID'],
-		course_number: variableFields['Course Number'],
-		course_name: variableFields['Course Name'],
-		credits: variableFields.Credits,
-		catalog_course_id: variableFields['Catalog Course ID'],
-		effective_date: variableFields['Effective Date'],
-	}
-
-	return post('addTransferCredit', transferCreditDetails)
-		.then(response => {
-			return response;
-		})
-		.catch(err => {
-			throw new Error(err);
+	downloadStream
+		.on('error', (error) => {
+			console.error(`Download failed: ${error.message}`);
 		});
-}
+
+	return pipeline(downloadStream, fileWriterStream)
+		.then(() => {
+			return fs.readFile(downloadPath, 'base64');
+		})
+		.catch((error) => console.error(`Something went wrong. ${error.message}`));*/
+};
 
 module.exports = {
-	getAccessToken,
 	addPerson,
-	getPerson,
+	addTransferCredit,
+	findTag,
+	getAccessToken,
+	getAcademicTermByName,
+	getAcademicTerms,
+	getCatalogCourse,
+	getFinancialAidYears,
 	getOrganization,
+	getPerson,
+	getPrograms,
+	getStudentInfo,
 	getTags,
 	getTags_deprecated,
 	getUsers,
-	getCatalogCourse,
-	getAcademicTerms,
 	image2base64,
-	getAcademicTermByName,
-	addTransferCredit,
-	findTag,
 };

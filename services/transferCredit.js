@@ -59,7 +59,9 @@ const validateHeaders = (headers) => {
 		'Course Name',
 		'Credits',
 		'Catalog Course ID',
-		'Effective Date'
+		'Effective Date',
+		'Program ID',
+		'Grade',
 	]);
 }
 

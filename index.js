@@ -487,7 +487,6 @@ router.get('/api/lead', (req, res) => {
 });
 
 router.post('/api/updateLead', (req, res) => {
-	console.log(req.body)
 	monday.updateLeadValues(req.body.leadId, req.body.columnValues).then(update => {
 		if (update && update.change_multiple_column_values) {
 			monday.getLeadById(update.change_multiple_column_values.id).then(lead => {
