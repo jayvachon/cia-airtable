@@ -341,8 +341,12 @@ const getPerson = (id) => {
 const getPrograms = () => {
 	return post('getPrograms')
 		.then(response => {
-			console.log(response.js)
-			return response;
+			return _.map(response.js.program, program => {
+				return {
+					id: program.id._text,
+					name: program.name._text,
+				};
+			});
 		})
 		.catch(err => {
 			throw new Error(err);
@@ -424,24 +428,7 @@ const image2base64 = (url) => {
         })
 	    .catch(error => {
             console.error(error);
-	    })
-
-	/*let filename = path.basename(url);
-	const downloadStream = got.stream(url);
-	const downloadPath = `${appRoot}/uploads/${filename}`;
-	const fileWriterStream = createWriteStream(downloadPath);
-	const pipeline = promisify(stream.pipeline);
-
-	downloadStream
-		.on('error', (error) => {
-			console.error(`Download failed: ${error.message}`);
-		});
-
-	return pipeline(downloadStream, fileWriterStream)
-		.then(() => {
-			return fs.readFile(downloadPath, 'base64');
-		})
-		.catch((error) => console.error(`Something went wrong. ${error.message}`));*/
+	    });
 };
 
 module.exports = {
