@@ -301,6 +301,16 @@ const getAcademicTerms = () => {
 		});
 };
 
+const getAidApplicationForStudentAidYear = (studentId, aidYearId) => {
+	return post('getAidApplicationForStudentAidYear', { student_id: studentId, aid_year_id: aidYearId })
+		.then(response => {
+			return response;
+		})
+		.catch(err => {
+			throw new Error(err);
+		});
+};
+
 const getCatalogCourse = (id) => {
 	return post('getCatalogCourse', { catalog_course_id: id })
 		.then(response => {
@@ -356,6 +366,23 @@ const getPrograms = () => {
 					id: program.id._text,
 					name: program.name._text,
 				};
+			});
+		})
+		.catch(err => {
+			throw new Error(err);
+		});
+};
+
+const getRoleMembers = (roleName) => {
+	return post('getRoleMembers', { roleName })
+		.then(response => {
+			return _.map(response.js.person, person => {
+				return {
+					id: person.personID._text,
+					firstName: person.first._text,
+					lastName: person.last._text,
+					username: person.username._text,
+				}
 			});
 		})
 		.catch(err => {
@@ -449,11 +476,13 @@ module.exports = {
 	getAccessToken,
 	getAcademicTermByName,
 	getAcademicTerms,
+	getAidApplicationForStudentAidYear,
 	getCatalogCourse,
 	getFinancialAidYears,
 	getOrganization,
 	getPerson,
 	getPrograms,
+	getRoleMembers,
 	getStudentInfo,
 	getTags,
 	getTags_deprecated,
