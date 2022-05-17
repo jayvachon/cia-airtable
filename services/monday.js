@@ -62,7 +62,7 @@ const TERM_COLUMN = {
 	wdiTag: 'text7',
 	waTag: 'text73',
 }
-const CURRENT_TERM = 2199255521; // Summer 2022
+const CURRENT_TERM = 2199255525; // Fall 2022
 
 const mapColumnIds = (columnValues, asArray) => {
 
@@ -159,6 +159,7 @@ const getTerms = () => {
 		}
 	}`;
 	return post(q).then(res => {
+		console.log(JSON.stringify(res.data.boards[0], null, 4))
 		return res.data.boards[0].items;
 	});
 };
