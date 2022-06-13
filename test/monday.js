@@ -74,13 +74,13 @@ describe('Monday', () => {
 		})
 	});*/
 
-	/*it('should list the term columns', done => {
+	it('should list the term columns', done => {
 		monday.getTermColumns().then(res => {
 			console.log(res);
 			res.should.be.an.Object;
 			done();
 		})
-	});*/
+	});
 
 	/*it('should get current term', done => {
 		monday.getCurrentTerm().then(res => {
@@ -102,13 +102,13 @@ describe('Monday', () => {
 		});
 	});*/
 
-	it('should get students for creation in populi', function(done) {
+	/*it('should get students for creation in populi', function(done) {
 		this.timeout(10000);
 		monday.getStudentsForPopuliCreation().then(res => {
 			// console.log(res);
 			done();
 		});
-	})
+	})*/
 
 	/*it('should upload a file', done => {
 

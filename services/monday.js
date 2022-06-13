@@ -9,7 +9,7 @@ const _ = require('lodash');
 
 const ROOT = 'https://api.monday.com/v2';
 const BOARD = '2134845746';
-const TERM_BOARD = '2199255493';
+const TERM_BOARD = '2601237584';
 const GROUP = { // The IDs of each group. IDs cannot be changed after groups are created in Monday, which is why these ID names are so weird and bad
 	new: 'new_group22902',
 	enrolling: 'new_group',
