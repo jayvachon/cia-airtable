@@ -62,7 +62,7 @@ const TERM_COLUMN = {
 	wdiTag: 'text7',
 	waTag: 'text73',
 }
-const CURRENT_TERM = 2199255525; // Fall 2022
+const CURRENT_TERM = 2601237706; // Fall 2022
 
 const mapColumnIds = (columnValues, asArray) => {
 

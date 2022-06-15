@@ -5,12 +5,12 @@ const monday = require('../services/monday');
 
 describe('Monday', () => {
 
-	/*it('should get the terms', done => {
+	it('should get the terms', done => {
 		monday.getTerms().then(res => {
 			res.should.be.an.Array();
 			done();
 		});
-	});*/
+	});
 
 	/*it('should get access token', done => {
 		let token = monday.getAccessToken();
@@ -74,13 +74,13 @@ describe('Monday', () => {
 		})
 	});*/
 
-	it('should list the term columns', done => {
+	/*it('should list the term columns', done => {
 		monday.getTermColumns().then(res => {
 			console.log(res);
 			res.should.be.an.Object;
 			done();
 		})
-	});
+	});*/
 
 	/*it('should get current term', done => {
 		monday.getCurrentTerm().then(res => {
