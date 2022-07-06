@@ -32,10 +32,8 @@ const initial = (firstName, program, upcomingTerm) => {
 		<br>
 			<p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt">Both courses start from the ground up with the fundamentals of programming. They cover front end development with HTML, CSS, and the JavaScript framework React.js; back end development using the JavaScript framework Node.js; and cloud computing with Amazon Web Services. The associate course also includes general education classes and an additional term of coding classes.</p>
 		<br>
-			<p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt">We deliver our programs using a hybrid modality. This means that the majority of your class days are conducted online via Zoom, with the exception of 1-4 class days conducted in person at the end of each term. You have the option of attending these in-person classes at either our New York City or Atlanta location.</p>
-		<br>
 		<p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt"><b>What's the cost?</b></p>
-		<p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt">Tuition for the associate course is $29,995, and tuition for the certificate course is $19,995. We accept various forms of assistance to help cover this cost, including GI Bill benefits, Pell Grants, government student loans and private student loans through Climb. <strong>Veterans enrolled in our programs receive an in person housing allowance based off the zip code 30303.</strong></p>
+		<p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt">Tuition for the associate course is $26,885, and tuition for the certificate course is $19,995. We accept various forms of assistance to help cover this cost, including GI Bill benefits, Pell Grants, government student loans and private student loans through Climb.</p>
 		<br>
 		<p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt"><b>What's the schedule?</b></p>
 		<p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt">Classes run Monday-Thursday, from 10:30 AM to 4:00 PM, with an hour lunch break in the afternoon. Unlike a coding “boot camp,” we take a more measured pace so that everyone with a desire to learn has the opportunity to succeed.</p>

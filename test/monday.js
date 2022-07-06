@@ -5,12 +5,12 @@ const monday = require('../services/monday');
 
 describe('Monday', () => {
 
-	it('should get the terms', done => {
+	/*it('should get the terms', done => {
 		monday.getTerms().then(res => {
 			res.should.be.an.Array();
 			done();
 		});
-	});
+	});*/
 
 	/*it('should get access token', done => {
 		let token = monday.getAccessToken();
@@ -102,13 +102,13 @@ describe('Monday', () => {
 		});
 	});*/
 
-	/*it('should get students for creation in populi', function(done) {
+	it('should get students for creation in populi', function(done) {
 		this.timeout(10000);
 		monday.getStudentsForPopuliCreation().then(res => {
 			// console.log(res);
 			done();
 		});
-	})*/
+	})
 
 	/*it('should upload a file', done => {
 
