@@ -4,26 +4,12 @@ const appRoot = require('app-root-path');
 
 describe('Populi', () => {
 
-	it('should get financial aid application for student in year', done => {
-		populi.getAidApplicationForStudentAidYear('50000746', '56').then(info => {
-			console.log(info);
-			done();
-		});
-	});
-
-	/*it('should get members of a specific role', done => {
-		populi.getRoleMembers('Student').then(members => {
-			console.log(members);
-			done();
-		});
-	});*/
-
-	/*it('should get the programs', done => {
+	it('should get the programs', done => {
 		populi.getPrograms().then(programs => {
 			console.log(programs)
 			done();
 		});
-	});*/
+	});
 	
 	/*it('should find a tag by name', done => {
 		const tag = '2022-01/ATL/CS/AOS/WA';
