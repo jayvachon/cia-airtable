@@ -49,6 +49,7 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	i20creationAndDelivery: 'files1',
 	i20: 'files85',
 	picture: 'files5',
+	ssc: 'files0',
 
 	createInPopuli: 'checkbox',
 	populiLink: 'text33',
