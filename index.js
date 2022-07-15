@@ -178,7 +178,7 @@ app.post('/registrar/transfer-credit-upload', upload.single('fileupload'), (req,
 
 	const tc = require('./services/transferCredit');
 
-	console.log("hI", req.session.registrarToken)
+	// console.log("hI", req.session.registrarToken)
 
 	tc.readXlsx(file.buffer).then(transfers => {
 		if (transfers.error) {
