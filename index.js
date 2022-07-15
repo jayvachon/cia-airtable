@@ -46,7 +46,7 @@ const sessionOptions = {
 	cookie: {},
 };
 
-router.use(session(sessionOptions));
+app.use(session(sessionOptions));
 
 // Upload config
 const storage = multer.diskStorage({
