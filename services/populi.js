@@ -195,7 +195,7 @@ const addPerson = (person) => {
 		});
 };
 
-const addTransferCredit = (variableFields) => {
+const addTransferCredit = (variableFields, token) => {
 
 	let transferCreditDetails = {
 		status: 'APPROVED',
@@ -217,20 +217,30 @@ const addTransferCredit = (variableFields) => {
 		effective_date: variableFields['Effective Date'],
 	}
 
-	return post('addTransferCredit', transferCreditDetails)
+	return post('addTransferCredit', transferCreditDetails, token)
 		.then(response => {
-			return response;
+			return response.js.id._text;
 		})
 		.catch(err => {
 			throw new Error(err);
 		});
 };
 
-const addTransferCreditProgram = (id, programId, grade) => {
+const addTransferCreditProgram = (id, programId, grade, token) => {
+	// console.log(id, programId, grade)
 	return post('getTransferCreditProgramGradeOptions', { program_id: programId })
 		.then(response => {
-
-			return post('addTransferCreditPrograme', { transfer_credit_id: id, program_id: programId, grade: grade })
+			const grades = _.map(response.js.grade_scale.option, option => { 
+					return {
+						value: option.value._text,
+						label: option.label._text,
+					}
+				});
+			const numberGrade = _.find(grades, g => g.label === grade).value;
+			// console.log(id)
+			// console.log(numberGrade)
+			// console.log(JSON.stringify(response.js, null, 2))
+			return post('addTransferCreditProgram', { transfer_credit_id: id, program_id: programId, grade: numberGrade, pass_fail: 'false' }, token)
 				.then(response => {
 					return response;
 				})
