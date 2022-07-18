@@ -104,15 +104,17 @@ const filterSpam = (entries, deleteSpam) => {
 
 	let nameFilter = /\b(\w+)[A-Z]{2}\s+\1/; // Matches a repeating first and last name with two capital letters at the end of the first name. Ex: WilliamPioneAH WilliamPione
 	let urlFilter = /^(ftp|http|https):\/\/[^ "]+$/; // Matches with a url
+	let numberFilter = /^.*\d.*$/;
 
 	let filtered = _.filter(entries, entry => {
 
 		let fullname = `${entry.content.firstName} ${entry.content.lastName}`;
 		let passNameFilter = nameFilter.test(fullname);
 		let passUrlFilter = urlFilter.test(entry.content.firstName);
+		let passNumberFilter = numberFilter.test(fullname);
 
 		// If it's not spam, it's true. If it's spam it's false.
-		return !(passNameFilter || passUrlFilter);
+		return !(passNameFilter || passUrlFilter || passNumberFilter);
 	});
 
 	let spam = _.filter(entries, entry => {
@@ -120,9 +122,10 @@ const filterSpam = (entries, deleteSpam) => {
 		let fullname = `${entry.content.firstName} ${entry.content.lastName}`;
 		let passNameFilter = nameFilter.test(fullname);
 		let passUrlFilter = urlFilter.test(entry.content.firstName);
+		let passNumberFilter = numberFilter.test(fullname);
 
 		// If it's not spam, it's false. If it's spam it's true.
-		return passNameFilter || passUrlFilter;
+		return passNameFilter || passUrlFilter || passNumberFilter;
 	});
 
 	logger.info(`[AUTO-EMAILER] Permanently deleting these spam entries: ${JSON.stringify(spam, null, 4)}`);

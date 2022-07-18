@@ -396,7 +396,8 @@ function uploadAttachment(attachment) {
 				if (process.env.NODE_ENV === 'development') {
 					urlPath = 'localhost:8080/';
 				} else if (process.env.NODE_ENV === 'production') {
-					urlPath = 'https://enroll.digitalfilmacademy.edu/';
+					// urlPath = 'https://enroll.digitalfilmacademy.edu/';
+					urlPath = 'https://codeimmersivesadmissions.website/';
 				}
 				urlPath += attachment.file;
 
