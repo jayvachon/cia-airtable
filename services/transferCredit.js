@@ -42,11 +42,22 @@ const readXlsx = (file) => {
 	return Promise.all(_.map(transfers, transfer => populi.getPerson(transfer['Person ID']))) // make sure all people exist
 		.then(() => Promise.all(_.map(transfers, transfer => populi.getOrganization(transfer['Organization ID'])))) // make sure all oganizations exist
 		.then(() => Promise.all(_.map(transfers, transfer => populi.getCatalogCourse(transfer['Catalog Course ID'])))) // make sure all the course catalogs exist
+		.then(() => populi.getPrograms())
+		.then(programs => {
+			_.forEach(transfers, transfer => {
+				const p = _.find(programs, program => program.id === transfer['Program ID']);
+				if (!p) {
+					throw new Error(`No program with the ID "${transfer['Program ID']}" exists`);
+				}
+			});
+			return transfers;
+		})
 		.then(res => {
-			console.log(transfers)
+			// console.log(transfers)
 			return { transfers };
 		})
 		.catch(err => {
+			console.error(err);
 			return { error: err }
 		});
 };

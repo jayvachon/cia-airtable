@@ -66,9 +66,9 @@ const getAccessToken = (username, password) => {
 	.catch(err => console.error(err));
 };
 
-const post = (path, keyvals) => {
+const post = (path, keyvals, customToken) => {
 
-	let token = constants[process.env.NODE_ENV].TOKEN;
+	let token = customToken ?? constants[process.env.NODE_ENV].TOKEN;
 
 	if (!token) {
 		throw new Error('You are not logged in');
@@ -195,7 +195,7 @@ const addPerson = (person) => {
 		});
 };
 
-const addTransferCredit = (variableFields) => {
+const addTransferCredit = (variableFields, token) => {
 
 	let transferCreditDetails = {
 		status: 'APPROVED',
@@ -217,20 +217,30 @@ const addTransferCredit = (variableFields) => {
 		effective_date: variableFields['Effective Date'],
 	}
 
-	return post('addTransferCredit', transferCreditDetails)
+	return post('addTransferCredit', transferCreditDetails, token)
 		.then(response => {
-			return response;
+			return response.js.id._text;
 		})
 		.catch(err => {
 			throw new Error(err);
 		});
 };
 
-const addTransferCreditProgram = (id, programId, grade) => {
+const addTransferCreditProgram = (id, programId, grade, token) => {
+	// console.log(id, programId, grade)
 	return post('getTransferCreditProgramGradeOptions', { program_id: programId })
 		.then(response => {
-
-			return post('addTransferCreditPrograme', { transfer_credit_id: id, program_id: programId, grade: grade })
+			const grades = _.map(response.js.grade_scale.option, option => { 
+					return {
+						value: option.value._text,
+						label: option.label._text,
+					}
+				});
+			const numberGrade = _.find(grades, g => g.label === grade).value;
+			// console.log(id)
+			// console.log(numberGrade)
+			// console.log(JSON.stringify(response.js, null, 2))
+			return post('addTransferCreditProgram', { transfer_credit_id: id, program_id: programId, grade: numberGrade, pass_fail: 'false' }, token)
 				.then(response => {
 					return response;
 				})
@@ -291,6 +301,16 @@ const getAcademicTerms = () => {
 		});
 };
 
+const getAidApplicationForStudentAidYear = (studentId, aidYearId) => {
+	return post('getAidApplicationForStudentAidYear', { student_id: studentId, aid_year_id: aidYearId })
+		.then(response => {
+			return response;
+		})
+		.catch(err => {
+			throw new Error(err);
+		});
+};
+
 const getCatalogCourse = (id) => {
 	return post('getCatalogCourse', { catalog_course_id: id })
 		.then(response => {
@@ -341,8 +361,29 @@ const getPerson = (id) => {
 const getPrograms = () => {
 	return post('getPrograms')
 		.then(response => {
-			console.log(response.js)
-			return response;
+			return _.map(response.js.program, program => {
+				return {
+					id: program.id._text,
+					name: program.name._text,
+				};
+			});
+		})
+		.catch(err => {
+			throw new Error(err);
+		});
+};
+
+const getRoleMembers = (roleName) => {
+	return post('getRoleMembers', { roleName })
+		.then(response => {
+			return _.map(response.js.person, person => {
+				return {
+					id: person.personID._text,
+					firstName: person.first._text,
+					lastName: person.last._text,
+					username: person.username._text,
+				}
+			});
 		})
 		.catch(err => {
 			throw new Error(err);
@@ -424,38 +465,24 @@ const image2base64 = (url) => {
         })
 	    .catch(error => {
             console.error(error);
-	    })
-
-	/*let filename = path.basename(url);
-	const downloadStream = got.stream(url);
-	const downloadPath = `${appRoot}/uploads/${filename}`;
-	const fileWriterStream = createWriteStream(downloadPath);
-	const pipeline = promisify(stream.pipeline);
-
-	downloadStream
-		.on('error', (error) => {
-			console.error(`Download failed: ${error.message}`);
-		});
-
-	return pipeline(downloadStream, fileWriterStream)
-		.then(() => {
-			return fs.readFile(downloadPath, 'base64');
-		})
-		.catch((error) => console.error(`Something went wrong. ${error.message}`));*/
+	    });
 };
 
 module.exports = {
 	addPerson,
 	addTransferCredit,
+	addTransferCreditProgram,
 	findTag,
 	getAccessToken,
 	getAcademicTermByName,
 	getAcademicTerms,
+	getAidApplicationForStudentAidYear,
 	getCatalogCourse,
 	getFinancialAidYears,
 	getOrganization,
 	getPerson,
 	getPrograms,
+	getRoleMembers,
 	getStudentInfo,
 	getTags,
 	getTags_deprecated,

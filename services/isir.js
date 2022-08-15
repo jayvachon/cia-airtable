@@ -13,9 +13,11 @@ const getFinancialAidYear = () => {
 };
 
 const getNewAidApplications = () => {
-	return populi.getUsers()
+	return populi.getRoleMembers('Student')
 		.then(users => {
-			return Promise.all(_.map(users, user => populi.getStudentInfo(user.id)));
+			return Promise.all(_.map(users, user => {
+				return populi.getStudentInfo(user.id).then(info => console.log(info))
+			}));
 		})
 		.then(studentInfos => {
 			console.log(studentInfos)

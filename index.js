@@ -46,7 +46,7 @@ const sessionOptions = {
 	cookie: {},
 };
 
-router.use(session(sessionOptions));
+app.use(session(sessionOptions));
 
 // Upload config
 const storage = multer.diskStorage({
@@ -121,7 +121,40 @@ const autoEmail = (res) => {
 		});
 };
 
+app.get('/registrar/login', (req, res) => {
+
+	let environment = process.env.NODE_ENV;
+	let root = constants[process.env.NODE_ENV].ROOT;
+
+	res.render('registrarLogin', { environment, root });
+});
+
+app.post('/registrar/login', (req, res, next) => {
+
+			let environment = process.env.NODE_ENV;
+			let root = constants[process.env.NODE_ENV].ROOT;
+
+	populi.getAccessToken(req.body.username, req.body.password)
+		.then(token => {
+
+			logger.info('Login succeeded for user ' + req.body.username);
+			if (!token) {
+				return res.render('error', {error: 'The username and password you provided did not work', home: '/registrar/login' });
+			}
+			req.session.registrarToken = token;
+			res.redirect('/registrar/transfer-credit-upload');
+		})
+		.catch(err => {
+			logger.error('Login failed for user ' + req.body.username);
+			res.render('error', {error:err, home: '/registrar/login'});
+		});
+});
+
 app.get('/registrar/transfer-credit-upload', (req, res) => {
+
+	if (!req.session || !req.session.registrarToken) {
+		return res.redirect('/registrar/login');
+	}
 
 	let environment = process.env.NODE_ENV;
 	let root = constants[process.env.NODE_ENV].ROOT;
@@ -145,12 +178,24 @@ app.post('/registrar/transfer-credit-upload', upload.single('fileupload'), (req,
 
 	const tc = require('./services/transferCredit');
 
+	// console.log("hI", req.session.registrarToken)
+
 	tc.readXlsx(file.buffer).then(transfers => {
 		if (transfers.error) {
 			res.render('error', { error: transfers.error, home: '/registrar/transfer-credit-upload' });
 		} else {
 			Promise.all(_.map(transfers.transfers, transfer => {
-				return populi.addTransferCredit(transfer)
+				return populi.addTransferCredit(transfer, req.session.registrarToken)
+					.then(transferResponse => {
+						// console.log(transferResponse)
+						// return transferResponse;
+						// console.log(transfer)
+						return populi.addTransferCreditProgram(transferResponse, transfer['Program ID'], transfer.Grade, req.session.registrarToken);
+					})
+					.then(transferProgramResponse => {
+						console.log(transferProgramResponse);
+						return transferProgramResponse;
+					})
 					.catch(err => {
 						return { error: err };
 					});
@@ -351,7 +396,8 @@ function uploadAttachment(attachment) {
 				if (process.env.NODE_ENV === 'development') {
 					urlPath = 'localhost:8080/';
 				} else if (process.env.NODE_ENV === 'production') {
-					urlPath = 'https://enroll.digitalfilmacademy.edu/';
+					// urlPath = 'https://enroll.digitalfilmacademy.edu/';
+					urlPath = 'https://codeimmersivesadmissions.website/';
 				}
 				urlPath += attachment.file;
 

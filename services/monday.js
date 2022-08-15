@@ -8,7 +8,8 @@ const fileUploader = require('./fileUploader');
 const _ = require('lodash');
 
 const ROOT = 'https://api.monday.com/v2';
-const BOARD = '2601210843';
+const BOARD = '2601210843'; // carbon web's
+// const BOARD = '2134845746'; // jay's
 const TERM_BOARD = '2601237584';
 const GROUP = { // The IDs of each group. IDs cannot be changed after groups are created in Monday, which is why these ID names are so weird and bad
 	new: 'new_group22902',
@@ -49,6 +50,7 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	i20creationAndDelivery: 'files1',
 	i20: 'files85',
 	picture: 'files5',
+	ssc: 'files92',
 
 	createInPopuli: 'checkbox',
 	populiLink: 'text33',
@@ -62,7 +64,7 @@ const TERM_COLUMN = {
 	wdiTag: 'text7',
 	waTag: 'text73',
 }
-const CURRENT_TERM = 2199255521; // Summer 2022
+const CURRENT_TERM = 2601237706; // Fall 2022
 
 const mapColumnIds = (columnValues, asArray) => {
 

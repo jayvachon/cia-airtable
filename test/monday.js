@@ -66,13 +66,13 @@ describe('Monday', () => {
 		});
 	});*/
 
-	/*it('should list the columns', done => {
+	it('should list the columns', done => {
 		monday.getColumns().then(res => {
 			console.log(res);
 			res.should.be.an.Object;
 			done();
 		})
-	});*/
+	});
 
 	/*it('should list the term columns', done => {
 		monday.getTermColumns().then(res => {
