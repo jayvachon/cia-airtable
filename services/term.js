@@ -33,9 +33,12 @@ const refreshCurrentTerm = () => {
 					// get the tag ids from populi
 					.then(allTags => {
 
-						const tags = _.pickBy(currentTerm, function(v, k) {
+						/*const tags = _.pickBy(currentTerm, function(v, k) {
 							return _.includes(k, 'Tag');
 						});
+
+						console.log('fff: ')
+						console.log(tags)
 
 						_.forEach(tags, (v, k) => {
 							let tag = _.find(allTags, allTag => allTag.name === v);
@@ -45,7 +48,9 @@ const refreshCurrentTerm = () => {
 							} else {
 								currentTerm[`${k}Id`] = tag.id;
 							}
-						});
+						});*/
+
+						currentTerm.tagId = _.find(allTags, tag => tag.name === currentTerm.startDate.substring(0, 7));
 
 						return currentTerm;
 					})

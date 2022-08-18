@@ -61,8 +61,6 @@ const TERM_COLUMN = {
 	endDate: 'date4',
 	orientationDate: 'date',
 	current: 'checkbox',
-	wdiTag: 'text7',
-	waTag: 'text73',
 }
 const CURRENT_TERM = 2601237706; // Fall 2022
 

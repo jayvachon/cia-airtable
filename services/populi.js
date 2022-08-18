@@ -3,7 +3,7 @@ require('dotenv').config({path:`${appRoot}/.env`});
 const _ = require('lodash');
 const constants = require('../constants');
 const tagService = require('./tags');
-const termService = require('./term');
+// const termService = require('./term');
 const Bottleneck = require('bottleneck');
 const got = require('got');
 const stream = require("stream");
@@ -18,7 +18,6 @@ const logger = require(`${appRoot}/config/winston`);
 
 // TODO: give international students the "International" tag
 
-
 const client = got.extend({
 	// hooks: before
 });
@@ -30,11 +29,6 @@ const limiter = new Bottleneck({
 const getUrl = () => {
 	return constants[process.env.NODE_ENV].ROOT;
 };
-
-/*// tagname is the descriptive name used inside this app (in tags.js), not the name on populi
-const getTag = (tagName) => {
-	return tags.tag[process.env.NODE_ENV][tagName];
-}*/
 
 const getAccessToken = (username, password) => {
 	
