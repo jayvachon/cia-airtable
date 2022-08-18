@@ -97,8 +97,6 @@ const preview_monday = () => {
 		})
 		.then(students => {
 
-			leadInfo.term_id = obj.term.populiId;
-
 			return _.map(students, newStudent => {
 
 				let program = newStudent.course;
@@ -130,6 +128,7 @@ const preview_monday = () => {
 					'Email': newStudent.email,
 					image: newStudent.picture,
 					tag: tagService.get(programShort),
+					termId: obj.term.tagId,
 					// tagName: tagName,
 					program: program,
 					programShort: programShort,

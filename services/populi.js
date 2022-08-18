@@ -3,7 +3,6 @@ require('dotenv').config({path:`${appRoot}/.env`});
 const _ = require('lodash');
 const constants = require('../constants');
 const tagService = require('./tags');
-// const termService = require('./term');
 const Bottleneck = require('bottleneck');
 const got = require('got');
 const stream = require("stream");
@@ -171,6 +170,10 @@ const addPerson = (person) => {
 				.then(() => post('addTag', {
 					person_id: person.id,
 					tag_id: tagService.get(person.programShort)
+				}))
+				.then(() => post('addTag', {
+					person_id: person.id,
+					tag_id: person.termId,
 				}))
 				/*.then(() => {
 					return tagService.getTermTag(termService.getCurrentTerm().startDate.substring(0, 7))

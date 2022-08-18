@@ -10,7 +10,6 @@ const airtable = require('./airtable');
 const monday = require('./services/monday');
 const populi = require('./services/populi');
 const studentCreation = require('./services/studentCreation');
-const configureEnrollment = require('./services/configureEnrollment');
 const templates = require('./templates');
 const multer = require('multer');
 const fs = require('fs');
@@ -438,7 +437,7 @@ router.post('/process-attachments', async (req, res, next) => {
 	}
 });
 
-router.get('/set-enrollment-term', (req, res) => {
+/*router.get('/set-enrollment-term', (req, res) => {
 	if (isLoggedIn() === false) {
 		return res.redirect('/');
 	}
@@ -479,7 +478,7 @@ router.post('/set-enrollment-term', (req, res) => {
 	}
 	fs.writeFileSync('settings.json', JSON.stringify(settings));
 	res.redirect('/ci');
-});
+});*/
 
 router.get('/student-creation-preview', (req, res) => {
 	studentCreation.preview_monday().then(results => {

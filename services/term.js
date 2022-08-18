@@ -30,27 +30,10 @@ const refreshCurrentTerm = () => {
 						return populi.getTags();
 					})
 
-					// get the tag ids from populi
 					.then(allTags => {
 
-						/*const tags = _.pickBy(currentTerm, function(v, k) {
-							return _.includes(k, 'Tag');
-						});
-
-						console.log('fff: ')
-						console.log(tags)
-
-						_.forEach(tags, (v, k) => {
-							let tag = _.find(allTags, allTag => allTag.name === v);
-							if (!tag) {
-								// this doesn't work and i can't be bothered to figure out why
-								return Promise.reject(new Error(`No tag with the name ${v} could be found in Populi`))
-							} else {
-								currentTerm[`${k}Id`] = tag.id;
-							}
-						});*/
-
-						currentTerm.tagId = _.find(allTags, tag => tag.name === currentTerm.startDate.substring(0, 7));
+						// This will throw an error if the term tag has not been created yet
+						currentTerm.tagId = _.find(allTags, tag => tag.name === currentTerm.startDate.substring(0, 7)).id;
 
 						return currentTerm;
 					})

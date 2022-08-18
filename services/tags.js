@@ -16,13 +16,6 @@ const tag = {
 	},
 };
 
-const getTermTag = (term) => {
-	return populi.getTags()
-		.then(tags => {
-			return _.find(tags, tag => tag.name === term);
-		});
-};
-
 // tagname is the descriptive name used inside this app (in tags.js), not the name on populi
 const get = (tagName) => {
 	return tag[process.env.NODE_ENV][tagName];
@@ -30,5 +23,4 @@ const get = (tagName) => {
 
 module.exports = {
 	get,
-	getTermTag,
 };

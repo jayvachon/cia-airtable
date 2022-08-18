@@ -2,7 +2,6 @@
 <body>
 	<%- include('partials/header'); -%>
 	<h2>Create Students in Populi</h2>
-	<p>NOTE! Make sure you've updated the <strong>tags and term IDs</strong> to reflect this term (<a href="/ci/set-enrollment-term">here</a>)</p>
 	<% if (results) { %>
 		<% results.forEach(function(result) { %>
 			<ul>
@@ -26,8 +25,8 @@
 					<strong>Lead Info:</strong>
 					<ul>
 						<li><strong>Admission Officer ID:</strong> <%= result.leadInfo.admissions_officer_id %></li>
-						<li><strong>Program:</strong> <%= result.tagName %> (<%= result.leadInfo.program_id[result.programShort] %>)</li>
-						<li><strong>Term:</strong> <%= result.termName %> (<%= result.leadInfo.term_id %>)</li>
+						<li><strong>Program ID:</strong><%= result.leadInfo.program_id[result.programShort] %></li>
+						<li><strong>Term ID:</strong> <%= result.leadInfo.term_id %></li>
 						<li><strong>Education Level ID:</strong> <%= result.educationLevel %></li>
 						<li><strong>High School Graduation Date:</strong> <%= result.highSchoolGradDate %></li>
 					</ul>
