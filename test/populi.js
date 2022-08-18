@@ -4,12 +4,12 @@ const appRoot = require('app-root-path');
 
 describe('Populi', () => {
 
-	it('should get the programs', done => {
+	/*it('should get the programs', done => {
 		populi.getPrograms().then(programs => {
 			console.log(programs)
 			done();
 		});
-	});
+	});*/
 	
 	/*it('should find a tag by name', done => {
 		const tag = '2022-01/ATL/CS/AOS/WA';

@@ -2,6 +2,8 @@ const appRoot = require('app-root-path');
 require('dotenv').config({path:`${appRoot}/.env`});
 const _ = require('lodash');
 const constants = require('../constants');
+const tagService = require('./tags');
+const termService = require('./term');
 const Bottleneck = require('bottleneck');
 const got = require('got');
 const stream = require("stream");
@@ -28,6 +30,11 @@ const limiter = new Bottleneck({
 const getUrl = () => {
 	return constants[process.env.NODE_ENV].ROOT;
 };
+
+/*// tagname is the descriptive name used inside this app (in tags.js), not the name on populi
+const getTag = (tagName) => {
+	return tags.tag[process.env.NODE_ENV][tagName];
+}*/
 
 const getAccessToken = (username, password) => {
 	
@@ -163,7 +170,24 @@ const addPerson = (person) => {
 			}
 		})
 		.then(response => {
-			return post('addTag', { person_id: person.id, tag_id: person.tag });
+			return post('addTag', {
+					person_id: person.id,
+					tag_id: tagService.get('location')
+				})
+				.then(() => post('addTag', {
+					person_id: person.id,
+					tag_id: tagService.get(person.programShort)
+				}))
+				/*.then(() => {
+					return tagService.getTermTag(termService.getCurrentTerm().startDate.substring(0, 7))
+						.then(termTag => {
+							console.log(termTag);
+							return post('addTag', {
+								person_id: person.id,
+								tag_id: termTag,
+							});
+						})
+				})*/
 		})
 		.then(response => {
 			return post('setLeadInfo', {

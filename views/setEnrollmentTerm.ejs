@@ -18,34 +18,6 @@
 	    <br>
 	    <br>
 
-	    <p>Current WDI certificate tag: <%= currentCertificateTag %></p>
-	    <!-- Tag select -->
-	    <select class="selectpicker_tags" data-style="btn-info" name="selectpicker_tags_certificate">
-	        <optgroup label="Select Tags">
-	            <option value="">Select Tags</option>
-	            <% tags.forEach(function(tag){ %>
-	            <option value="<%= JSON.stringify(tag) %>"><%= tag.name %></option>
-	            <% }) %>
-	        </optgroup>
-	    </select>
-
-	    <br>
-	    <br>
-
-	    <p>Current WDI Associate's tag: <%= currentAssociatesTag %></p>
-	    <!-- Tag select -->
-	    <select class="selectpicker_tags" data-style="btn-info" name="selectpicker_tags_associates">
-	        <optgroup label="Select Tags">
-	            <option value="">Select Tags</option>
-	            <% tags.forEach(function(tag){ %>
-	            <option value="<%= JSON.stringify(tag) %>"><%= tag.name %></option>
-	            <% }) %>
-	        </optgroup>
-	    </select>
-
-	    <br>
-	    <br>
-
 	    <p>Current academic term: <%= currentAcademicTerm %></p>
 	    <!-- Academic term select -->
 	    <select class="selectpicker_academicTerm" data-style="btn-info" name="selectpicker_academicTerm">
