@@ -1,6 +1,8 @@
 const airtable = require('../airtable');
 const populi = require('./populi');
 
+// TODO: deprecate
+
 const getDropdownData = () => {
 	let dropdowns = {};
 	return airtable.getTerms()

@@ -47,6 +47,13 @@ const leadInfo = {
 	},
 };
 
+// call this instead of accessing the above leadInfo object directly so that the term ID is up to date
+const getLeadInfo = () => {
+	let li = leadInfo[process.env.NODE_ENV];
+	li.term_id = termService.getCurrentTerm().populiId;
+	return li;
+};
+
 const application = {
 	production: {
 		application_template_id: '34334',
@@ -126,7 +133,7 @@ const preview_monday = () => {
 					// tagName: tagName,
 					program: program,
 					programShort: programShort,
-					leadInfo: leadInfo[process.env.NODE_ENV],
+					leadInfo: getLeadInfo(),//leadInfo[process.env.NODE_ENV],
 					educationLevel: mapEducationLevel(newStudent.educationLevel),
 					highSchoolGradDate: newStudent.graduationDate,
 					application: application[process.env.NODE_ENV],

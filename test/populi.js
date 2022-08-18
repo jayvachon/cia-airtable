@@ -105,7 +105,7 @@ describe('Populi', () => {
 	});*/
 
 	/*it('should get academic term by name', done => {
-		populi.getAcademicTermByName('Summer 2022').then(res => {
+		populi.getAcademicTermByName('Fall 2022').then(res => {
 			console.log(res);
 			done();
 		})
