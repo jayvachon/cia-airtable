@@ -102,13 +102,13 @@ describe('Monday', () => {
 		});
 	});*/
 
-	it('should get students for creation in populi', function(done) {
+	/*it('should get students for creation in populi', function(done) {
 		this.timeout(10000);
 		monday.getStudentsForPopuliCreation().then(res => {
 			// console.log(res);
 			done();
 		});
-	})
+	})*/
 
 	/*it('should upload a file', done => {
 

@@ -25,7 +25,8 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	financialAid: 'status_11',
 	dateAdded: 'date4',
 	phone: 'phone',
-	term: 'connect_boards8',
+	term: 'connect_boards8', // deprecated
+	department: 'status_1',
 	course: 'status_15',
 	status: 'status',
 	socialSecurityNumber: 'text1',
@@ -457,7 +458,7 @@ const createLead = (lead) => {
 
 	let vals = {};
 
-	const currentTerm = CURRENT_TERM;
+	// const currentTerm = CURRENT_TERM;
 	const today = new Date().toISOString().split('T')[0];
 	vals[COLUMN.dateAdded] = { date: today, time: "00:00:00" };
 
@@ -532,7 +533,8 @@ const createLead = (lead) => {
 	if (lead.content.phone) {
 		vals[COLUMN.phone] = { phone: lead.content.phone };
 	}
-	vals[COLUMN.term] = { item_ids: [currentTerm] };
+	vals[COLUMN.department] = { label: 'Computer Science' };
+	// vals[COLUMN.term] = { item_ids: [currentTerm] };
 
 	const json = JSON.stringify(JSON.stringify(vals));
 	const q = `mutation {
