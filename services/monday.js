@@ -533,7 +533,11 @@ const createLead = (lead) => {
 	if (lead.content.phone) {
 		vals[COLUMN.phone] = { phone: lead.content.phone };
 	}
-	vals[COLUMN.department] = { label: 'Computer Science' };
+	if (program === 'Web Development Immersive Certificate' || program === 'Associate of Science in Computer Science and Web Architecture') {
+		vals[COLUMN.department] = { label: 'Computer Science' };
+	} else {
+		vals[COLUMN.department] = { label: 'Media' };
+	}
 	// vals[COLUMN.term] = { item_ids: [currentTerm] };
 
 	const json = JSON.stringify(JSON.stringify(vals));
