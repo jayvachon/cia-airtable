@@ -175,16 +175,6 @@ const addPerson = (person) => {
 					person_id: person.id,
 					tag_id: person.termId,
 				}))
-				/*.then(() => {
-					return tagService.getTermTag(termService.getCurrentTerm().startDate.substring(0, 7))
-						.then(termTag => {
-							console.log(termTag);
-							return post('addTag', {
-								person_id: person.id,
-								tag_id: termTag,
-							});
-						})
-				})*/
 		})
 		.then(response => {
 			return post('setLeadInfo', {

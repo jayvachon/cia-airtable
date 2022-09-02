@@ -308,70 +308,8 @@ router.get('/email-new-leads', (req, res) => {
 	return autoEmail(res);
 });
 
-router.get('/log-correspondence', (req, res) => {
-	if (isLoggedIn() === false) {
-		return res.redirect('/');
-	}
-	res.render('logCorrespondence');
-});
-
-router.get('/manually-add-lead', (req, res) => {
-	if (isLoggedIn() === false) {
-		return res.redirect('/');
-	}
-	res.render('manuallyAddLead');
-});
-
-router.get('/process-attachments', (req, res) => {
-	if (isLoggedIn() === false) {
-		return res.redirect('/');
-	}
-	gmailer.init(oAuth2Client);
-
-	// Get the 20 most recent emails and filter out the ones that don't have attachments
-	gmailer.list20().then(bodies => gmailer.downloadAttachments(bodies))
-		.then(bodies => {
-
-			// bodies is an array of arrays with only one first element, so flatten the array
-			let flatBodies = _.map(bodies, body => body[0]);
-
-			// Group emails by the sender's email address
-			let emailsBySender = _.groupBy(flatBodies, body => {
-				let sender = _.find(body.data.payload.headers, header => header.name === 'From');
-				from = sender.value;
-				if (from.includes('<')) {
-					from = from.match(/\<(.*?)\>/)[1];
-				}
-				return from;
-			});
-
-			// Put the senders back into an array for easier mapping
-			emailsBySender = _.values(_.mapKeys(emailsBySender, (val, key) => {
-				val.emails = _.clone(val);
-				val.id = key;
-				return key;
-			}));
-
-			// Create previews with the sender's email address and attachments
-			let previews = _.map(emailsBySender, e => {
-				
-				let files = _.map(e.emails, email => 
-					_.map(email.files, file => file.localPath.split(/(\\|\/)/g).pop()));
-				files = _.flatten(files);
-
-				return {
-					from: e.id,
-					files,
-				};
-			});
-
-			console.log(JSON.stringify(previews, null, 4));
-
-			return res.render('processAttachments', { previews });
-		});
-});
-
-function uploadAttachment(attachment) {
+// is this deprecated?
+/*function uploadAttachment(attachment) {
 	if (attachment.type === '') { return Promise.resolve(attachment); }
 	else {
 
@@ -409,76 +347,7 @@ function uploadAttachment(attachment) {
 					// Next step: rename files and upload to drive
 			});
 	}
-};
-
-router.post('/process-attachments', async (req, res, next) => {
-	
-	drive.init(oAuth2Client);
-
-	// Organize uploads by who sent it, the file path, and the selected document type
-	let attachments = _.zip(req.body.selectpicker, req.body.file, req.body.from);
-	attachments = _.map(attachments, attachment => {
-		return {
-			from: attachment[2].trim(),
-			file: attachment[1],
-			type: attachment[0],
-		};
-	});
-
-
-	try {
-		for (attachment of attachments) {
-			await uploadAttachment(attachment);
-		}
-		res.redirect('/');
-	}
-	catch (e) {
-		res.render('error', { error: e });
-	}
-});
-
-/*router.get('/set-enrollment-term', (req, res) => {
-	if (isLoggedIn() === false) {
-		return res.redirect('/');
-	}
-	let settings = JSON.parse(fs.readFileSync('settings.json'));
-	let currentTerm = settings.current_term.Name;
-	let currentCertificateTag = settings.current_certificate_tag.name;
-	let currentAssociatesTag = settings.current_associates_tag.name;
-	let currentAcademicTerm = settings.current_academic_term.name;
-
-	configureEnrollment.getDropdownData()
-		.then(dropdowns => {
-			res.render('setEnrollmentTerm', { 
-				currentTerm,
-				currentCertificateTag,
-				currentAssociatesTag,
-				currentAcademicTerm,
-				terms: dropdowns.terms,
-				tags: dropdowns.tags,
-				academicTerms:dropdowns.academicTerms 
-			});
-		})
-});
-
-router.post('/set-enrollment-term', (req, res) => {
-	let settings = JSON.parse(fs.readFileSync('settings.json'));
-	let body = req.body;
-	if (body.selectpicker_term !== '') {
-		settings.current_term = JSON.parse(req.body.selectpicker_term);
-	}
-	if (body.selectpicker_tags_certificate !== '') {
-		settings.current_certificate_tag = JSON.parse(body.selectpicker_tags_certificate);
-	}
-	if (body.selectpicker_tags_associates !== '') {
-		settings.current_associates_tag = JSON.parse(body.selectpicker_tags_associates);
-	}
-	if (body.selectpicker_academicTerm !== '') {
-		settings.current_academic_term = JSON.parse(body.selectpicker_academicTerm);
-	}
-	fs.writeFileSync('settings.json', JSON.stringify(settings));
-	res.redirect('/ci');
-});*/
+};*/
 
 router.get('/student-creation-preview', (req, res) => {
 	studentCreation.preview_monday().then(results => {
