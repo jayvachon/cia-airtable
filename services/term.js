@@ -23,18 +23,29 @@ const refreshCurrentTerm = () => {
 				// Get the term id in populi
 				return populi.getAcademicTermByName(currentTerm.name)
 					.then(academicTerm => {
+
+						// Attempts to add the Populi term, but continues with a warning if it can't find it
+
 						if (!academicTerm) {
-							return Promise.reject(new Error(`No term exists in Populi called ${currentTerm.name}`))
+							console.warn(`No term exists in Populi called ${currentTerm.name}`);
+							return populi.getTags();
 						}
 						currentTerm.populiId = academicTerm.id;
 						return populi.getTags();
 					})
 
 					.then(allTags => {
+						
+						// Attempts to add the Populi term tag, but continues with a warning if it can't find it
 
-						// This will throw an error if the term tag has not been created yet
-						currentTerm.tagId = _.find(allTags, tag => tag.name === currentTerm.startDate.substring(0, 7)).id;
+						const tagName = currentTerm.startDate.substring(0, 7);
+						const termTag = _.find(allTags, tag => tag.name === tagName)
 
+						if (!termTag) {
+							console.warn(`No tag exists in Populi called ${tagName}`);
+						} else {
+							currentTerm.tagId = termTag.id;
+						}
 						return currentTerm;
 					})
 

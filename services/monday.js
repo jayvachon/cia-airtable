@@ -8,9 +8,10 @@ const fileUploader = require('./fileUploader');
 const _ = require('lodash');
 
 const ROOT = 'https://api.monday.com/v2';
-// const BOARD = '2601210843'; // carbon web's
-const BOARD = '2134845746'; // jay's
-const TERM_BOARD = '2601237584';
+const BOARD = '2601210843'; // carbon web's
+// const BOARD = '2134845746'; // jay's
+// const TERM_BOARD = '2601237584'; // jay's
+const TERM_BOARD = '2601237584'; // carbon web's
 const GROUP = { // The IDs of each group. IDs cannot be changed after groups are created in Monday, which is why these ID names are so weird and bad
 	new: 'new_group22902',
 	enrolling: 'new_group',
