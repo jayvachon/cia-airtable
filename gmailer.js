@@ -5,10 +5,11 @@ const fs = require('fs');
 const appRoot = require('app-root-path');
 const {google} = require('googleapis');
 const logger = require(`${appRoot}/config/winston`);
+const termService = require('./services/term');
 
 const getCurrentTerm = () => {
-	let currentTerm = JSON.parse(fs.readFileSync('settings.json')).current_term;
-	let startDate = new Date(currentTerm['Start date']);
+	const currentTerm = termService.getCurrentTerm();
+	let startDate = new Date(currentTerm['startDate']);
 	let month = startDate.toLocaleString('default', { month: 'long' });
 	let year = startDate.getFullYear();
 	return `${month} ${year}`;
@@ -312,4 +313,5 @@ module.exports = {
 	markRead,
 	downloadAttachments,
 	filterSpam,
+	getCurrentTerm,
 };

@@ -4,6 +4,12 @@ const _ = require('lodash');
 
 describe('Gmailer', () => {
 
+	it('should format the current term', done => {
+		const term = gmailer.getCurrentTerm();
+		console.log(term);
+		done();
+	});
+
 	/*it('should list messages with attachments', done => {
 
 		gmailer.list().then(messages => {

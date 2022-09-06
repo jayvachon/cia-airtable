@@ -10,6 +10,7 @@ const airtable = require('./airtable');
 const monday = require('./services/monday');
 const populi = require('./services/populi');
 const studentCreation = require('./services/studentCreation');
+const termService = require('./services/term');
 const templates = require('./templates');
 const multer = require('multer');
 const fs = require('fs');
@@ -147,6 +148,13 @@ app.post('/registrar/login', (req, res, next) => {
 			logger.error('Login failed for user ' + req.body.username);
 			res.render('error', {error:err, home: '/registrar/login'});
 		});
+});
+
+router.get('/refresh-term', (req, res) => {
+	termService.refreshCurrentTerm().then(term => {
+		console.log(term);
+		res.send(term);
+	});
 });
 
 app.get('/registrar/transfer-credit-upload', (req, res) => {
