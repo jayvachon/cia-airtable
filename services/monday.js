@@ -54,6 +54,9 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	picture: 'files5',
 	ssc: 'files0',
 
+	location: 'status_10',
+	travel: 'status_12',
+
 	createInPopuli: 'checkbox',
 	populiLink: 'text33',
 };

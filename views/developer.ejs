@@ -1,0 +1,10 @@
+<%- include('partials/head'); -%>
+<body>
+	<h1>Developer</h1>
+	<h2>Monday Enrollment Database colums</h2>
+	<ul>
+		<% columns.forEach(function(column) { %>
+			<li><strong><%= column.title %>:</strong> <%= column.id %></li>
+		<% }) %>
+	</ul>
+</body>

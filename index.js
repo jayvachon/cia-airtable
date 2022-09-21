@@ -293,6 +293,12 @@ router.post('/populi-login', (req, res, next) => {
 		});
 });
 
+router.get('/developer', (req, res) => {
+	monday.getColumns().then(result => {
+		res.render('developer', { columns: result.columns });
+	});
+});
+
 router.get('/', (req, res) => {
 
 	let file = fs.readFileSync('./package.json');
@@ -315,47 +321,6 @@ router.get('/email-new-leads', (req, res) => {
 
 	return autoEmail(res);
 });
-
-// is this deprecated?
-/*function uploadAttachment(attachment) {
-	if (attachment.type === '') { return Promise.resolve(attachment); }
-	else {
-
-		// Get lead and leaddoc records from airtable
-		return airtable.getLeadByEmail(attachment.from)
-			.then(lead => {
-				if (!lead) {
-					// console.log('No lead record exists for ' + attachment.from);
-					throw new Error('No lead record exists for ' + attachment.from);
-				} else {
-					return airtable.getOrCreateLeadDoc(lead);
-				}
-			})
-
-			// Get or create student directory in Drive 
-			.then(records => {
-				let studentName = `${records.lead.fields['Last Name']}${records.lead.fields['First Name']}`;
-				let filePath = `${appRoot}/public/${attachment.file}`;
-
-				let urlPath = '';
-				if (process.env.NODE_ENV === 'development') {
-					urlPath = 'localhost:8080/';
-				} else if (process.env.NODE_ENV === 'production') {
-					// urlPath = 'https://enroll.digitalfilmacademy.edu/';
-					urlPath = 'https://codeimmersivesadmissions.website/';
-				}
-				urlPath += attachment.file;
-
-				let fileName = `${records.lead.fields['Last Name']}${records.lead.fields['First Name']}_${attachment.type}${path.extname(filePath)}`;
-
-				return drive.getOrCreateParentFolder()
-					.then(id => drive.getOrCreateStudentFolder(id, studentName))
-					.then(directory => drive.uploadFile(directory, filePath, fileName))
-					.then(fileId => airtable.uploadAttachment(records.leadDoc, urlPath, fileName, attachment.type));
-					// Next step: rename files and upload to drive
-			});
-	}
-};*/
 
 router.get('/student-creation-preview', (req, res) => {
 	studentCreation.preview_monday().then(results => {
