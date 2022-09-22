@@ -336,6 +336,16 @@ const getLead = (email) => {
 				let values = mapColumnIds(res.data.items_by_column_values[0].column_values)
 				values.id = res.data.items_by_column_values[0].id;
 
+				// Convert null values to empty strings
+				let convertedValues = {};
+				_.forOwn(values, (v, k) => {
+					if (v === null) {
+						convertedValues[k] = '';
+					} else {
+						convertedValues[k] = v;
+					}
+				});
+
 				// Censor sensitive information (with the exception of the keys in the following array)
 				const includeKeys = [
 					'status',
@@ -348,7 +358,7 @@ const getLead = (email) => {
 					'id',
 				];
 				let censoredLead = {};
-				_.forOwn(values, (v, k) => {
+				_.forOwn(convertedValues, (v, k) => {
 					if (includeKeys.includes(k)) {
 						censoredLead[k] = v;
 					} else {
