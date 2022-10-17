@@ -417,7 +417,9 @@ router.get('/logs', (req, res) => {
 });
 
 cron.schedule('0 */1 * * *', () => {
-	autoEmail();
+	if (process.env.CRON === 'on') {
+		autoEmail();
+	}
 });
 
 app.listen(PORT);
