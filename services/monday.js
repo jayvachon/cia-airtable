@@ -292,10 +292,10 @@ const getStudentsForPopuliCreation = () => {
 
 const getOrCreateLead = (email) => {
 	email = email.toLowerCase();
-	console.log('get or create: ' + email)
+	// console.log('get or create: ' + email)
 	return getLead(email)
 		.then(values => {
-			console.log('values: ' + JSON.stringify(values, null, 4))
+			// console.log('values: ' + JSON.stringify(values, null, 4))
 			if (values) {
 				return values;
 			} else {
@@ -308,7 +308,7 @@ const getOrCreateLead = (email) => {
 				}
 				return createLead(lead)
 					.then(data => {
-						console.log('create: ' + JSON.stringify(lead, null, 4))
+						// console.log('create: ' + JSON.stringify(lead, null, 4))
 						return getLeadById(data.create_item.id);
 					});
 			}
