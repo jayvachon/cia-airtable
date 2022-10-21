@@ -52,7 +52,7 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	i20creationAndDelivery: 'files1',
 	i20: 'files85',
 	picture: 'files5',
-	ssc: 'files0',
+	ssc: 'files92',
 
 	location: 'status_10',
 	travel: 'status_12',

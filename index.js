@@ -368,7 +368,6 @@ router.get('/send-enrollment-information', (req, res) => {
 // req.query for GET
 
 router.get('/api/lead', (req, res) => {
-	console.log('/api/lead')
 	monday.getOrCreateLead(req.query.email).then(lead => {
 		res.json(lead);
 	});
