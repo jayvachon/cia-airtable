@@ -23,15 +23,15 @@ describe('Monday', () => {
 			// console.log(res);
 			done();
 		});
-	})
+	})*/
 
-	it('should list the groups', done => {
+	/*it('should list the groups', done => {
 		monday.getGroups().then(res => {
-			// console.log(res);
+			console.log(res);
 			done();
 		});
-	});
-*/
+	});*/
+
 	/*it('should find a lead by email', done => {
 		monday.getLead('luisespinal294@gmail.com').then(res => {
 			// console.log(JSON.stringify(res, null, 2));
@@ -66,13 +66,13 @@ describe('Monday', () => {
 		});
 	});*/
 
-	it('should list the columns', done => {
+	/*it('should list the columns', done => {
 		monday.getColumns().then(res => {
 			console.log(res);
 			res.should.be.an.Object;
 			done();
 		})
-	});
+	});*/
 
 	/*it('should list the term columns', done => {
 		monday.getTermColumns().then(res => {
@@ -159,11 +159,11 @@ describe('Monday', () => {
 					studentType: 'Veteran - CH-33',
 					program: 'Javascript - Web Development',
 				}
-			}
+			},
 		];
 
-		monday.insertUnique(leads).then(res => {
-			console.log(res)
+		monday.insertUniqueLead(leads).then(res => {
+			// console.log(res)
 			done();
 		});
 	});*/

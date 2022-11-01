@@ -89,8 +89,7 @@ const autoEmail = (res) => {
 
 	gmailer.init(oAuth2Client);
 	gmailer.list()
-		// .then(leads => airtable.insertUnique(leads))
-		.then(leads => monday.insertUnique(leads))
+		.then(leads => monday.insertUniqueLead(leads))
 		.then(newLeads => {
 
 			// Send emails

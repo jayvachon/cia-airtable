@@ -8,14 +8,31 @@ const fileUploader = require('./fileUploader');
 const _ = require('lodash');
 
 const ROOT = 'https://api.monday.com/v2';
-const BOARD = '2601210843'; // carbon web's
-// const BOARD = '2134845746'; // jay's
-// const TERM_BOARD = '2601237584'; // jay's
+const BOARD = '2601210843'; // carbon web's Enrollment Database
+const LEADS_BOARD = '2411210882'; // leads board
 const TERM_BOARD = '2601237584'; // carbon web's
 const GROUP = { // The IDs of each group. IDs cannot be changed after groups are created in Monday, which is why these ID names are so weird and bad
 	new: 'new_group22902',
 	enrolling: 'new_group',
 	enrolled: 'topics',
+};
+const LEADS_GROUP = {
+	new: 'new_group7534',
+};
+const LEADS_COLUMN = {
+	name: 'name',
+	department: 'status_152',
+	program: 'status_15',
+	term: 'status_2',
+	firstName: 'text36',
+	lastName: 'text_11',
+	email: 'email_1',
+	phone: 'phone',
+	financialAid: 'status_168',
+	va: 'status_14',
+	international: 'status_16',
+	type: 'status_155',
+	additionalInfo: 'long_text6',
 };
 const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	email: 'email',
@@ -405,6 +422,67 @@ const getLeadById = (id) => {
 	});
 }
 
+const insertUniqueLead = (leads) => {
+
+	leads = _.uniqBy(leads, 'content.email');
+
+	let q = `query {
+		boards (ids: ${LEADS_BOARD}) {
+			items {
+				id
+				name
+				column_values (ids: ${LEADS_COLUMN.email}) {
+					id
+					value
+				}
+			}
+		}
+	}`;
+
+	return post(q).then(res => {
+		
+		// Get a list of the emails that have already been added to the board
+		let emails = _.map(res.data.boards[0].items, item => {
+			let value = JSON.parse(item.column_values[0].value);
+			if (value === null) {
+				return '';
+			} else {
+				return value.email;
+			}
+		});
+
+		// Disregard any blank items
+		emails = _.filter(emails, email => email !== '');
+
+		return emails;
+		// example output: [ 'jay.vachon@codeimmersives.com', 'test@codeimmersives.com' ]
+	})
+	.then(existingEmails => {
+
+		return {
+			// Leads making first contact
+			initial: _.filter(leads, lead => !_.includes(existingEmails, lead.content.email.toLowerCase())),
+
+			// Leads who are filling out the form again
+			repeat: _.filter(leads, lead => _.includes(existingEmails, lead.content.email.toLowerCase())),
+		};
+
+		// example output:
+		// {
+		//   initial: [ { id: '3', content: [Object] } ],
+		//   repeat: [ { id: '0', content: [Object] }, { id: '1', content: [Object] } ]
+		// }
+	})
+	.then(newLeads => {
+		return Promise.all(_.map(newLeads.initial, newLead => createNewLead(newLead)))
+			.then(() => { return newLeads; });
+	})
+	.catch(err => {
+		logger.error(err);
+		throw new Error(err);
+	});
+};
+
 const insertUnique = (leads) => {
 
 	// Filter out duplicate emails
@@ -467,6 +545,8 @@ const insertUnique = (leads) => {
 	});
 };
 
+// HEY! despite the name of this function, this actually creates an item in the Enrollment Database board, not the Leads board!
+// the createNewLead function creates an item in the Leads board
 const createLead = (lead) => {
 
 	let vals = {};
@@ -573,7 +653,132 @@ const createLead = (lead) => {
 			logger.error(err);
 			throw new Error(err);
 		});
-}
+};
+
+const createNewLead = (lead) => {
+
+	// console.log(lead.content);
+
+	let vals = {};
+
+	const email = lead.content.email.toLowerCase();
+	vals[LEADS_COLUMN.email] = { email: email, text: email };
+
+	let itemName = '';
+	let firstNameFormatted = '';
+	let lastNameFormatted = '';
+
+	if (lead.content.firstName) {
+		const firstName = lead.content.firstName;//.toLowerCase();
+		firstNameFormatted = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+		vals[LEADS_COLUMN.firstName] = firstNameFormatted;
+	}
+	if (lead.content.lastName) {
+		const lastName = lead.content.lastName;//.toLowerCase();
+		lastNameFormatted = lastName.charAt(0).toUpperCase() + lastName.slice(1);
+		vals[LEADS_COLUMN.lastName] = lastNameFormatted;
+	}
+	if (lead.content.firstName && lead.content.lastName) {
+		itemName = `${firstNameFormatted} ${lastNameFormatted}`;
+	}
+	else {
+		itemName = email;
+	}
+
+	let isVeteran = false;
+	let normalizedType = lead.content.studentType.toLowerCase();
+	let type = 'FA';
+	if (normalizedType.includes('veteran')) {
+		type = 'American Veteran';
+		isVeteran = true;
+	}
+	if (normalizedType.includes('international')) {
+		type = 'INTL';
+	}
+	if (normalizedType.includes('not specified')) {
+		type = '';
+	}
+
+	let finAid = 'None'
+	if (isVeteran) {
+		
+		type = 'VA';
+
+		if (normalizedType.includes('31')) {
+			// finAid = 'Chapter 31';
+			type = 'VA - CH 31';
+		}
+		else if (normalizedType.includes('33')) {
+			// finAid = 'Chapter 33';
+			type = 'VA - CH 33';
+		}
+		else if (normalizedType.includes('35')) {
+			// finAid = 'Chapter 35';
+			type = 'VA - CH 35';
+		}
+		else if (normalizedType.includes('veteran')) {
+			// finAid = 'Other - veteran';
+			type = 'VA';
+		}
+	}
+	// vals[LEADS_COLUMN.financialAid] = { label: finAid };
+	vals[LEADS_COLUMN.type] = { label: type };
+
+	let va = 'No';
+	if (isVeteran) va = 'Yes';
+	vals[LEADS_COLUMN.va] = { label: va };
+
+	let intl = 'Not Selected';
+	if (type === 'INTL') intl = 'Need Visa';
+	vals[LEADS_COLUMN.international] = { label: intl };
+
+	let fa = 'No';
+	if (type === 'FA') fa = 'Yes';
+	vals[LEADS_COLUMN.financialAid] = { label: fa };
+
+	let program = 'Not Specified';
+	if (lead.content.program) {
+		if (lead.content.program.toLowerCase() === 'javascript - web development') {
+			program = 'Web Development Immersive Certificate';
+		}
+		if (lead.content.program.toLowerCase().includes('associate')) {
+			program = 'Associate of Science in Computer Science and Web Architecture';
+		}
+	}
+	vals[LEADS_COLUMN.course] = { label: program };
+	vals[LEADS_COLUMN.status] = { label: 'New' };
+
+	if (lead.content.phone) {
+		vals[LEADS_COLUMN.phone] = { phone: lead.content.phone };
+	}
+	if (program === 'Web Development Immersive Certificate' || program === 'Associate of Science in Computer Science and Web Architecture') {
+		vals[LEADS_COLUMN.department] = { label: 'Computer Science' };
+	} else {
+		vals[LEADS_COLUMN.department] = { label: 'Media' };
+	}
+	// vals[COLUMN.term] = { item_ids: [currentTerm] };
+
+	const json = JSON.stringify(JSON.stringify(vals));
+	const q = `mutation {
+	    create_item (
+	    	board_id: ${LEADS_BOARD},
+	    	group_id: "${LEADS_GROUP.new}",
+	    	item_name: "${itemName}",
+	    	column_values: ${json}) {
+
+	        id
+	    }
+	}`;
+	return post(q)
+		.then(res => {
+			console.log(JSON.stringify(res, null, 4));
+			return res.data;
+		})
+		.catch(err => {
+			logger.error(err);
+			throw new Error(err);
+		});
+};
 
 const updateLeadValues = (leadId, columnValues) => {
 
@@ -654,6 +859,7 @@ module.exports = {
 	getTerms,
 	getCurrentTerm,
 	insertUnique,
+	insertUniqueLead,
 	updateLeadValues,
 	uploadLeadDocument,
 	test,
