@@ -78,8 +78,6 @@ describe('Populi', () => {
 		});
 	});*/
 
-	
-
 	/*it('should get tags', done => {
 		populi.getTags().then(res => {
 			console.log(res);

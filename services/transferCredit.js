@@ -32,12 +32,18 @@ const readXlsx = (file) => {
 	headers = _.filter(headers, header => header !== undefined); // remove any columns that come in as "undefined"
 
 	if (validateHeaders(headers) === false) {
-		return [ { error: 'Wrong headers' }];
+		return Promise.reject(new Error('Error: headers on uploaded XLSX do not match expected headers' ))
+			.then(() => {}, (error) => console.error(error));
 	}
 
 	_.remove(result, r => { return _.uniq(r).length < 2; }) // remove empty rows
 	let transfers = _.map(result, r => { return _.zipObject(headers, r); });
 	transfers = _.map(transfers, transfer => validate(transfer));
+
+	if (validateCreditsOrHours(transfers) === false) {
+		return Promise.reject(new Error('Error: a transfer credit entry contains both credits and hours. It can only contain either credits or hours.' ))
+			.then(() => {}, (error) => console.error(error));		
+	}
 
 	return Promise.all(_.map(transfers, transfer => populi.getPerson(transfer['Person ID']))) // make sure all people exist
 		.then(() => Promise.all(_.map(transfers, transfer => populi.getOrganization(transfer['Organization ID'])))) // make sure all oganizations exist
@@ -69,12 +75,17 @@ const validateHeaders = (headers) => {
 		'Course Number',
 		'Course Name',
 		'Credits',
+		'Hours',
 		'Catalog Course ID',
 		'Effective Date',
 		'Program ID',
 		'Grade',
 	]);
-}
+};
+
+const validateCreditsOrHours = (transfers) => {
+	return _.find(transfers, t => { return Number(t.Credits) > 0 && Number(t.Hours) > 0; }) ? false : true;
+};
 
 const validate = (transfer) => {
 	if (_.some(transfer, _.isEmpty)) {

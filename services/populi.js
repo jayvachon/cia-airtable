@@ -223,9 +223,15 @@ const addTransferCredit = (variableFields, token) => {
 		person_id: variableFields['Person ID'],
 		course_number: variableFields['Course Number'],
 		course_name: variableFields['Course Name'],
-		credits: variableFields.Credits,
 		catalog_course_id: variableFields['Catalog Course ID'],
 		effective_date: variableFields['Effective Date'],
+	};
+
+	if (Number(variableFields.Credits) > 0) {
+		transferCreditDetails.credits = variableFields.Credits;
+	}
+	if (Number(variableFields.Hours) > 0) {
+		transferCreditDetails.hours = variableFields.Hours;
 	}
 
 	return post('addTransferCredit', transferCreditDetails, token)
