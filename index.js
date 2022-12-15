@@ -336,6 +336,9 @@ router.get('/student-creation', (req, res) => {
 		console.log("HERE:")
 		console.log(JSON.stringify(results))
 		res.render('studentCreationResults', { results });
+	})
+	.catch(err => {
+		res.render('error', { error: err, home: '/ci'})
 	});
 });
 

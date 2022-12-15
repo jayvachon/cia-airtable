@@ -100,8 +100,6 @@ const preview_monday = () => {
 
 			// TODO:
 			// - Picture not displaying
-			// - Term ID not adding as tag (populi.js line 177)
-			// - academic_term_id invalid (populi.js line 199)
 
 			return _.map(students, newStudent => {
 
@@ -113,7 +111,7 @@ const preview_monday = () => {
 				else if (program === 'Web Development Immersive Certificate') {
 					programShort = 'wdi';
 				}
-				console.log(newStudent.picture)
+				
 				let profile = {
 					mondayId: newStudent.mondayId,
 					'First Name': newStudent.firstName,

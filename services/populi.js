@@ -174,10 +174,10 @@ const addPerson = (person) => {
 					person_id: person.id,
 					tag_id: tagService.get(person.programShort)
 				}))
-				/*.then(() => post('addTag', {
+				.then(() => post('addTag', {
 					person_id: person.id,
 					tag_id: person.termId,
-				}))*/
+				}))
 		})
 		.then(response => {
 			return post('setLeadInfo', {
@@ -190,7 +190,7 @@ const addPerson = (person) => {
 				high_school_grad_date: person.highSchoolGradDate,
 			});
 		})
-		/*.then(response => {
+		.then(response => {
 			return post('addApplication', {
 				person_id: person.id,
 				application_template_id: person.application.application_template_id,
@@ -198,7 +198,7 @@ const addPerson = (person) => {
 				program_id: person.leadInfo.program_id[person.programShort],
 				academic_term_id: person.leadInfo.term_id,
 			});
-		})*/
+		})
 		.then(response => {
 			return person.id;
 		})
