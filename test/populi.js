@@ -85,14 +85,15 @@ describe('Populi', () => {
 		});
 	});*/
 
-	/*it('should convert image', done => {
+	it('should convert image', done => {
 		// populi.image2base64('https://dl.airtable.com/.attachments/d1230ddbf32249ba2e362b1d7433f79f/c28531de/FB_IMG_1599275082632__01.jpg').then(base64 => {
 		// the following public url from monday expires after one hour
-		populi.image2base64('https://files-monday-com.s3.amazonaws.com/10289196/resources/434716177/3B603B91-6914-4F82-A016-01D3AED2BC16.jpeg?response-content-disposition=attachment&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MPVJMFXPCFHVJDO%2F20220413%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220413T191514Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=a491e548a14d0db0391ea9a1fecc2ce11e486369fa9e701813db2737b66443ee').then(base64 => {
+		// populi.image2base64('https://files-monday-com.s3.amazonaws.com/10289196/resources/434716177/3B603B91-6914-4F82-A016-01D3AED2BC16.jpeg?response-content-disposition=attachment&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MPVJMFXPCFHVJDO%2F20220413%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220413T191514Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=a491e548a14d0db0391ea9a1fecc2ce11e486369fa9e701813db2737b66443ee').then(base64 => {
+		populi.image2base64('https://digitalfilmacademy.monday.com/protected_static/10289196/resources/688786117/IMG_6289.JPG').then(base64 => {
 			console.log(base64);
 			done();
 		});
-	});*/
+	});
 
 	/*it('should get academic terms', function(done) {
 		this.timeout(5000);

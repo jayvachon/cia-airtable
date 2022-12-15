@@ -33,7 +33,7 @@ const leadInfo = {
 		program_id: {
 			python: '35666',
 			wdi: '35366',
-			as: 'XXXX',
+			as: '35348',
 		},
 		term_id: '283070',
 		ed_level: {
@@ -94,25 +94,26 @@ const preview_monday = () => {
 		.then(currentTerm => {
 			obj.term = currentTerm;
 			return monday.getStudentsForPopuliCreation();	
+			// return monday.getStudentsForPopuliCreation_deprecated();	
 		})
 		.then(students => {
+
+			// TODO:
+			// - Picture not displaying
+			// - Term ID not adding as tag (populi.js line 177)
+			// - academic_term_id invalid (populi.js line 199)
 
 			return _.map(students, newStudent => {
 
 				let program = newStudent.course;
 				let programShort = '';
-
 				if (program === 'Associate of Science in Computer Science and Web Architecture') {
-					// tag = obj.term.waTagId;
-					// tagName = obj.term.waTag;
 					programShort = 'as';
 				}
 				else if (program === 'Web Development Immersive Certificate') {
-					// tag = obj.term.wdiTagId;
-					// tagName = obj.term.wdiTag;
 					programShort = 'wdi';
 				}
-
+				console.log(newStudent.picture)
 				let profile = {
 					mondayId: newStudent.mondayId,
 					'First Name': newStudent.firstName,
@@ -126,7 +127,7 @@ const preview_monday = () => {
 					postal: newStudent.zip,
 					country: 'US',
 					'Email': newStudent.email,
-					image: newStudent.picture,
+					image: '', //newStudent.picture,
 					tag: tagService.get(programShort),
 					termId: obj.term.tagId,
 					// tagName: tagName,
@@ -138,7 +139,7 @@ const preview_monday = () => {
 					application: application[process.env.NODE_ENV],
 					error: '',
 				};
-				console.log(profile)
+				// console.log(profile)
 
 				return profile;
 		});

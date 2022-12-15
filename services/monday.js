@@ -11,6 +11,7 @@ const ROOT = 'https://api.monday.com/v2';
 const BOARD = '2601210843'; // carbon web's Enrollment Database
 const LEADS_BOARD = '2411210882'; // leads board
 const TERM_BOARD = '2601237584'; // carbon web's
+const ENROLLMENT_BOARD = '2411210937';
 const GROUP = { // The IDs of each group. IDs cannot be changed after groups are created in Monday, which is why these ID names are so weird and bad
 	new: 'new_group22902',
 	enrolling: 'new_group',
@@ -49,10 +50,12 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	socialSecurityNumber: 'text1',
 	dateOfBirth: 'date_1',
 	graduationDate: 'date',
+
 	street: 'text4',
 	city: 'text27',
 	state: 'text3',
 	zip: 'text01',
+
 	educationLevel: 'dropdown',
 	visa: 'status_113',
 
@@ -83,8 +86,45 @@ const TERM_COLUMN = {
 	endDate: 'date4',
 	orientationDate: 'date',
 	current: 'checkbox',
-}
-const CURRENT_TERM = 2601237706; // Fall 2022
+};
+const ENROLLMENT_COLUMN = {
+	email: 'mirror75',
+	firstName: 'mirror38',
+	lastName: 'mirror306',
+	type: 'mirror479',
+	financialAid: 'mirror5', // called 'Funding' in the Enrollment Process table
+	// dateAdded (is this needed?)
+	phone: 'mirror31',
+	// department (is ths needed?)
+	course: 'mirror772', // called "Program" in Enrollment Process table
+	status: 'status9',
+	socialSecurityNumber: 'mirror64',
+	dateOfBirth: 'mirror357',
+	graduationDate: 'mirror47',
+
+    street: 'mirror00', // called 'Address' in the Enrollment Process table
+	city: 'mirror53',
+	state: 'mirror51',
+	zip: 'mirror91',
+
+	educationLevel: 'mirror72',
+	visa: 'mirror86',
+
+	picture: 'mirror94',
+
+	createInPopuli: 'checkbox',
+    populiLink: 'text7',
+
+	/*
+	
+	{ id: 'mirror83', title: 'Start Date', type: 'lookup' },
+	{
+	  id: 'connect_boards0',
+	  title: 'Program Term',
+	  type: 'board-relation'
+	},
+	*/
+};
 
 const mapColumnIds = (columnValues, asArray) => {
 
@@ -122,6 +162,34 @@ const mapTermColumnIds = (columnValues, asArray) => {
 	const mapped = _.chain(columnValues)
 		.map(cv => {
 			let key = _.findKey(TERM_COLUMN, item => {
+				return item === cv.id;
+			});
+			return {
+				id: key,
+				text: cv.text,
+			};
+		})
+		.filter(cv => cv.id !== undefined)
+		.value();
+
+	if (asArray) {
+		return mapped;
+	} else {
+		return _.chain(mapped)
+		    .keyBy('id')
+		    .mapValues('text')
+		    .value();
+	}
+};
+
+const mapEnrollmentColumnIds = (columnValues, asArray) => {
+
+	// Takes the column values as returned by Monday
+	// and maps them to the sensible names mapped out in TERM_COLUMN
+
+	const mapped = _.chain(columnValues)
+		.map(cv => {
+			let key = _.findKey(ENROLLMENT_COLUMN, item => {
 				return item === cv.id;
 			});
 			return {
@@ -216,9 +284,9 @@ const getGroups = () => {
 	});
 };
 
-const getColumns = () => {
+const _getColumns = (boardId) => {
 	const query = `query {
-	    boards (ids: ${BOARD}) {
+	    boards (ids: ${boardId}) {
 	        columns {
 	            id
 	            title
@@ -231,19 +299,16 @@ const getColumns = () => {
 	});
 };
 
+const getColumns = () => {
+	return _getColumns(BOARD);
+};
+
 const getTermColumns = () => {
-	const query = `query {
-	    boards (ids: ${TERM_BOARD}) {
-	        columns {
-	            id
-	            title
-	            type
-	        }       
-	    }
-	}`;
-	return post(query).then(res => {
-		return res.data.boards[0];
-	});
+	return _getColumns(TERM_BOARD);
+};
+
+const getEnrollmentColumns = () => {
+	return _getColumns(ENROLLMENT_BOARD);
 };
 
 const getImageUrl = (assetId) => {
@@ -260,6 +325,74 @@ const getImageUrl = (assetId) => {
 };
 
 const getStudentsForPopuliCreation = () => {
+	const vals = {
+		checked: true
+	};
+	const json = JSON.stringify(JSON.stringify(vals));
+	/*const q = `query {
+		items_by_column_values (board_id: ${BOARD}, column_id: "${COLUMN['status']}", column_value: "Finalized Documents") {
+	        id
+	        name
+	        column_values {
+	        	id
+	        	value
+	        	text
+	        }
+		}
+	}`;*/
+	const q = `query {
+		items_by_column_values (board_id: ${ENROLLMENT_BOARD}, column_id: "${ENROLLMENT_COLUMN['status']}", column_value: "4 Enrolled") {
+	        id
+	        name
+	        column_values {
+	        	id
+	        	value
+	        	text
+	        }
+		}
+	}`;
+	return post(q).then(res => {
+
+		// Early out if there are no students to create
+		const items = res.data.items_by_column_values; // this is the line when using items_by_column_values as the query
+		if (items.length === 0) {
+			return [];
+		}
+
+		// Only return students that are marked as ready to be created
+		const readyStudents = _.filter(items, item => {
+			// const checkbox = _.find(item.column_values, cv => cv.id === COLUMN['createInPopuli']); // marked as ready to be created AND...
+			// const populiLink = _.find(item.column_values, cv => cv.id === COLUMN['populiLink']); // ...hasn't already been created
+			const checkbox = _.find(item.column_values, cv => cv.id === ENROLLMENT_COLUMN['createInPopuli']); // marked as ready to be created AND...
+			const populiLink = _.find(item.column_values, cv => cv.id === ENROLLMENT_COLUMN['populiLink']); // ...hasn't already been created
+			return checkbox.text !== '' && populiLink.text === '';
+		});
+
+		// console.log(JSON.stringify(readyStudents[0].column_values, null, 4));
+
+		return Promise.all(_.map(readyStudents, item => {
+				
+			let student = mapEnrollmentColumnIds(item.column_values);
+			student.mondayId = item.id;
+			// student.picture = publicUrl;
+			// console.log(student);
+			return student;
+
+			// monday files are only publicly accessible for an hour at a time, so it's necessary to get the temporary image url
+			/*const assetId = JSON.parse(_.find(item.column_values, cv => cv.id === COLUMN['picture']).value).files[0].assetId;
+
+			return getImageUrl(assetId)
+				.then(publicUrl => {
+					let student = mapColumnIds(item.column_values);
+					student.mondayId = item.id;
+					student.picture = publicUrl;
+					return student;
+				})*/
+		}));
+	});
+};
+
+const getStudentsForPopuliCreation_deprecated = () => {
 	const vals = {
 		checked: true
 	};
@@ -287,12 +420,12 @@ const getStudentsForPopuliCreation = () => {
 		const readyStudents = _.filter(items, item => {
 			const checkbox = _.find(item.column_values, cv => cv.id === COLUMN['createInPopuli']); // marked as ready to be created AND...
 			const populiLink = _.find(item.column_values, cv => cv.id === COLUMN['populiLink']); // ...hasn't already been created
-			// console.log(checkbox)
 			return checkbox.text !== '' && populiLink.text === '';
 		});
 
+
 		return Promise.all(_.map(readyStudents, item => {
-				
+
 			// monday files are only publicly accessible for an hour at a time, so it's necessary to get the temporary image url
 			const assetId = JSON.parse(_.find(item.column_values, cv => cv.id === COLUMN['picture']).value).files[0].assetId;
 
@@ -551,7 +684,6 @@ const createLead = (lead) => {
 
 	let vals = {};
 
-	// const currentTerm = CURRENT_TERM;
 	const today = new Date().toISOString().split('T')[0];
 	vals[COLUMN.dateAdded] = { date: today, time: "00:00:00" };
 
@@ -850,11 +982,13 @@ module.exports = {
 	getGroups,
 	getColumns,
 	getTermColumns,
+	getEnrollmentColumns,
 	getOrCreateLead,
 	getLead,
 	getLeadById,
 	getImageUrl,
 	getStudentsForPopuliCreation,
+	getStudentsForPopuliCreation_deprecated,
 	createLead,
 	getTerms,
 	getCurrentTerm,
