@@ -12,6 +12,7 @@ describe('Student Creation', () => {
 	});*/
 
 	it('should preview monday students', function(done) {
+		this.timeout(10000);
 		studentCreation.preview_monday().then(result => {
 			// console.log(result);
 			done();

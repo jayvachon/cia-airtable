@@ -68,8 +68,6 @@ const getAccessToken = (username, password) => {
 
 const post = (path, keyvals, customToken) => {
 
-	console.log(keyvals)
-
 	let token = customToken ?? constants[process.env.NODE_ENV].TOKEN;
 
 	if (!token) {

@@ -93,13 +93,13 @@ const preview_monday = () => {
 	return termService.refreshCurrentTerm()
 		.then(currentTerm => {
 			obj.term = currentTerm;
-			return monday.getStudentsForPopuliCreation();	
+			return monday.getStudentsForPopuliCreation();
 			// return monday.getStudentsForPopuliCreation_deprecated();	
 		})
 		.then(students => {
 
 			// TODO:
-			// - Picture not displaying
+			// - Populi link not updating in Monday (might be working, but can't test until academic_term_id is set in the test site)
 
 			return _.map(students, newStudent => {
 
@@ -125,7 +125,7 @@ const preview_monday = () => {
 					postal: newStudent.zip,
 					country: 'US',
 					'Email': newStudent.email,
-					image: '', //newStudent.picture,
+					image: newStudent.picture,
 					tag: tagService.get(programShort),
 					termId: obj.term.tagId,
 					// tagName: tagName,
@@ -150,7 +150,8 @@ const create_monday = () => {
 			return populi.addPerson(profile)
 				.then(id => {
 					const populiLink = `${constants[process.env.NODE_ENV].WEB_ROOT}router/contacts/people/${id}`;
-					return monday.updateLeadValues(profile.mondayId, { populiLink })
+					console.log(populiLink)
+					return monday.updateEnrollmentValues(profile.mondayId, { populiLink })
 						.then(update => {
 							return {
 								populiLink,

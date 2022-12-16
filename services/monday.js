@@ -46,7 +46,7 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	term: 'connect_boards8', // deprecated
 	department: 'status_1',
 	course: 'status_15',
-	status: 'status',
+	status: 'status1',
 	socialSecurityNumber: 'text1',
 	dateOfBirth: 'date_1',
 	graduationDate: 'date',
@@ -77,8 +77,8 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 	location: 'status_10',
 	travel: 'status_12',
 
-	createInPopuli: 'checkbox',
-	populiLink: 'text33',
+	createInPopuli: 'checkbox0',
+	populiLink: 'text8',
 };
 const TERM_COLUMN = {
 	name: 'name',
@@ -329,17 +329,6 @@ const getStudentsForPopuliCreation = () => {
 		checked: true
 	};
 	const json = JSON.stringify(JSON.stringify(vals));
-	/*const q = `query {
-		items_by_column_values (board_id: ${BOARD}, column_id: "${COLUMN['status']}", column_value: "Finalized Documents") {
-	        id
-	        name
-	        column_values {
-	        	id
-	        	value
-	        	text
-	        }
-		}
-	}`;*/
 	const q = `query {
 		items_by_column_values (board_id: ${ENROLLMENT_BOARD}, column_id: "${ENROLLMENT_COLUMN['status']}", column_value: "4 Enrolled") {
 	        id
@@ -361,44 +350,34 @@ const getStudentsForPopuliCreation = () => {
 
 		// Only return students that are marked as ready to be created
 		const readyStudents = _.filter(items, item => {
-			// const checkbox = _.find(item.column_values, cv => cv.id === COLUMN['createInPopuli']); // marked as ready to be created AND...
-			// const populiLink = _.find(item.column_values, cv => cv.id === COLUMN['populiLink']); // ...hasn't already been created
 			const checkbox = _.find(item.column_values, cv => cv.id === ENROLLMENT_COLUMN['createInPopuli']); // marked as ready to be created AND...
 			const populiLink = _.find(item.column_values, cv => cv.id === ENROLLMENT_COLUMN['populiLink']); // ...hasn't already been created
 			return checkbox.text !== '' && populiLink.text === '';
 		});
 
-		// console.log(JSON.stringify(readyStudents[0].column_values, null, 4));
-
 		return Promise.all(_.map(readyStudents, item => {
-				
+		
 			let student = mapEnrollmentColumnIds(item.column_values);
-			student.mondayId = item.id;
-			// student.picture = publicUrl;
-			// console.log(student);
-			return student;
-
-			// monday files are only publicly accessible for an hour at a time, so it's necessary to get the temporary image url
-			/*const assetId = JSON.parse(_.find(item.column_values, cv => cv.id === COLUMN['picture']).value).files[0].assetId;
-
+			const assetId = student.picture.split('/')[6];
+			
 			return getImageUrl(assetId)
 				.then(publicUrl => {
-					let student = mapColumnIds(item.column_values);
 					student.mondayId = item.id;
 					student.picture = publicUrl;
+					console.log(publicUrl)
 					return student;
-				})*/
+				})
 		}));
 	});
 };
 
-const getStudentsForPopuliCreation_deprecated = () => {
+/*const getStudentsForPopuliCreation_deprecated = () => {
 	const vals = {
 		checked: true
 	};
 	const json = JSON.stringify(JSON.stringify(vals));
 	const q = `query {
-		items_by_column_values (board_id: ${BOARD}, column_id: "${COLUMN['status']}", column_value: "Finalized Documents") {
+		items_by_column_values (board_id: ${BOARD}, column_id: "${COLUMN['status']}", column_value: "Done") {
 	        id
 	        name
 	        column_values {
@@ -423,11 +402,11 @@ const getStudentsForPopuliCreation_deprecated = () => {
 			return checkbox.text !== '' && populiLink.text === '';
 		});
 
-
 		return Promise.all(_.map(readyStudents, item => {
 
 			// monday files are only publicly accessible for an hour at a time, so it's necessary to get the temporary image url
 			const assetId = JSON.parse(_.find(item.column_values, cv => cv.id === COLUMN['picture']).value).files[0].assetId;
+			console.log(_.find(item.column_values, cv => cv.id === COLUMN['picture']))
 
 			return getImageUrl(assetId)
 				.then(publicUrl => {
@@ -438,7 +417,7 @@ const getStudentsForPopuliCreation_deprecated = () => {
 				})
 		}));
 	});
-};
+};*/
 
 const getOrCreateLead = (email) => {
 	email = email.toLowerCase();
@@ -912,7 +891,7 @@ const createNewLead = (lead) => {
 		});
 };
 
-const updateLeadValues = (leadId, columnValues) => {
+const updateLeadValues = (leadId, columnValues, boardId) => {
 
 	/* columnValues ex:
 		{ 
@@ -920,6 +899,8 @@ const updateLeadValues = (leadId, columnValues) => {
 			'phone': '9999999999',
 		}
 	*/
+
+	boardId = boardId ?? BOARD;
 
 	if (columnValues.dateOfBirth) {
 		columnValues.dateOfBirth = formatDate(columnValues.dateOfBirth);
@@ -943,6 +924,10 @@ const updateLeadValues = (leadId, columnValues) => {
 			logger.error(err);
 			throw new Error(err);
 		})
+};
+
+const updateEnrollmentValues = (leadId, columnValues) => {
+	return updateLeadValues(leadId, columnValues, ENROLLMENT_BOARD);
 };
 
 const uploadLeadDocument = (leadId, documentType, file) => {
