@@ -82,13 +82,13 @@ describe('Monday', () => {
 		})
 	});*/
 
-	/*it('should list the enrollment process columns', done => {
+	it('should list the enrollment process columns', done => {
 		monday.getEnrollmentColumns().then(res => {
 			console.log(res);
 			res.should.be.an.Object;
 			done();
 		});
-	});*/
+	});
 
 	/*it('should get current term', done => {
 		monday.getCurrentTerm().then(res => {

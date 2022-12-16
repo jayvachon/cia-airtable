@@ -359,58 +359,9 @@ const getStudentsForPopuliCreation = () => {
 		
 			let student = mapEnrollmentColumnIds(item.column_values);
 			const assetId = student.picture.split('/')[6];
-			
-			return getImageUrl(assetId)
-				.then(publicUrl => {
-					student.mondayId = item.id;
-					student.picture = publicUrl;
-					console.log(publicUrl)
-					return student;
-				})
-		}));
-	});
-};
-
-const getStudentsForPopuliCreation_deprecated = () => {
-	const vals = {
-		checked: true
-	};
-	const json = JSON.stringify(JSON.stringify(vals));
-	const q = `query {
-		items_by_column_values (board_id: ${BOARD}, column_id: "${COLUMN['status']}", column_value: "Done") {
-	        id
-	        name
-	        column_values {
-	        	id
-	        	value
-	        	text
-	        }
-		}
-	}`;
-	return post(q).then(res => {
-
-		// Early out if there are no students to create
-		const items = res.data.items_by_column_values; // this is the line when using items_by_column_values as the query
-		if (items.length === 0) {
-			return [];
-		}
-
-		// Only return students that are marked as ready to be created
-		const readyStudents = _.filter(items, item => {
-			const checkbox = _.find(item.column_values, cv => cv.id === COLUMN['createInPopuli']); // marked as ready to be created AND...
-			const populiLink = _.find(item.column_values, cv => cv.id === COLUMN['populiLink']); // ...hasn't already been created
-			return checkbox.text !== '' && populiLink.text === '';
-		});
-
-		return Promise.all(_.map(readyStudents, item => {
-
-			// monday files are only publicly accessible for an hour at a time, so it's necessary to get the temporary image url
-			const assetId = JSON.parse(_.find(item.column_values, cv => cv.id === COLUMN['picture']).value).files[0].assetId;
-			console.log(_.find(item.column_values, cv => cv.id === COLUMN['picture']))
 
 			return getImageUrl(assetId)
 				.then(publicUrl => {
-					let student = mapColumnIds(item.column_values);
 					student.mondayId = item.id;
 					student.picture = publicUrl;
 					return student;
@@ -891,7 +842,7 @@ const createNewLead = (lead) => {
 		});
 };
 
-const updateLeadValues = (leadId, columnValues, boardId) => {
+const updateLeadValues = (leadId, columnValues, boardId, columns) => {
 
 	/* columnValues ex:
 		{ 
@@ -901,6 +852,7 @@ const updateLeadValues = (leadId, columnValues, boardId) => {
 	*/
 
 	boardId = boardId ?? BOARD;
+	columns = columns ?? COLUMN;
 
 	if (columnValues.dateOfBirth) {
 		columnValues.dateOfBirth = formatDate(columnValues.dateOfBirth);
@@ -909,10 +861,10 @@ const updateLeadValues = (leadId, columnValues, boardId) => {
 		columnValues.graduationDate = formatDate(columnValues.graduationDate);
 	}
 
-	const vals = _.mapKeys(columnValues, (v, k) => COLUMN[k]);
+	const vals = _.mapKeys(columnValues, (v, k) => columns[k]);
 	const json = JSON.stringify(JSON.stringify(vals));
 	const q = `mutation {
-	  change_multiple_column_values(item_id: ${leadId}, board_id: ${BOARD}, column_values: ${json}) {
+	  change_multiple_column_values(item_id: ${leadId}, board_id: ${boardId}, column_values: ${json}) {
 	    id
 	  }
 	}`
@@ -927,7 +879,7 @@ const updateLeadValues = (leadId, columnValues, boardId) => {
 };
 
 const updateEnrollmentValues = (leadId, columnValues) => {
-	return updateLeadValues(leadId, columnValues, ENROLLMENT_BOARD);
+	return updateLeadValues(leadId, columnValues, ENROLLMENT_BOARD, ENROLLMENT_COLUMN);
 };
 
 const uploadLeadDocument = (leadId, documentType, file) => {
@@ -956,6 +908,7 @@ const post = (query) => {
 			return JSON.parse(response.body);
 		})
 		.catch(err => {
+			logger.error(query);
 			logger.error(err);
 			throw new Error(err);
 		});
@@ -973,12 +926,12 @@ module.exports = {
 	getLeadById,
 	getImageUrl,
 	getStudentsForPopuliCreation,
-	getStudentsForPopuliCreation_deprecated,
 	createLead,
 	getTerms,
 	getCurrentTerm,
 	insertUnique,
 	insertUniqueLead,
+	updateEnrollmentValues,
 	updateLeadValues,
 	uploadLeadDocument,
 	test,

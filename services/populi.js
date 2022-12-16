@@ -95,6 +95,11 @@ const post = (path, keyvals, customToken) => {
 			body: form,
 		})
 		.then(response => {
+
+			if (path === 'addProfilePicture') {
+				console.log(response.body)
+			}
+
 			return { raw: response.body, js: xmlConvert.xml2js(response.body, {compact: true}).response };
 		})
 		.catch(err => {
@@ -150,11 +155,9 @@ const addPerson = (person) => {
 			}
 		})
 		.then(response => {
-			console.log('email');
 			return post('addEmailAddress', { person_id: person.id, email_address: person['Email'], type: 'HOME', primary: 'true' })
 		})
 		.then(response => {
-			console.log(person.image)
 			if (!person.image) {
 				return Promise.resolve();
 			} else {
@@ -188,7 +191,7 @@ const addPerson = (person) => {
 				high_school_grad_date: person.highSchoolGradDate,
 			});
 		})
-		.then(response => {
+		/*.then(response => {
 			return post('addApplication', {
 				person_id: person.id,
 				application_template_id: person.application.application_template_id,
@@ -196,7 +199,7 @@ const addPerson = (person) => {
 				program_id: person.leadInfo.program_id[person.programShort],
 				academic_term_id: person.leadInfo.term_id,
 			});
-		})
+		})*/
 		.then(response => {
 			return person.id;
 		})

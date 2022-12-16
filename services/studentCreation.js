@@ -94,12 +94,8 @@ const preview_monday = () => {
 		.then(currentTerm => {
 			obj.term = currentTerm;
 			return monday.getStudentsForPopuliCreation();
-			// return monday.getStudentsForPopuliCreation_deprecated();	
 		})
 		.then(students => {
-
-			// TODO:
-			// - Populi link not updating in Monday (might be working, but can't test until academic_term_id is set in the test site)
 
 			return _.map(students, newStudent => {
 
@@ -150,7 +146,6 @@ const create_monday = () => {
 			return populi.addPerson(profile)
 				.then(id => {
 					const populiLink = `${constants[process.env.NODE_ENV].WEB_ROOT}router/contacts/people/${id}`;
-					console.log(populiLink)
 					return monday.updateEnrollmentValues(profile.mondayId, { populiLink })
 						.then(update => {
 							return {
