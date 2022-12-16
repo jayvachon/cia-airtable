@@ -371,7 +371,7 @@ const getStudentsForPopuliCreation = () => {
 	});
 };
 
-/*const getStudentsForPopuliCreation_deprecated = () => {
+const getStudentsForPopuliCreation_deprecated = () => {
 	const vals = {
 		checked: true
 	};
@@ -417,7 +417,7 @@ const getStudentsForPopuliCreation = () => {
 				})
 		}));
 	});
-};*/
+};
 
 const getOrCreateLead = (email) => {
 	email = email.toLowerCase();
