@@ -683,7 +683,7 @@ const createLead = (lead) => {
 		}
 	}
 	vals[COLUMN.course] = { label: program };
-	vals[COLUMN.status] = { label: 'New' };
+	vals[COLUMN.status] = { label: 'Enroller' };
 
 	if (lead.content.phone) {
 		vals[COLUMN.phone] = { phone: lead.content.phone };
@@ -708,7 +708,7 @@ const createLead = (lead) => {
 	}`;
 	return post(q)
 		.then(res => {
-			// console.log(res);
+			console.log(res);
 			return res.data;
 		})
 		.catch(err => {
