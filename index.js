@@ -376,13 +376,13 @@ router.get('/api/lead', (req, res) => {
 });
 
 router.post('/api/updateLead', (req, res) => {
-	monday.updateLeadValues(req.body.leadId, req.body.columnValues).then(update => {
-		if (update && update.change_multiple_column_values) {
-			monday.getLeadById(update.change_multiple_column_values.id).then(lead => {
+	monday.updateLeadValues(req.body.leadId, req.body.columnValues).then(response => {
+		if (response.update && response.update.change_multiple_column_values) {
+			monday.getLeadById(response.update.change_multiple_column_values.id).then(lead => {
 				res.json(lead);
 			})
 		} else {
-			res.json({ error: true });
+			res.json({ error: response.error });
 		}
 	});
 });

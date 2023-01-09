@@ -870,7 +870,7 @@ const updateLeadValues = (leadId, columnValues, boardId, columns) => {
 	}`
 	return post(q)
 		.then(res => {
-			return res.data;
+			return { update: res.data, error: res.error_message };
 		})
 		.catch(err => {
 			logger.error(err);
