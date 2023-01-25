@@ -2,7 +2,21 @@
 <body>
 	<p><a href="/ci">Go Home</a></p>
 	<h1>Errors</h1>
-	<p><%= error %></p>
-	<h1>Combined</h1>
-	<p><%= combined %></p>
+	<% errors.forEach(function(error) { %>
+		<ul>
+			<li><%= error.timestamp %></li>
+			<li><%= error.message %></li>
+			<li><%= error.stack %></li>
+		</ul>
+		<hr />
+	<% }) %>
+	<a id="combined"><h1>Combined</h1></a>
+	<% combineds.forEach(function(combined) { %>
+		<ul>
+			<li><%= combined.timestamp %></li>
+			<li><%= combined.message %></li>
+			<li><%= combined.stack %></li>
+		</ul>
+		<hr />
+	<% }) %>
 </body>

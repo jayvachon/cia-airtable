@@ -371,6 +371,7 @@ router.get('/send-enrollment-information', (req, res) => {
 
 router.get('/api/lead', (req, res) => {
 	monday.getOrCreateLead(req.query.email).then(lead => {
+		console.log(lead)
 		res.json(lead);
 	});
 });
@@ -397,6 +398,7 @@ router.post('/api/upload', (req, res) => {
 	const uploadPath = `${appRoot}/uploads/${file.name}`;
 	file.mv(uploadPath, err => {
 		if (err) {
+			console.log(err);
 			return res.status(500).send(err);
 		}
 		monday.uploadLeadDocument(req.body.leadId, req.body.documentType, uploadPath)
@@ -413,9 +415,21 @@ router.post('/api/upload', (req, res) => {
 });
 
 router.get('/logs', (req, res) => {
-	let combined = fs.readFileSync(`${appRoot}/logs/combined.log`);
-	let error = fs.readFileSync(`${appRoot}/logs/error.log`);
-	res.render('logs', { combined, error });
+	let combined = fs.readFileSync(`${appRoot}/logs/combined.log`, 'utf-8');
+	let error = fs.readFileSync(`${appRoot}/logs/error.log`, 'utf-8');
+	
+	let combineds = combined.split('\n')
+		.filter(e => String(e).trim())
+		.map(JSON.parse)
+		.sort(function(a, b) { return new Date(b.timestamp) - new Date(a.timestamp); });
+	
+	let errors = error.split('\n')
+		.filter(e => String(e).trim())
+		.map(JSON.parse)
+		.sort(function(a, b) { return new Date(b.timestamp) - new Date(a.timestamp); });
+	
+	
+	res.render('logs', { combineds, errors });
 });
 
 cron.schedule('0 */1 * * *', () => {
