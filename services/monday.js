@@ -79,6 +79,8 @@ const COLUMN = { // The IDs of each column. Call getColumns() to add more
 
 	createInPopuli: 'checkbox0',
 	populiLink: 'text8',
+
+	disabilityStatement: 'boolean',
 };
 const TERM_COLUMN = {
 	name: 'name',
@@ -860,7 +862,9 @@ const updateLeadValues = (leadId, columnValues, boardId, columns) => {
 	if (columnValues.graduationDate) {
 		columnValues.graduationDate = formatDate(columnValues.graduationDate);
 	}
-
+	if (columnValues.disabilityStatement) {
+		columnValues.disabilityStatement = {checked: "true"};
+	}
 	const vals = _.mapKeys(columnValues, (v, k) => columns[k]);
 	const json = JSON.stringify(JSON.stringify(vals));
 	const q = `mutation {
